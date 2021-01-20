@@ -21,14 +21,13 @@ class PerspectiveSpecification {
 	 	import ca.mcgill.sel.core.Cardinality;
 	 	import ca.mcgill.sel.core.CoreFactory;
 	 	import ca.mcgill.sel.core.MappingEnd;
-	 	import ca.mcgill.sel.core.perspective.design.ElementMapping;
-	 	import ca.mcgill.sel.core.perspective.domain.design.models.PerspectiveDesign;
+	 	//import ca.mcgill.sel.core.perspective.design.ElementMapping;
 	 	
 	 	«FOR language : perspective.languages»
 	 		import «language.rootPackage».*;
 	 	«ENDFOR»
 	 	
-	 	public class «perspective.name» {
+	 	public class «perspective.name»Specification {
 	 	
 	 	    public static COREPerspective initializePerspective(COREPerspective perspective) {
 	 	
@@ -60,18 +59,18 @@ class PerspectiveSpecification {
 	 	
 	 	        // language element mapping 
 	 	        «FOR mapping : perspective.mappings»
-	 	        	ElementMapping «mapping.fromElement.toFirstLower».«mapping.toElement»Mapping = createLanguageElementMapping(perspective, «mapping.fromCardinality»,
+	 	        	ElementMapping «mapping.fromElement.toFirstLower»«mapping.toElement»Mapping = createLanguageElementMapping(perspective, «mapping.fromCardinality»,
 	 	        		 	                "«mapping.fromRoleName»", «mapping.fromGetElement», «mapping.toCardinality», "«mapping.toRoleName»",
 	 	        		 	                «mapping.toGetElement»);
 	 	        		 	                
 	 	        		 	«FOR nestedMapping : mapping.nestedMappings»
-	 	        		 		CORELanguageElementMapping mappingType = «mapping.fromElement.toFirstLower».«mapping.toElement»Mapping.getMappingType();
+	 	        		 		CORELanguageElementMapping mappingType = «mapping.fromElement.toFirstLower»«mapping.toElement»Mapping.getMappingType();
 	 	        		 			 	        		 	        
 	 	        		 		// get from mapped language element, i.e., the from container of the feature to be mapped.
-	 	        		 		CORELanguageElement fromLanguageELement = «mapping.fromElement.toFirstLower».«mapping.toElement»Mapping.getFromLanguageElement();
+	 	        		 		CORELanguageElement fromLanguageELement = «mapping.fromElement.toFirstLower»«mapping.toElement»Mapping.getFromLanguageElement();
 	 	        		 			 	        		 	        
 	 	        		 		// get to mapped language element, i.e., the to container of the feature to be mapped.
-	 	        		 		CORELanguageElement toLanguageELement = «mapping.fromElement.toFirstLower».«mapping.toElement»Mapping.getToLanguageElement();
+	 	        		 		CORELanguageElement toLanguageELement = «mapping.fromElement.toFirstLower»«mapping.toElement»Mapping.getToLanguageElement();
 	 	        		 			 	        		 	        
 	 	        		 		// nested mapping.
 	 	        		 		createNestedMapping(mappingType, fromLanguageELement, toLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
@@ -100,7 +99,7 @@ class PerspectiveSpecification {
 	 	            String toRoleName, EObject toMetaclass) {
 	 	
 	 	        CORELanguageElementMapping mappingType = CoreFactory.eINSTANCE.createCORELanguageElementMapping();
-	 	        mappingType.setIdentifier(PerspectiveDesign.getNextMappingId(perspective));
+	 	        mappingType.setIdentifier(getNextMappingId(perspective));
 	 	
 	 	        // from mapping end settings
 	 	        MappingEnd fromMappingEnd = CoreFactory.eINSTANCE.createMappingEnd();
@@ -214,7 +213,7 @@ class PerspectiveSpecification {
 	 	        return nestedElement;
 	 	    }
 	 	    
-	 		public static int getNextMappingId(COREPerspective perspective) {
+	 		private static int getNextMappingId(COREPerspective perspective) {
 	 	
 	 			int idNumber = 0;
 	 			for (CORELanguageElementMapping lem : perspective.getMappings()) {

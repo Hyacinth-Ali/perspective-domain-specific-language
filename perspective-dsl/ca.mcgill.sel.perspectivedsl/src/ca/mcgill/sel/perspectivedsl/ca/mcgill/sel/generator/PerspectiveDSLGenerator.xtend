@@ -67,7 +67,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		 *@generated
 		 *
 		 */
-		public class DomainDesignUseCaseDesign {
+		public class «perspective.name» {
 		    
 		 public static void main(String[] args) {
 		        
@@ -86,7 +86,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        ResourceUtils.loadLibraries();
 		       
 		        // create a perspective
-		        COREConcern perspectiveConcern = COREModelUtil.createConcern(«perspective.displayName»);
+		        COREConcern perspectiveConcern = COREModelUtil.createConcern("«perspective.displayName»");
 		        
 		        COREPerspective perspective = CoreFactory.eINSTANCE.createCOREPerspective();
 		        perspective.setName(«perspective.displayName»);
@@ -106,8 +106,8 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        			for (COREArtefact a : languageConcern.getArtefacts()) {
 		        				if (a instanceof COREExternalLanguage) {
 		        					COREExternalLanguage existingLanguage = (COREExternalLanguage) a;
-		        					if (existingLanguage.getName().equals(«language.name»)) {
-		        						perspective.getLanguages().put(«language.roleName», existingLanguage);
+		        					if (existingLanguage.getName().equals("«language.name»")) {
+		        						perspective.getLanguages().put("«language.roleName»", existingLanguage);
 		        					} 
 		        				}
 		        			}
@@ -117,10 +117,10 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        }
 		        
 		        // initialize perspective with perspective actions and mappings
-		        DomainDesignUseCasePerspective.initializePerspective(perspective);
+		        «perspective.name»Specification.initializePerspective(perspective);
 		        
 		        String fileName = "/Users/hyacinthali/git/touchram/ca.mcgill.sel.ram/resources/models/perspectives/"
-		           + «perspective.name»"Perspective";
+		           + "«perspective.name»Perspective";
 		        
 		        try {
 		            ResourceManager.saveModel(perspectiveConcern, fileName.concat("." + "core"));
