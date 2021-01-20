@@ -36,7 +36,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 	private def compile(Perspective perspective) {
 		
 		'''
-		package ca.mcgill.sel.core.perspective.domain.design.usecase.models;
+		package ca.mcgill.sel.core.perspective.«perspective.name.toLowerCase»;
 		
 		import java.io.IOException;
 		import java.util.List;
@@ -59,10 +59,12 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		import ca.mcgill.sel.ram.ui.utils.ResourceUtils;
 		
 		/**
-		 * This class is used to create a perspective which combines class diagram language and use case language
-		 * for the purposes of domain modeling, design modeling, and use case modeling.
+		 * This is the base class for creating and then saving a perspective. To instantiate and then save
+		 * the bnew poerspective, just run the class as a regular java class..
 		 * 
 		 * @author Hyacinth Ali
+		 *
+		 *@generated
 		 *
 		 */
 		public class DomainDesignUseCaseDesign {
@@ -84,50 +86,41 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        ResourceUtils.loadLibraries();
 		       
 		        // create a perspective
-		        COREConcern perspectiveConcern = COREModelUtil.createConcern("Domain Design UseCase");
+		        COREConcern perspectiveConcern = COREModelUtil.createConcern(«perspective.displayName»);
 		        
 		        COREPerspective perspective = CoreFactory.eINSTANCE.createCOREPerspective();
-		        perspective.setName("Domain Design UseCase");
+		        perspective.setName(«perspective.displayName»);
 		        
 		        //Add perspective to the concern
 		        perspectiveConcern.getArtefacts().add(perspective);
 		        
 		
-		        // create external languages, if any
-		//        COREExternalLanguage classDiagram = ClassDiagramLanguage.createLanguage();
-		//        perspective.getLanguages().put("Domain_Model", classDiagram);
-		//        perspective.getLanguages().put("Design_Model", classDiagram);
-		//        
-		//        COREExternalLanguage useCaseDiagram = UseCaseLanguage.createLanguage();
-		//        perspective.getLanguages().put("Use_Case", useCaseDiagram);
-		//        
 		        // Add existing external languages, if any
 		        List<String> languages = ResourceUtil.getResourceListing("models/languages/", ".core");
 		        if (languages != null) {
-		            for (String l : languages) {
-		        
-		                // load existing languages
-		                URI fileURI = URI.createURI(l);
-		                COREConcern languageConcern = (COREConcern) ResourceManager.loadModel(fileURI);
-		                for (COREArtefact a : languageConcern.getArtefacts()) {
-		                    if (a instanceof COREExternalLanguage) {
-		                        COREExternalLanguage existingLanguage = (COREExternalLanguage) a;
-		                        if (existingLanguage.getName().equals("Class Diagram Language")) {
-		                            perspective.getLanguages().put("Domain_Model", existingLanguage);
-		                            perspective.getLanguages().put("Design_Model", existingLanguage);
-		                        } else if (existingLanguage.getName().equals("Use Cases")) {
-		                            perspective.getLanguages().put("Use_Case", existingLanguage);
-		                        }
-		                    }
-		                }
-		            }
+		        	«FOR language : perspective.languages»
+		        		for (String l : languages) {
+		        			// load existing languages
+		        			URI fileURI = URI.createURI(l);
+		        			COREConcern languageConcern = (COREConcern) ResourceManager.loadModel(fileURI);
+		        			for (COREArtefact a : languageConcern.getArtefacts()) {
+		        				if (a instanceof COREExternalLanguage) {
+		        					COREExternalLanguage existingLanguage = (COREExternalLanguage) a;
+		        					if (existingLanguage.getName().equals(«language.name»)) {
+		        						perspective.getLanguages().put(«language.roleName», existingLanguage);
+		        					} 
+		        				}
+		        			}
+		        		}
+		        	«ENDFOR»
+
 		        }
 		        
 		        // initialize perspective with perspective actions and mappings
 		        DomainDesignUseCasePerspective.initializePerspective(perspective);
 		        
 		        String fileName = "/Users/hyacinthali/git/touchram/ca.mcgill.sel.ram/resources/models/perspectives/"
-		           + "DomainDesignUseCasePerspective";
+		           + «perspective.name»"Perspective";
 		        
 		        try {
 		            ResourceManager.saveModel(perspectiveConcern, fileName.concat("." + "core"));
@@ -136,18 +129,6 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		            e.printStackTrace();
 		        } 
 		   }
-		    
-		    public static int getNextMappingId(COREPerspective perspective) {
-		        
-		        int idNumber = 0;
-		        for (CORELanguageElementMapping lem : perspective.getMappings()) {
-		            if (lem.getIdentifier() > idNumber) {
-		                idNumber = lem.getIdentifier();
-		            }
-		        }
-		        return idNumber + 1;
-		      }
-		
 		}
 		
 		'''

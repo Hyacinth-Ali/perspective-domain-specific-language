@@ -8,11 +8,11 @@ class PerspectiveSpecification {
 	 	
 	 	'''
 	 	
-	 	package ca.mcgill.sel.core.perspective.domain.design.usecase.models;
+	 	package ca.mcgill.sel.core.perspective.«perspective.name.toLowerCase»;
 	 	
 	 	import org.eclipse.emf.ecore.EObject;
 	 	
-	 	import ca.mcgill.sel.classdiagram.CdmPackage;
+	 	
 	 	import ca.mcgill.sel.core.COREExternalLanguage;
 	 	import ca.mcgill.sel.core.CORELanguageElement;
 	 	import ca.mcgill.sel.core.CORELanguageElementMapping;
@@ -23,9 +23,12 @@ class PerspectiveSpecification {
 	 	import ca.mcgill.sel.core.MappingEnd;
 	 	import ca.mcgill.sel.core.perspective.design.ElementMapping;
 	 	import ca.mcgill.sel.core.perspective.domain.design.models.PerspectiveDesign;
-	 	import ca.mcgill.sel.usecases.UcPackage;
 	 	
-	 	public class DomainDesignUseCasePerspective {
+	 	«FOR language : perspective.languages»
+	 		import «language.rootPackage».*;
+	 	«ENDFOR»
+	 	
+	 	public class «perspective.name» {
 	 	
 	 	    public static COREPerspective initializePerspective(COREPerspective perspective) {
 	 	
@@ -41,406 +44,42 @@ class PerspectiveSpecification {
 	 	    private static void createPerspectiveAction(COREPerspective perspective) {
 	 	        // create perspective actions
 	 	
-	 	        COREPerspectiveAction pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("ClassDiagram.Class.add");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("ClassDiagram.Class.edit");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("ClassDiagram.Class.delete");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Note.add");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Note.edit");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Note.delete");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Association.add");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Association.edit");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Association.delete");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.NaryAssociation.add");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.NaryAssociation.delete");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("ClassDiagram.Classifier.Attribute.add");
-	 	        pAction.setForRole("Domain_Model");
-	 	        // testing perspective action identifier
-	 	        pAction.setActionIdentifier(1);
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("ClassDiagram.Classifier.Attribute.edit");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("ClassDiagram.Classifier.Attribute.delete");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.CDEnum.add");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.CDEnum.edit");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.CDEnum.delete");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.StructuralFeature.static.edit");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.VisibilityType.edit");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("ClassDiagram.Class.add");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("ClassDiagram.Class.edit");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("ClassDiagram.Class.delete");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Note.add");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Note.edit");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Note.delete");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Association.add");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Association.edit");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Association.delete");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.NaryAssociation.add");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.NaryAssociation.delete");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("ClassDiagram.Classifier.Attribute.add");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("ClassDiagram.Classifier.Attribute.edit");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("ClassDiagram.Classifier.Attribute.delete");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.CDEnum.add");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.CDEnum.edit");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.CDEnum.delete");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.StructuralFeature.static.edit");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.ImplementationClass.add");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.ImplementationClass.edit");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.ImplementationClass.delete");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Classifier.Operation.add");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Classifier.Operation.edit");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Classifier.Operation.delete");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Classifier.Operation.Parameter.add");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Classifier.Operation.Parameter.edit");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.Classifier.Operation.Parameter.delete");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("ClassDiagram.VisibilityType.edit");
-	 	        pAction.setForRole("Design_Model");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("UseCaseDiagram.Actor.add");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("UseCaseDiagram.Actor.edit");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("UseCaseDiagram.Actor.delete");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("UseCaseDiagram.Note.add");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("UseCaseDiagram.Note.edit");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("UseCaseDiagram.Note.delete");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("UseCaseDiagram.PrimaryLink.add");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("UseCaseDiagram.PrimaryLink.edit");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("UseCaseDiagram.PrimaryLink.delete");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("UseCaseDiagram.SecondaryLink.add");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("UseCaseDiagram.SecondaryLink.edit");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        pAction.setName("UseCaseDiagram.SecondaryLink.delete");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("UseCaseDiagram.UseCase.add");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("UseCaseDiagram.UseCase.edit");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
-	 	
-	 	        pAction = CoreFactory.eINSTANCE.createCOREReexposeAction();
-	 	        pAction.setName("UseCaseDiagram.UseCase.delete");
-	 	        pAction.setForRole("Use_Case");
-	 	        perspective.getActions().add(pAction);
+	 	        COREPerspectiveAction pAction = null;
 	 	        
-	 	        pAction = CoreFactory.eINSTANCE.createCreateModelElementMapping();
-	 	        pAction.setName("perspective.create.mapping");
-	 	        pAction.setForRole("Domain_Model");
-	 	        perspective.getActions().add(pAction);
+	 	        «FOR action : perspective.actions»
+	 	        	pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
+	 	        	pAction.setName("«action.name»");
+	 	        	pAction.setForRole("«action.roleName»");
+	 	        	perspective.getActions().add(pAction);
+	 	        	
+	 	        «ENDFOR»
+	 	
 	 	    }
 	 	
 	 	    private static void createPerspectiveMappings(COREPerspective perspective) {
 	 	
-	 	        // language element mapping between a domain diagram metaclass and a use case diagram metaclass.
-	 	        createLanguageElementMapping(perspective, Cardinality.COMPULSORY, "Domain_Model", CdmPackage.eINSTANCE.getClassDiagram(),
-	 	                Cardinality.COMPULSORY, "Use_Case", UcPackage.eINSTANCE.getUseCaseModel());
-	 	
-	 	        // language element mapping between a domain diagram metaclass and a design diagram metaclass.
-	 	        createLanguageElementMapping(perspective, Cardinality.COMPULSORY, "Domain_Model", CdmPackage.eINSTANCE.getClassDiagram(),
-	 	                Cardinality.COMPULSORY, "Design_Model", CdmPackage.eINSTANCE.getClassDiagram());
+	 	        // language element mapping 
+	 	        «FOR mapping : perspective.mappings»
+	 	        	ElementMapping «mapping.fromElement.toFirstLower».«mapping.toElement»Mapping = createLanguageElementMapping(perspective, «mapping.fromCardinality»,
+	 	        		 	                "«mapping.fromRoleName»", «mapping.fromGetElement», «mapping.toCardinality», "«mapping.toRoleName»",
+	 	        		 	                «mapping.toGetElement»);
+	 	        		 	                
+	 	        		 	«FOR nestedMapping : mapping.nestedMappings»
+	 	        		 		CORELanguageElementMapping mappingType = «mapping.fromElement.toFirstLower».«mapping.toElement»Mapping.getMappingType();
+	 	        		 			 	        		 	        
+	 	        		 		// get from mapped language element, i.e., the from container of the feature to be mapped.
+	 	        		 		CORELanguageElement fromLanguageELement = «mapping.fromElement.toFirstLower».«mapping.toElement»Mapping.getFromLanguageElement();
+	 	        		 			 	        		 	        
+	 	        		 		// get to mapped language element, i.e., the to container of the feature to be mapped.
+	 	        		 		CORELanguageElement toLanguageELement = «mapping.fromElement.toFirstLower».«mapping.toElement»Mapping.getToLanguageElement();
+	 	        		 			 	        		 	        
+	 	        		 		// nested mapping.
+	 	        		 		createNestedMapping(mappingType, fromLanguageELement, toLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
+	 	        		 		"«mapping.fromRoleName»", "«mapping.toRoleName»");
+	 	        		 	«ENDFOR»
+	 	        		 	        
+	 	        «ENDFOR»
 	 	        
-	 	        // language element mapping between a Use Case diagram metaclass and a design diagram metaclass.
-	 	        createLanguageElementMapping(perspective, Cardinality.COMPULSORY, "Use_Case", UcPackage.eINSTANCE.getUseCaseModel(),
-	 	                Cardinality.COMPULSORY, "Design_Model", CdmPackage.eINSTANCE.getClassDiagram());
-	 	
-	 	        // language element mapping between a domain model Class metaclass and a use case model Actor metaclass.
-	 	        ElementMapping classActorMapping = createLanguageElementMapping(perspective, Cardinality.COMPULSORY,
-	 	                "Domain_Model", CdmPackage.eINSTANCE.getClass_(), Cardinality.OPTIONAL, "Use_Case",
-	 	                UcPackage.eINSTANCE.getActor());
-	 	
-	 	        // feature mappings, the name of a class is mapped to the corresponding name of an actor.
-	 	        // get the parent mapping type, i.e., the instance of the language element mapping between the container of each
-	 	        // feature (e.g., name) to be mapped.
-	 	        CORELanguageElementMapping mappingType = classActorMapping.getMappingType();
-	 	        
-	 	        // get from mapped language element, i.e., the from container of the feature to be mapped.
-	 	        CORELanguageElement fromLanguageELement = classActorMapping.getFromLanguageElement();
-	 	        
-	 	        // get to mapped language element, i.e., the to container of the feature to be mapped.
-	 	        CORELanguageElement toLanguageELement = classActorMapping.getToLanguageElement();
-	 	        
-	 	        // feature mapping, i.e., mapping the name of the domain class to the name of the corresponding actor.
-	 	        createNestedMapping(mappingType, fromLanguageELement, toLanguageELement, "name", "name", "Domain_Model", 
-	 	                "Use_Case");
-	 	        
-	 	        // language element mapping between a design model Class metaclass and a use case model Actor metaclass.
-	 	        ElementMapping designClassActorMapping = createLanguageElementMapping(perspective, Cardinality.COMPULSORY,
-	 	                "Design_Model", CdmPackage.eINSTANCE.getClass_(), Cardinality.OPTIONAL, "Use_Case",
-	 	                UcPackage.eINSTANCE.getActor());
-	 	        
-	 	        // get the mapping type between design class and actor metaclasses.
-	 	        CORELanguageElementMapping designActorMappingType = designClassActorMapping.getMappingType();
-	 	        
-	 	        // get from mapped language element, i.e., the from container of the feature to be mapped.
-	 	        CORELanguageElement designClass = designClassActorMapping.getFromLanguageElement();
-	 	        
-	 	        // get to mapped language element, i.e., the to container of the feature to be mapped.
-	 	        CORELanguageElement actor = designClassActorMapping.getToLanguageElement();
-	 	        
-	 	        // feature mapping, i.e., mapping the name of the design class to the name of the corresponding actor.
-	 	        createNestedMapping(designActorMappingType, designClass, actor, "name", "name", "Design_Model", 
-	 	                "Use_Case");
-	 	        
-	 	          // language element mapping between a domain model Class metaclass and a design Model Class metaclass.
-	 	        ElementMapping classClassMapping = createLanguageElementMapping(perspective, Cardinality.OPTIONAL,
-	 	                "Domain_Model", CdmPackage.eINSTANCE.getClass_(), Cardinality.COMPULSORY_MULTIPLE, "Design_Model",
-	 	                CdmPackage.eINSTANCE.getClass_());
-	 	        
-	 	        // feature mapping, i.e., mapping the name of the domain class to the name of the corresponding design class.
-	 	        createNestedMapping(classClassMapping.getMappingType(), classClassMapping.getFromLanguageElement(),
-	 	                classClassMapping.getToLanguageElement(), "name", "name", "Domain_Model", "Design_Model");
-	 	 
-	 	        // feature mapping, visibility
-	 	        createNestedMapping(classClassMapping.getMappingType(), classClassMapping.getFromLanguageElement(),
-	 	                classClassMapping.getToLanguageElement(), "visibility", "visibility", "Domain_Model", "Design_Model");
-	 	        
-	 	        // feature mapping, abstract
-	 	        createNestedMapping(classClassMapping.getMappingType(), classClassMapping.getFromLanguageElement(),
-	 	                classClassMapping.getToLanguageElement(), "abstract", "abstract", "Domain_Model", "Design_Model");
-	 	
-	 	        // language element mapping between a domain model Attribute metaclass and a design Model Attribute metaclass.
-	 	        ElementMapping attributeAttributeMapping = createLanguageElementMapping(perspective, Cardinality.COMPULSORY,
-	 	                "Domain_Model", CdmPackage.eINSTANCE.getAttribute(), Cardinality.OPTIONAL, "Design_Model",
-	 	                CdmPackage.eINSTANCE.getAttribute());
-	 	        
-	 	        // feature mapping, attribute type
-	 	        createNestedMapping(attributeAttributeMapping.getMappingType(), attributeAttributeMapping.getFromLanguageElement(),
-	 	                attributeAttributeMapping.getToLanguageElement(), "type", "type", "Domain_Model", "Design_Model");
-	 	        
-	 	        // feature mapping, attribute name
-	 	        createNestedMapping(attributeAttributeMapping.getMappingType(), attributeAttributeMapping.getFromLanguageElement(),
-	 	                attributeAttributeMapping.getToLanguageElement(), "name", "name", "Domain_Model", "Design_Model");
-	 	
 	 	    }
 	 	
 	 	    /**
@@ -574,6 +213,17 @@ class PerspectiveSpecification {
 	 	        }
 	 	        return nestedElement;
 	 	    }
+	 	    
+	 		public static int getNextMappingId(COREPerspective perspective) {
+	 	
+	 			int idNumber = 0;
+	 			for (CORELanguageElementMapping lem : perspective.getMappings()) {
+	 				if (lem.getIdentifier() > idNumber) {
+	 					idNumber = lem.getIdentifier();
+	 				}
+	 			}
+	 			return idNumber + 1;
+	 		}
 	 	}
 	 	
 	 	
