@@ -3,6 +3,10 @@
  */
 package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.validation;
 
+import org.eclipse.xtext.validation.Check;
+
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective;
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveDSLPackage;
 
 /**
  * This class contains custom validation rules. 
@@ -11,7 +15,7 @@ package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.validation;
  */
 public class PerspectiveDSLValidator extends AbstractPerspectiveDSLValidator {
 	
-//	public static final String INVALID_NAME = "invalidName";
+	public static final String INVALID_NAME = "invalidName";
 //
 //	@Check
 //	public void checkGreetingStartsWithCapital(Greeting greeting) {
@@ -21,5 +25,32 @@ public class PerspectiveDSLValidator extends AbstractPerspectiveDSLValidator {
 //					INVALID_NAME);
 //		}
 //	}
+	
+	@Check
+    public void checkPerspectiveStartsWithCapital(Perspective perspective) {
+        if (!Character.isUpperCase(perspective.getName().charAt(0))) {
+            warning("Perspective element name should start with a capital",
+                    PerspectiveDSLPackage.Literals.PERSPECTIVE__NAME,
+                    INVALID_NAME);
+        }
+    }
+
+//    @Check
+//    public void checkLanguageStartsWithCapital(ExternalLanguage language) {
+//        if (!Character.isUpperCase(language.getName().charAt(0))) {
+//            warning("Language name should start with a capital",
+//                    PerspectiveDSLPackage.Literals.LANGUAGE__NAME,
+//                    INVALID_NAME);
+//        }
+//    }
+
+//    @Check
+//    public void checkLanguageStartsWithCapital(Perspective perspective) {
+//        if (!Character.isUpperCase(perspective.getName().charAt(0))) {
+//            warning("Perspective name should start with a capital",
+//                    PerspectiveDSLPackage.Literals.LANGUAGE__NAME,
+//                    INVALID_NAME);
+//        }
+//    }
 	
 }
