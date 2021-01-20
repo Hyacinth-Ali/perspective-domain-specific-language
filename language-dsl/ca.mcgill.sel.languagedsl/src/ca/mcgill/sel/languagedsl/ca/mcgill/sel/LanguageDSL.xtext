@@ -2,8 +2,45 @@ grammar ca.mcgill.sel.languagedsl.ca.mcgill.sel.LanguageDSL with org.eclipse.xte
 
 generate languageDSL "http://www.mcgill.ca/sel/languagedsl/ca/mcgill/sel/LanguageDSL"
 
-Model:
-	greetings+=Greeting*;
-	
-Greeting:
-	'Hello' name=ID '!';
+LanguageModel:
+    (language += Language)*
+;
+
+
+Language:
+    'language' name = ID '{'
+        'rootPackage' rootPackage = STRING';'
+        'rootControllerPackage' rootControllerPackage = STRING';'
+        'packageClassName' packageClassName = ID';'
+        'nsURI' nsURI = STRING';'
+        'resourceFactory' resourceFactory = STRING';'  
+        'adapterFactory' adapterFactory = STRING';'
+        'weaverClassName' weaverClassName = STRING';'
+        'fileExtension' fileExtension = ID';' 
+        'modelUtilClassName' modelUtilClassName = STRING';'
+        
+        'language' 'elements' ':'
+            (elements += LanguageElement)*
+        'end'
+        
+        'actions' ':'
+            (actions += Action)*
+        'end'
+    '}'
+;
+
+LanguageElement:
+    'languageElement' ':' languageElement = ID';'
+    ('attributeName' attributeName = ID';')?
+    ('nested' 'elements' ':'
+        (nestedElements += [LanguageElement])*
+    'end')?
+;
+
+
+Action:
+   'create' methodNameAndParameters = STRING '{'
+        'metaclass' ':' metaclass = ID';'
+        'classQualifiedName' ':' classQualifiedName = STRING';'
+   '}'
+;
