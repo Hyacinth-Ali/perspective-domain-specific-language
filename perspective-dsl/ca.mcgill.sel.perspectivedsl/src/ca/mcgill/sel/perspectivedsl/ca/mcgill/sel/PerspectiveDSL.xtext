@@ -3,7 +3,7 @@ grammar ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.PerspectiveDSL with org.eclip
 generate perspectiveDSL "http://www.mcgill.ca/sel/perspectivedsl/ca/mcgill/sel/PerspectiveDSL"
 
 PerspectiveModel:
-    (perspective = Perspective)
+    (perspective += Perspective)*
 ;
 
 
@@ -11,6 +11,8 @@ Perspective:
     'perspective' name = ID '{'
 
         ('default' default = ID';')?
+        
+        'display' 'name' displayName = STRING';'
 
         'languages' ':'
             (languages += Language)*
@@ -40,8 +42,8 @@ LanguageElementMapping:
 //        'relationship' ':' relationship = Relationship';'
         'fromCardinality' ':' fromCardinality = Cardinality';'
         'toCardinality' ':' toCardinality = Cardinality';'
-        'fromElement' ':' fromElement = ID 'from' fromRoleName = ID';'
-        'toELement' ':' toElement = ID 'from' toRoleName = ID';'
+        'fromElement' ':' fromElement = ID 'from' fromRoleName = ID 'fromGetElement' fromGetElement = STRING';'
+        'toELement' ':' toElement = ID 'from' toRoleName = ID 'toGetElement' toGetElement = STRING';'
 
         ('nested' 'mappings' ':'
             (nestedMappings += NestedMapping)*
@@ -51,8 +53,8 @@ LanguageElementMapping:
 
 NestedMapping:
     'nested' 'mapping' ':'
-        'fromElement' ':' fromElementName = ID 'from' fromRoleName = ID';'
-        'toELement' ':' toElementName = ID 'from' toRoleName = ID';'
+        'fromElement' ':' 'elementName' fromElementName = STRING 'from' fromRoleName = ID';'
+        'toELement' ':' 'elementName' toElementName = STRING 'from' toRoleName = ID';'
     'end'
 ;
 
