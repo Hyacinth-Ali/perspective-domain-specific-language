@@ -7,6 +7,7 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import ca.mcgill.sel.languagedsl.ca.mcgill.sel.languageDSL.Language
 
 /**
  * Generates code from your model files on save.
@@ -16,10 +17,12 @@ import org.eclipse.xtext.generator.IGeneratorContext
 class LanguageDSLGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-//		fsa.generateFile('greetings.txt', 'People to greet: ' + 
-//			resource.allContents
-//				.filter(Greeting)
-//				.map[name]
-//				.join(', '))
+		for (language : resource.allContents.toIterable.filter(Language)){
+            fsa.generateFile(
+                 "ca/mcgill/sel/core/language/"
+                 + language.name + ".java",
+                LanguageRegistration.compile(language)
+                )
+        }
 	}
 }
