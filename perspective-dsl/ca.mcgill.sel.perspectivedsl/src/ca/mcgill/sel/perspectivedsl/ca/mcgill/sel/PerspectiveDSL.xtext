@@ -1,0 +1,77 @@
+grammar ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.PerspectiveDSL with org.eclipse.xtext.common.Terminals
+
+generate perspectiveDSL "http://www.mcgill.ca/sel/perspectivedsl/ca/mcgill/sel/PerspectiveDSL"
+
+PerspectiveModel:
+    (perspective = Perspective)
+;
+
+
+Perspective:
+    'perspective' name = ID '{'
+
+        ('default' default = ID';')?
+
+        'languages' ':'
+            (languages += Language)*
+        'end'
+
+        'actions' ':'
+            (actions += Action)*
+        'end'
+
+        'mappings' ':'
+            (mappings += LanguageElementMapping)*
+        'end'
+
+    '}'
+;
+
+Language:
+    'existing' 'language' name = ID '{'
+        "rootPackage" rootPackage = STRING';'
+        "packageClassName" packageClassName = ID';'
+        "roleName" roleName = ID';'
+    '}'
+;
+
+LanguageElementMapping:
+    'mapping' name = ID '{'
+//        'relationship' ':' relationship = Relationship';'
+        'fromCardinality' ':' fromCardinality = Cardinality';'
+        'toCardinality' ':' toCardinality = Cardinality';'
+        'fromElement' ':' fromElement = ID 'from' fromRoleName = ID';'
+        'toELement' ':' toElement = ID 'from' toRoleName = ID';'
+
+        ('nested' 'mappings' ':'
+            (nestedMappings += NestedMapping)*
+        'end')?
+    '}'
+;
+
+NestedMapping:
+    'nested' 'mapping' ':'
+        'fromElement' ':' fromElementName = ID 'from' fromRoleName = ID';'
+        'toELement' ':' toElementName = ID 'from' toRoleName = ID';'
+    'end'
+;
+
+
+Action:
+    //   'action' (actionType ?= PerspectiveActionType)?  name = ID';'
+    'action' actionType = PerspectiveActionType  roleName = ID name = STRING';'
+;
+
+
+
+//enum Relationship:
+//    EQUALITY='equality' | REFINES='refines' | USES='uses' | EXTENDS='extends' | REQUIRES='requires'
+//;
+
+enum Cardinality:
+    COMPULSORY='1' | OPTIONAL='0..1' | COMPULSORY_MULTIPLE='1..*' | OPTIONAL_MULTIPLE='0..*'
+;
+
+enum PerspectiveActionType :
+    REEXPOSE='re_expose' | REDEFINED='redefined' | CREATE_MAPPING='create_mapping'
+;
