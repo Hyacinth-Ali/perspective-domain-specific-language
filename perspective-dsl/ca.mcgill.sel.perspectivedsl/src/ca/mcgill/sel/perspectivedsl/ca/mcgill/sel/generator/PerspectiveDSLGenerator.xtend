@@ -17,11 +17,20 @@ import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
 class PerspectiveDSLGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-//		fsa.generateFile('greetings.txt', 'People to greet: ' + 
-//			resource.allContents
-//				.filter(Greeting)
-//				.map[name]
-//				.join(', '))
+		
+		for (perspective : resource.allContents.toIterable.filter(Perspective)){
+            fsa.generateFile(
+                 "ca/mcgill/sel/core/perspective/"  + perspective.name.toLowerCase() + "/" + perspective.name + ".java",
+                perspective.compile
+                )
+        }
+        
+        for (perspective : resource.allContents.toIterable.filter(Perspective)){
+            fsa.generateFile(
+                 "ca/mcgill/sel/core/perspective/"  + perspective.name.toLowerCase() + "/" + perspective.name + "Specification.java",
+                PerspectiveSpecification.compile(perspective)
+                )
+        }
 	}
 	
 	private def compile(Perspective perspective) {
