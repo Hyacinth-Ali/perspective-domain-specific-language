@@ -1,0 +1,9 @@
+grammar ca.mcgill.sel.languagedsl.ca.mcgill.sel.LanguageDSL with org.eclipse.xtext.common.Terminals
+
+generate languageDSL "http://www.mcgill.ca/sel/languagedsl/ca/mcgill/sel/LanguageDSL"
+
+Model:
+	greetings+=Greeting*;
+	
+Greeting:
+	'Hello' name=ID '!';
