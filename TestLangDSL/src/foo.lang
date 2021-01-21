@@ -26,7 +26,7 @@ language CDM {
         }
     end
          
-}
+} 
 
 language CDM {
     rootPackage "ca.mcgill.sel.classdiagram";

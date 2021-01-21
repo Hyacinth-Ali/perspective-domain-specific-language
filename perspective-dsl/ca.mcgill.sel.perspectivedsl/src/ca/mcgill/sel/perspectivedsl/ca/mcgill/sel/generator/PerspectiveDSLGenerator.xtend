@@ -56,7 +56,6 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		import ca.mcgill.sel.core.COREArtefact;
 		import ca.mcgill.sel.core.COREConcern;
 		import ca.mcgill.sel.core.COREExternalLanguage;
-		import ca.mcgill.sel.core.CORELanguageElementMapping;
 		import ca.mcgill.sel.core.COREPerspective;
 		import ca.mcgill.sel.core.CoreFactory;
 		import ca.mcgill.sel.core.CorePackage;
@@ -126,7 +125,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        // initialize perspective with perspective actions and mappings
 		        «perspective.name»Specification.initializePerspective(perspective);
 		        
-		        String fileName = "/Users/hyacinthali/git/touchram/ca.mcgill.sel.ram/resources/models/perspectives/"
+		        String fileName = "/Users/hyacinthali/git/touchram/ca.mcgill.sel.ram/resources/models/testperspectives/"
 		           + "«perspective.name»Perspective";
 		        
 		        try {

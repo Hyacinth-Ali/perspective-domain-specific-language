@@ -82,7 +82,7 @@ class LanguageRegistration {
 
             langConcern.getArtefacts().add(language);
 
-            String language1FileName = "/Users/hyacinthali/git/touchram/ca.mcgill.sel.ram/resources/resources/models/testlanguages/"
+            String language1FileName = "/Users/hyacinthali/git/touchram/ca.mcgill.sel.ram/resources/models/testlanguages/"
                     + "«language.getName()»";
 
              try {

@@ -81,7 +81,7 @@ class PerspectiveSpecification {
 	 	            
                     «FOR nestedMapping : mapping.nestedMappings»
                    
-                        createNestedMapping(«mapping.name.toFirstLower»MappingType, «mapping.name.toFirstLower»MappingFromLanguageELement, 
+                          createNestedMapping(«mapping.name.toFirstLower»MappingType, «mapping.name.toFirstLower»MappingFromLanguageELement, 
                             «mapping.name.toFirstLower»MappingToLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
                             "«mapping.fromRoleName»", "«mapping.toRoleName»");
 
