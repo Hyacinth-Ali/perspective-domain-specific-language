@@ -102,7 +102,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        
 		
 		        // Add existing external languages, if any
-		        List<String> languages = ResourceUtil.getResourceListing("models/languages/", ".core");
+		        List<String> languages = ResourceUtil.getResourceListing("models/testlanguages/", ".core");
 		        if (languages != null) {
 		        	«FOR language : perspective.languages»
 		        		for (String l : languages) {
@@ -126,7 +126,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        «perspective.name»Specification.initializePerspective(perspective);
 		        
 		        String fileName = "/Users/hyacinthali/git/touchram/ca.mcgill.sel.ram/resources/models/testperspectives/"
-		           + "«perspective.name»Perspective";
+		           + "«perspective.name»_Perspective";
 		        
 		        try {
 		            ResourceManager.saveModel(perspectiveConcern, fileName.concat("." + "core"));
