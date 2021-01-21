@@ -35,7 +35,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
         for (perspective : resource.allContents.toIterable.filter(Perspective)){
             fsa.generateFile(
                  "ca/mcgill/sel/core/perspective/"  + perspective.name.toLowerCase() + "/" + "ElementMapping.java",
-                ElementMapping.compile
+                ElementMapping.compile(perspective)
                 )
         }
 	}
@@ -96,7 +96,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        COREConcern perspectiveConcern = COREModelUtil.createConcern("«perspective.displayName»");
 		        
 		        COREPerspective perspective = CoreFactory.eINSTANCE.createCOREPerspective();
-		        perspective.setName(«perspective.displayName»);
+		        perspective.setName("«perspective.displayName»");
 		        
 		        //Add perspective to the concern
 		        perspectiveConcern.getArtefacts().add(perspective);

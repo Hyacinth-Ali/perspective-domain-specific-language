@@ -1,11 +1,13 @@
 package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.generator
 
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
+
 class ElementMapping {
     
-    def static compile() {
+    def static compile(Perspective perspective) {
         
         '''
-        package ca.mcgill.sel.core.perspective.design;
+        package ca.mcgill.sel.core.perspective.«perspective.name.toLowerCase»;
         
         import ca.mcgill.sel.core.CORELanguageElement;
         import ca.mcgill.sel.core.CORELanguageElementMapping;

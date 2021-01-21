@@ -1,6 +1,8 @@
 package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.generator
 
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.LanguageElementMapping
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Cardinality
 
 class PerspectiveSpecification {
 	
@@ -59,21 +61,22 @@ class PerspectiveSpecification {
 	 	
 	 	        // language element mapping 
 	 	        «FOR mapping : perspective.mappings»
-	 	        	ElementMapping «mapping.fromElement.toFirstLower»«mapping.toElement»Mapping = createLanguageElementMapping(perspective, «mapping.fromCardinality»,
-	 	        		 	                "«mapping.fromRoleName»", «mapping.fromGetElement», «mapping.toCardinality», "«mapping.toRoleName»",
+	 	        	ElementMapping «mapping.fromElement.toFirstLower»«mapping.toElement»Mapping = createLanguageElementMapping(perspective, «getCardinality(mapping, true)»,
+	 	        		 	                "«mapping.fromRoleName»", «mapping.fromGetElement», «getCardinality(mapping, false)», "«mapping.toRoleName»",
 	 	        		 	                «mapping.toGetElement»);
 	 	        		 	                
 	 	        		 	«FOR nestedMapping : mapping.nestedMappings»
-	 	        		 		CORELanguageElementMapping mappingType = «mapping.fromElement.toFirstLower»«mapping.toElement»Mapping.getMappingType();
+	 	        		 		CORELanguageElementMapping «mapping.fromElement.toFirstLower»«mapping.toElement»MappingType = «mapping.fromElement.toFirstLower»«mapping.toElement»Mapping.getMappingType();
 	 	        		 			 	        		 	        
 	 	        		 		// get from mapped language element, i.e., the from container of the feature to be mapped.
-	 	        		 		CORELanguageElement fromLanguageELement = «mapping.fromElement.toFirstLower»«mapping.toElement»Mapping.getFromLanguageElement();
+	 	        		 		CORELanguageElement «mapping.fromElement.toFirstLower»«mapping.toElement»MappingFromLanguageELement = «mapping.fromElement.toFirstLower»«mapping.toElement»Mapping.getFromLanguageElement();
 	 	        		 			 	        		 	        
 	 	        		 		// get to mapped language element, i.e., the to container of the feature to be mapped.
-	 	        		 		CORELanguageElement toLanguageELement = «mapping.fromElement.toFirstLower»«mapping.toElement»Mapping.getToLanguageElement();
+	 	        		 		CORELanguageElement «mapping.fromElement.toFirstLower»«mapping.toElement»MappingToLanguageELement = «mapping.fromElement.toFirstLower»«mapping.toElement»Mapping.getToLanguageElement();
 	 	        		 			 	        		 	        
 	 	        		 		// nested mapping.
-	 	        		 		createNestedMapping(mappingType, fromLanguageELement, toLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
+	 	        		 		createNestedMapping(«mapping.fromElement.toFirstLower»«mapping.toElement»MappingType, «mapping.fromElement.toFirstLower»«mapping.toElement»MappingFromLanguageELement, 
+	 	        		 		    «mapping.fromElement.toFirstLower»«mapping.toElement»MappingToLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
 	 	        		 		"«mapping.fromRoleName»", "«mapping.toRoleName»");
 	 	        		 	«ENDFOR»
 	 	        		 	        
@@ -228,6 +231,53 @@ class PerspectiveSpecification {
 	 	
 	 	'''
 	 	
+	 }
+	 
+	 /**
+	  * Gets the cardinality of a given mapping-end.
+	  */
+	 def static String getCardinality(LanguageElementMapping mapping, boolean isFrom) {
+	     var cardinality = ''
+	
+	     if (isFrom) {
+	         
+	         switch(mapping.fromCardinality) {
+            case COMPULSORY: {
+                cardinality = "Cardinality.COMPULSORY"
+            }
+            case COMPULSORY_MULTIPLE: {
+                cardinality = "Cardinality.COMPULSORY_MULTIPLE"
+            }
+            case OPTIONAL: {
+                cardinality = "Cardinality.OPTIONAL"
+            }
+            case OPTIONAL_MULTIPLE: {
+                cardinality = "Cardinality.OPTIONAL_MULTIPLE"
+            }
+             
+         }
+	         
+	     } else {
+	         
+	         switch(mapping.toCardinality) {
+            case COMPULSORY: {
+                cardinality = "Cardinality.COMPULSORY"
+            }
+            case COMPULSORY_MULTIPLE: {
+                cardinality = "Cardinality.COMPULSORY_MULTIPLE"
+            }
+            case OPTIONAL: {
+                cardinality = "Cardinality.OPTIONAL"
+            }
+            case OPTIONAL_MULTIPLE: {
+                cardinality = "Cardinality.OPTIONAL_MULTIPLE"
+            }
+             
+          }
+	         
+	     }
+	     
+	     return cardinality
 	 }
 	
 }
