@@ -34,7 +34,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
         
         for (perspective : resource.allContents.toIterable.filter(Perspective)){
             fsa.generateFile(
-                 "ca/mcgill/sel/core/perspective/"  + perspective.name.toLowerCase() + "/" + perspective.name + "Specification.java",
+                 "ca/mcgill/sel/core/perspective/"  + perspective.name.toLowerCase() + "/" + "ElementMapping.java",
                 ElementMapping.compile
                 )
         }
