@@ -52,7 +52,7 @@ LanguageElementMapping:
 ;
 
 NestedMapping:
-    'nested' 'mapping' ':'
+    'nested' 'mapping' name = ID ':'
         'fromElement' ':' 'elementName' fromElementName = STRING 'from' fromRoleName = ID';'
         'toELement' ':' 'elementName' toElementName = STRING 'from' toRoleName = ID';'
     'end'
