@@ -30,11 +30,13 @@ Language:
 ;
 
 LanguageElement:
-    'languageElement' ':' languageElement = ID';'
-    ('attributeName' attributeName = ID';')?
-    ('nested' 'elements' ':'
-        (nestedElements += [LanguageElement])*
-    'end')?
+    'languageElement' languageElement = ID '{'
+    	(nestedElements += NestedElement)*
+    '}'
+;
+
+NestedElement:
+    'nestedElement' languageElement = ID 'elementName' attributeName = ID';'
 ;
 
 
