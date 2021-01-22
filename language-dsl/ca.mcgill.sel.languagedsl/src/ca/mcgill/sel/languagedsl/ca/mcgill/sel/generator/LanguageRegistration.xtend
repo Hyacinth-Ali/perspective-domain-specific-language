@@ -99,14 +99,20 @@ class LanguageRegistration {
                 «FOR element : language.elements»
                     // create classdiagram core language element
                     «IF element.languageElement == "Class"»
-                        CORELanguageElement «element.languageElement» = createCORELanguageElement(language, «language.packageClassName».eINSTANCE.get«element.languageElement»_());
+                        CORELanguageElement «element.languageElement.toFirstLower»Element = createCORELanguageElement(language, «language.packageClassName».eINSTANCE.get«element.languageElement»_());
                     «ELSE»
-                        CORELanguageElement «element.languageElement» = createCORELanguageElement(language, «language.packageClassName».eINSTANCE.get«element.languageElement»());
+                        CORELanguageElement «element.languageElement.toFirstLower»Element = createCORELanguageElement(language, «language.packageClassName».eINSTANCE.get«element.languageElement»());
                     «ENDIF»
 
                     «FOR nestedElement : element.nestedElements»
                         // create nested element
-                        createNestedCORELanguageElement(language, «language.packageClassName».eINSTANCE.get«nestedElement.languageElement»(), «element.languageElement», "«nestedElement.attributeName»");
+                        CORELanguageElement «element.languageElement.toFirstLower»«nestedElement.attributeName.toFirstUpper» = CoreFactory.eINSTANCE.createCORELanguageElement();
+                        «element.languageElement.toFirstLower»«nestedElement.attributeName.toFirstUpper».setName("«nestedElement.attributeName»");
+                        «element.languageElement.toFirstLower»«nestedElement.attributeName.toFirstUpper».setLanguageElement(«language.packageClassName».eINSTANCE.get«nestedElement.languageElement»());
+                        
+                        «element.languageElement.toFirstLower»Element.getNestedElements().add(«element.languageElement.toFirstLower»«nestedElement.attributeName.toFirstUpper»);
+                        «element.languageElement.toFirstLower»«nestedElement.attributeName.toFirstUpper».setOwner(«element.languageElement.toFirstLower»Element);
+                        
                     «ENDFOR»
 
                 «ENDFOR»
@@ -131,28 +137,6 @@ class LanguageRegistration {
                 language.getLanguageElements().add(coreLanguageElement);
 
                 return coreLanguageElement;
-            }
-
-            /**
-             * This method creates an instance of {@link CORELanguageElement}, nested element, for a given language {@link COREExternalLanguage}
-            * and its existing language element.
-            * @param language - the language in question.
-            * @param languageElement - the existing language element.
-            * @param container - the {@link CORELanguageElement} container of the new element
-            * @param name - name of the language element attribute
-            *
-            * @generated
-            */
-            private static void createNestedCORELanguageElement(COREExternalLanguage language, EObject languageElement,
-                    CORELanguageElement container, String name) {
-
-                // create core language element
-                CORELanguageElement coreLanguageElement = CoreFactory.eINSTANCE.createCORELanguageElement();
-                coreLanguageElement.setName(name);
-                coreLanguageElement.setLanguageElement(CdmPackage.eINSTANCE.getNamedElement_Name());
-
-                container.getNestedElements().add(coreLanguageElement);
-                coreLanguageElement.setOwner(container);
             }
 
             /**

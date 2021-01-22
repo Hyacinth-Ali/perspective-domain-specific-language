@@ -23,9 +23,9 @@ Language:
             (elements += LanguageElement)*
         'end'
         
-        'actions' ':'
+        ('actions' ':'
             (actions += Action)*
-        'end'
+        'end')?
     '}'
 ;
 
