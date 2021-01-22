@@ -29,7 +29,6 @@ class LanguageRegistration {
         import ca.mcgill.sel.core.util.COREModelUtil;
 
         import ca.mcgill.sel.core.*;
-        import ca.mcgill.sel.core.util.*;
 
         import «language.rootPackage».*;
 
