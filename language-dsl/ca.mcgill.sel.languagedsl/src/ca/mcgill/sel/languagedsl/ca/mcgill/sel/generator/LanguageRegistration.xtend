@@ -106,7 +106,7 @@ class LanguageRegistration {
 
                     «FOR nestedElement : element.nestedElements»
                         // create nested element
-                        createNestedCORELanguageElement(language, «language.packageClassName».eINSTANCE.get«nestedElement.languageElement»(), «element.languageElement», «nestedElement.attributeName»);
+                        createNestedCORELanguageElement(language, «language.packageClassName».eINSTANCE.get«nestedElement.languageElement»(), «element.languageElement», "«nestedElement.attributeName»");
                     «ENDFOR»
 
                 «ENDFOR»
