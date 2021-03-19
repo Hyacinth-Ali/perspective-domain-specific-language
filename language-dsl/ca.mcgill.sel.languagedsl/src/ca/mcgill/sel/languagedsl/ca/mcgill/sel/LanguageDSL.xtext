@@ -19,13 +19,13 @@ Language:
         'fileExtension' fileExtension = ID';' 
         'modelUtilClassName' modelUtilClassName = STRING';'
         
-        'language' 'elements' ':'
+        'language' 'elements' '{'
             (elements += LanguageElement)*
-        'end'
+        '}'
         
-        ('actions' ':'
+        ('actions' '{'
             (actions += Action)*
-        'end')?
+        '}')?
     '}'
 ;
 

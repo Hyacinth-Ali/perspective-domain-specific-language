@@ -3,7 +3,7 @@ grammar ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.PerspectiveDSL with org.eclip
 generate perspectiveDSL "http://www.mcgill.ca/sel/perspectivedsl/ca/mcgill/sel/PerspectiveDSL"
 
 PerspectiveModel:
-    (perspective += Perspective)*
+    (perspectives += Perspective)*
 ;
 
 
@@ -14,17 +14,17 @@ Perspective:
         
         'display' 'name' displayName = STRING';'
 
-        'languages' ':'
+        'languages' '{'
             (languages += Language)*
-        'end'
+        '}'
 
-        'actions' ':'
+        'actions' '{'
             (actions += Action)*
-        'end'
+        '}'
 
-        'mappings' ':'
+        'mappings' '{'
             (mappings += LanguageElementMapping)*
-        'end'
+        '}'
 
     '}'
 ;
@@ -45,17 +45,18 @@ LanguageElementMapping:
         'fromElement' ':' fromElement = ID 'from' fromRoleName = ID 'fromGetElement' fromGetElement = STRING';'
         'toELement' ':' toElement = ID 'from' toRoleName = ID 'toGetElement' toGetElement = STRING';'
 
-        ('nested' 'mappings' ':'
+        ('nested' 'mappings' '{'
             (nestedMappings += NestedMapping)*
-        'end')?
+        '}')?
     '}'
 ;
 
 NestedMapping:
-    'nested' 'mapping' name = ID ':'
+    'nested' 'mapping' name = ID '{'
+    	'matchMaker' ':' matchMaker = MatchMaker';'
         'fromElement' ':' 'elementName' fromElementName = STRING 'from' fromRoleName = ID';'
         'toELement' ':' 'elementName' toElementName = STRING 'from' toRoleName = ID';'
-    'end'
+    '}'
 ;
 
 
@@ -76,4 +77,8 @@ enum Cardinality:
 
 enum PerspectiveActionType :
     REEXPOSE='re_expose' | REDEFINED='redefined' | CREATE_MAPPING='create_mapping'
+;
+
+enum MatchMaker:
+    TRUE='true' | FALSE='false' 
 ;
