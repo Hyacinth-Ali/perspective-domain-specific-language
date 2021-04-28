@@ -125,7 +125,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        // initialize perspective with perspective actions and mappings
 		        «perspective.name»Specification.initializePerspective(perspective);
 		        
-		        String fileName = "/Users/hyacinthali/git/touchram/ca.mcgill.sel.ram/resources/models/testperspectives/"
+		        String fileName = "/Users/hyacinthali/workspace/TouchCORE2/touchram/ca.mcgill.sel.ram/resources/models/testperspectives/"
 		           + "«perspective.name»_Perspective";
 		        
 		        try {

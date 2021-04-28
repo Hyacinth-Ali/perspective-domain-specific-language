@@ -44,5 +44,23 @@ Action:
    'create' methodNameAndParameters = STRING '{'
         'metaclass' ':' metaclass = ID';'
         'classQualifiedName' ':' classQualifiedName = STRING';'
+        
+        ('secondary' 'effects' '{'
+        	(secondaryEffects += ActionEffect)*
+        	
+        '}')?
    '}'
+;
+
+ActionEffect:
+	CreateEffect | DeleteEffect | UpdateEffect
+;
+CreateEffect:
+    'create' 'element' ':' 'type' type = ID';'
+;
+DeleteEffect:
+    'delete' 'element' ':' 'deleteParameterEffect' deleteParameterEffect = ID';'
+;
+UpdateEffect:
+    'update' 'element' ':' 'updateParameterEffect' updateParameterEffect = ID 'affectedFeature' affectedFeature = ID';'
 ;
