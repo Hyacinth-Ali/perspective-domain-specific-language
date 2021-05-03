@@ -3,6 +3,9 @@ package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.generator
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.LanguageElementMapping
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Cardinality
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveActionType
 
 class PerspectiveSpecification {
 	
@@ -29,7 +32,7 @@ class PerspectiveSpecification {
 	 		import «language.rootPackage».*;
 	 	«ENDFOR»
 	 	
-	 	public class «perspective.name»Specification {
+	 	public class «perspective.name» {
 	 	
 	 	    public static COREPerspective initializePerspective(COREPerspective perspective) {
 	 	

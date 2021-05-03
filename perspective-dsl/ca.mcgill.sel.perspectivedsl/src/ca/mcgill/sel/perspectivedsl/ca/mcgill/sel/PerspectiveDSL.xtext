@@ -19,7 +19,7 @@ Perspective:
         '}'
 
         'actions' '{'
-            (actions += Action)*
+            (actions += PerspectiveAction)*
         '}'
 
         'mappings' '{'
@@ -33,6 +33,7 @@ Language:
     'existing' 'language' name = ID '{'
         "rootPackage" rootPackage = STRING';'
         "packageClassName" packageClassName = ID';'
+        "controllerPackage" controllerPackage = STRING';'
         "roleName" roleName = ID';'
     '}'
 ;
@@ -60,10 +61,14 @@ NestedMapping:
 ;
 
 
-Action:
-    //   'action' (actionType ?= PerspectiveActionType)?  name = ID';'
-    // 'action' perspectiveActionType = PerspectiveActionType  roleName = ID name = STRING';'
-    perspectiveActionType = PerspectiveActionType langActionType = LanguageActionType
+PerspectiveAction:
+    perspectiveActionType = PerspectiveActionType langActionType = LanguageActionType 'action' name = ID (end ?= ';')? ('{'
+    	'roleName' ':' roleName = ID';'
+    	'methodTypeAndParameters' ':' typeParameters = STRING';'
+    	'methodCall' ':' methodCall = STRING';'
+    	'methodParameters' ':' methodParameter = STRING';'
+    	'metaclass' ':' metaclass = ID';'
+    '}')?
 ;
 
 

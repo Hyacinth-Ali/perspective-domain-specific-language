@@ -8,6 +8,9 @@ import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveActionType
 
 /**
  * Generates code from your model files on save.
@@ -23,6 +26,14 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
                  "ca/mcgill/sel/core/perspective/"  + perspective.name.toLowerCase() + "/" + perspective.name + ".java",
                 perspective.compile
                 )
+             for (Language language : perspective.languages) {
+             	if (containsRedefinedAction(perspective, language)) {
+             		fsa.generateFile(
+                 		"ca/mcgill/sel/core/perspective/"  + perspective.name.toLowerCase() + "/Redefined" + language.name + "Action.java",
+                		RedefinedAction.compileActions(perspective, language)
+                	)
+             	}
+             }
         }
         
         for (perspective : resource.allContents.toIterable.filter(Perspective)){
@@ -140,4 +151,17 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		'''
 		
 	}
+	
+		 /**
+	  * This method checks if a language contains redefined action.
+	  */
+	 def static boolean containsRedefinedAction(Perspective perspective, Language language) {
+	 	var roleName = language.roleName;
+	 	for (PerspectiveAction pA : perspective.actions) {
+	 		if (pA.roleName == roleName && pA.perspectiveActionType == PerspectiveActionType.REDEFINED) {
+	 			return true;
+	 		}
+	 	}
+	 	return false;
+	 }
 }
