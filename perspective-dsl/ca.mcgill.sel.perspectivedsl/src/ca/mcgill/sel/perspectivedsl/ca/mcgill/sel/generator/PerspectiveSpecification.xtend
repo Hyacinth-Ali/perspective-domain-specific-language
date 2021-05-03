@@ -155,10 +155,12 @@ class PerspectiveSpecification {
 	 	     * @param toNestedElementName - to nested language element name
 	 	     * @param fromRoleName - the role name of the from language in the perspective.
 	 	     * @param toRoleName - the role name of the to language in the perspective.
+	 	     * @param matchMaker - the flag which determines if the values of the respective nested mapping language elements
+	 	     * can used to find corresponding element.
 	 	     */
 	 	    private static void createNestedMapping(CORELanguageElementMapping mappingType,
 	 	            CORELanguageElement fromLanguageElement, CORELanguageElement toLanguageElement, String fromNestedElementName, 
-	 	            String toNestedElementName, String fromRoleName, String toRoleName) {
+	 	            String toNestedElementName, String fromRoleName, String toRoleName, boolean matchMaker) {
 	 	
 	 	        // from nested language element, which is contained in fromLanguageElement
 	 	        CORELanguageElement fromNestedElement = getNestedElement(fromLanguageElement, fromNestedElementName);
@@ -168,6 +170,7 @@ class PerspectiveSpecification {
 	 	
 	 	        // create the nested mapping
 	 	        CORELanguageElementMapping nestedElementMapping = CoreFactory.eINSTANCE.createCORELanguageElementMapping();
+	 	        nestedElementMapping.setMatchMaker(matchMaker);
 	 	        
 	 	        MappingEnd fromNestedElementMappingEnd = CoreFactory.eINSTANCE.createMappingEnd();
 	 	        fromNestedElementMappingEnd.setRoleName(fromRoleName);

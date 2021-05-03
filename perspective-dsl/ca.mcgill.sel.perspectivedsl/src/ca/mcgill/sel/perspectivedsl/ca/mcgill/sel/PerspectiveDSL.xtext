@@ -62,7 +62,8 @@ NestedMapping:
 
 Action:
     //   'action' (actionType ?= PerspectiveActionType)?  name = ID';'
-    'action' actionType = PerspectiveActionType  roleName = ID name = STRING';'
+    // 'action' perspectiveActionType = PerspectiveActionType  roleName = ID name = STRING';'
+    perspectiveActionType = PerspectiveActionType langActionType = LanguageActionType
 ;
 
 
@@ -77,6 +78,10 @@ enum Cardinality:
 
 enum PerspectiveActionType :
     REEXPOSE='re_expose' | REDEFINED='redefined' | CREATE_MAPPING='create_mapping'
+;
+
+enum LanguageActionType :
+	CREATE ='create' | DELETE='delete' | UPDATE='update'
 ;
 
 enum MatchMaker:
