@@ -13,7 +13,7 @@ class PerspectiveSpecification {
 	 	
 	 	'''
 	 	
-	 	package ca.mcgill.sel.core.perspective.«perspective.name.toLowerCase»;
+	 	package ca.mcgill.sel.core.perspective.«perspective.name.toLowerCase»Specification;
 	 	
 	 	import org.eclipse.emf.ecore.EObject;
 	 	
@@ -83,10 +83,10 @@ class PerspectiveSpecification {
 	 	            CORELanguageElement «mapping.name.toFirstLower»MappingToLanguageELement = «mapping.name.toFirstLower»Mapping.getToLanguageElement();
 	 	            
                     «FOR nestedMapping : mapping.nestedMappings»
-                   
+	 	            
                           createNestedMapping(«mapping.name.toFirstLower»MappingType, «mapping.name.toFirstLower»MappingFromLanguageELement, 
                             «mapping.name.toFirstLower»MappingToLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
-                            "«mapping.fromRoleName»", "«mapping.toRoleName»");
+                            "«mapping.fromRoleName»", "«mapping.toRoleName»", «nestedMapping.matchMaker»);
 
                     «ENDFOR»
                   

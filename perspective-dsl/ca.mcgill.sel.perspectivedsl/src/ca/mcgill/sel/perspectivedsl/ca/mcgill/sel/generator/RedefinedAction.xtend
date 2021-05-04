@@ -9,6 +9,8 @@ class RedefinedAction {
 	def static compileActions(Perspective perspective, Language language) {
 		
 		'''
+		package ca.mcgill.sel.core.perspective.«perspective.name.toLowerCase»;
+		
 		import java.util.ArrayList;
 		import java.util.List;
 		import java.util.Map;
