@@ -31,25 +31,22 @@ class RedefinedAction {
 		
 		import «language.rootPackage».*;
 		import «language.controllerPackage».*;
+		import «language.facadeActionPackage».*;
 		
 		public class Redefined«language.name»Action {
 		«FOR action : perspective.actions»
 			«IF action.perspectiveActionType == PerspectiveActionType.REDEFINED»
 				public void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
 					«action.typeParameters») {
-					// a list to contain all the newly created classes
-					List<EObject> elements = new ArrayList<EObject>();
-					// a list to contain all the existing classes
-					List<EObject> initialElements = new ArrayList<EObject>();
-					initialElements.addAll(owner.getA1s());
+					
+				// record existing elements.
+				BaseFacade.INSTANCE.recordElements(owner);
 				
 					// primary language action to create a new class
 					«action.methodCall»;
 				
 					// retrieve the new element
-					elements.addAll(owner.getA1s());
-					elements.removeAll(initialElements);
-					EObject newElement = elements.get(0);
+					EObject newElement = BaseFacade.INSTANCE.getNewElement(owner);
 				
 					createOtherElementsFor«action.metaclass»(perspective, scene, currentRole, newElement,
 					 	«action.methodParameter»);

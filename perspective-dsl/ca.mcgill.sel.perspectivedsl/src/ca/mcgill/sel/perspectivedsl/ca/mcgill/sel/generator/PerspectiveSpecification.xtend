@@ -13,7 +13,7 @@ class PerspectiveSpecification {
 	 	
 	 	'''
 	 	
-	 	package ca.mcgill.sel.core.perspective.«perspective.name.toLowerCase»Specification;
+	 	package ca.mcgill.sel.core.perspective.«perspective.name.toLowerCase»;
 	 	
 	 	import org.eclipse.emf.ecore.EObject;
 	 	
@@ -32,7 +32,7 @@ class PerspectiveSpecification {
 	 		import «language.rootPackage».*;
 	 	«ENDFOR»
 	 	
-	 	public class «perspective.name» {
+	 	public class «perspective.name»Specification {
 	 	
 	 	    public static COREPerspective initializePerspective(COREPerspective perspective) {
 	 	

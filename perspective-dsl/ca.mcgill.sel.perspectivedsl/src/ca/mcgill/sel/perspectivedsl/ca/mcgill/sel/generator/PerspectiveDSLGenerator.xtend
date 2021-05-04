@@ -23,13 +23,13 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		
 		for (perspective : resource.allContents.toIterable.filter(Perspective)){
             fsa.generateFile(
-                 "ca/mcgill/sel/core/perspective/"  + perspective.name.toLowerCase() + "/" + perspective.name + ".java",
+                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/" + perspective.name + ".java",
                 perspective.compile
                 )
              for (Language language : perspective.languages) {
              	if (containsRedefinedAction(perspective, language)) {
              		fsa.generateFile(
-                 		"ca/mcgill/sel/core/perspective/"  + perspective.name.toLowerCase() + "/Redefined" + language.name + "Action.java",
+                 		"ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/Redefined" + language.name + "Action.java",
                 		RedefinedAction.compileActions(perspective, language)
                 	)
              	}
@@ -38,14 +38,14 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
         
         for (perspective : resource.allContents.toIterable.filter(Perspective)){
             fsa.generateFile(
-                 "ca/mcgill/sel/core/perspective/"  + perspective.name.toLowerCase() + "/" + perspective.name + "Specification.java",
+                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/" + perspective.name + "Specification.java",
                 PerspectiveSpecification.compile(perspective)
                 )
         }
         
         for (perspective : resource.allContents.toIterable.filter(Perspective)){
             fsa.generateFile(
-                 "ca/mcgill/sel/core/perspective/"  + perspective.name.toLowerCase() + "/" + "ElementMapping.java",
+                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/" + "ElementMapping.java",
                 ElementMapping.compile(perspective)
                 )
         }
