@@ -88,73 +88,73 @@ class RedefinedAction {
 				
 						// C1
 						case CAN_CREATE:
-							canCreateElement(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
+							canCreateElementFor«action.metaclass»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
 									«action.methodParameter»);
 							break;
 				
 						// C2
 						case CREATE:
-							createElement(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
+							createElementFor«action.metaclass»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
 									«action.methodParameter»);
 							break;
 				
 						// C3
 						case CAN_CREATE_MANY:
-							canCreateManyElements(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
+							canCreateManyElementsFor«action.metaclass»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
 									«action.methodParameter»);
 							break;
 				
 						// C4
 						case CREATE_AT_LEAST_ONE:
-							createAtLeastOneElement(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
+							createAtLeastOneElementFor«action.metaclass»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
 									«action.methodParameter»);
 							break;
 				
 						// C5
 						case CAN_CREATE_OR_USE:
-							canCreateOrUseElement(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
+							canCreateOrUseElementFor«action.metaclass»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
 									«action.methodParameter»);
 							break;
 				
 						// C6
 						case CREATE_OR_USE:
-							createOrUseElement(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
+							createOrUseElementFor«action.metaclass»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
 									«action.methodParameter»);
 							break;
 				
 						// C7
 						case CAN_CREATE_OR_USE_MANY:
-							canCreateOrUseManyElements(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
+							canCreateOrUseManyElementsFor«action.metaclass»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
 									«action.methodParameter»);
 							break;
 				
 						// C8
 						case CREATE_OR_USE_AT_LEAST_ONE:
-							createOrUseAtLeastOneElement(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
+							createOrUseAtLeastOneElementFor«action.metaclass»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
 									«action.methodParameter»);
 							break;
 				
 						// C9
 						case CAN_CREATE_OR_USE_NON_MAPPED:
-							canCreateOrUseNonMappedElement(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
+							canCreateOrUseNonMappedElementFor«action.metaclass»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
 									otherLE, «action.methodParameter»);
 							break;
 				
 						// C10
 						case CREATE_OR_USE_NON_MAPPED:
-							createOrUseNonMappedElement(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
+							createOrUseNonMappedElementFor«action.metaclass»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
 									otherLE, «action.methodParameter»);
 							break;
 				
 						// C11
 						case CAN_CREATE_OR_USE_NON_MAPPED_MANY:
-							canCreateOrUseNonMappedManyElements(perspective, mappingType, scene, currentElement, currentRoleName,
+							canCreateOrUseNonMappedManyElementsFor«action.metaclass»(perspective, mappingType, scene, currentElement, currentRoleName,
 									otherRoleName, otherLE, «action.methodParameter»);
 							break;
 				
 						// C12
 						case CREATE_OR_USE_NON_MAPPED_AT_LEAST_ONE:
-							createOrUseNonMappedAtLeastOneElement(perspective, mappingType, scene, currentElement, currentRoleName,
+							createOrUseNonMappedAtLeastOneElementFor«action.metaclass»(perspective, mappingType, scene, currentElement, currentRoleName,
 									otherRoleName, otherLE, «action.methodParameter»);
 							break;
 				
@@ -179,7 +179,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void canCreateElement(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private void canCreateElementFor«action.metaclass»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -215,7 +215,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void createElement(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene, EObject currentElement,
+				private void createElementFor«action.metaclass»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene, EObject currentElement,
 						String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -243,7 +243,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void canCreateManyElements(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private void canCreateManyElementsFor«action.metaclass»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -275,7 +275,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void createAtLeastOneElement(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private void createAtLeastOneElementFor«action.metaclass»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -308,7 +308,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void canCreateOrUseElement(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private void canCreateOrUseElementFor«action.metaclass»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -350,7 +350,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void createOrUseElement(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private void createOrUseElementFor«action.metaclass»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -388,7 +388,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void canCreateOrUseManyElements(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private void canCreateOrUseManyElementsFor«action.metaclass»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -433,7 +433,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void createOrUseAtLeastOneElement(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private void createOrUseAtLeastOneElementFor«action.metaclass»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -479,7 +479,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void canCreateOrUseNonMappedElement(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private void canCreateOrUseNonMappedElementFor«action.metaclass»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -518,7 +518,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void createOrUseNonMappedElement(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private void createOrUseNonMappedElementFor«action.metaclass»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -559,7 +559,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void canCreateOrUseNonMappedManyElements(COREPerspective perspective, CORELanguageElementMapping mappingType,
+				private void canCreateOrUseNonMappedManyElementsFor«action.metaclass»(COREPerspective perspective, CORELanguageElementMapping mappingType,
 						COREScene scene, EObject currentElement, String currentRoleName, String otherRoleName,
 						EObject otherLE, «action.typeParameters») {
 				
@@ -607,7 +607,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void createOrUseNonMappedAtLeastOneElement(COREPerspective perspective, CORELanguageElementMapping mappingType,
+				private void createOrUseNonMappedAtLeastOneElementFor«action.metaclass»(COREPerspective perspective, CORELanguageElementMapping mappingType,
 						COREScene scene, EObject currentElement, String currentRoleName, String otherRoleName,
 						EObject otherLE, «action.typeParameters») {
 				
