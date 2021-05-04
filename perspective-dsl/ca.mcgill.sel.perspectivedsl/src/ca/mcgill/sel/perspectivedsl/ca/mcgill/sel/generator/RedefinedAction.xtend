@@ -36,8 +36,8 @@ class RedefinedAction {
 		
 		public class Redefined«language.name»Action {
 		«FOR action : perspective.actions»
-			«IF action.perspectiveActionType == PerspectiveActionType.REDEFINED && 
-			action.langActionType == LanguageActionType.CREATE»
+			«IF action.langActionType == LanguageActionType.CREATE &&
+			action.roleName.equals(language.roleName)»
 				public void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
 					«action.typeParameters») {
 					
@@ -173,7 +173,7 @@ class RedefinedAction {
 				 * @param mappingType
 				 * @param scene
 				 * @param currentElement
-				 * @param currentRoleName TODO
+				 * @param currentRoleName 
 				 * @param otherRoleName
 				 * @param otherLE
 				 * @param currentOwner
@@ -209,7 +209,7 @@ class RedefinedAction {
 				 * @param mappingType
 				 * @param scene
 				 * @param currentElement
-				 * @param currentRoleName TODO
+				 * @param currentRoleName 
 				 * @param otherRoleName
 				 * @param otherLE
 				 * @param currentOwner
@@ -237,7 +237,7 @@ class RedefinedAction {
 				 * @param mappingType
 				 * @param scene
 				 * @param currentElement
-				 * @param currentRoleName TODO
+				 * @param currentRoleName 
 				 * @param otherRoleName
 				 * @param otherLE
 				 * @param currentOwner
@@ -269,7 +269,7 @@ class RedefinedAction {
 				 * @param mappingType
 				 * @param scene
 				 * @param currentElement
-				 * @param currentRoleName TODO
+				 * @param currentRoleName 
 				 * @param otherRoleName
 				 * @param otherLE
 				 * @param currentOwner
@@ -302,7 +302,7 @@ class RedefinedAction {
 				 * @param mappingType
 				 * @param scene
 				 * @param currentElement
-				 * @param currentRoleName TODO
+				 * @param currentRoleName 
 				 * @param otherRoleName
 				 * @param otherLE
 				 * @param currentOwner
@@ -344,7 +344,7 @@ class RedefinedAction {
 				 * @param mappingType
 				 * @param scene
 				 * @param currentElement
-				 * @param currentRoleName TODO
+				 * @param currentRoleName 
 				 * @param otherRoleName
 				 * @param otherLE
 				 * @param currentOwner
@@ -382,7 +382,7 @@ class RedefinedAction {
 				 * @param mappingType
 				 * @param scene
 				 * @param currentElement
-				 * @param currentRoleName TODO
+				 * @param currentRoleName 
 				 * @param otherRoleName
 				 * @param otherLE
 				 * @param currentOwner
@@ -427,7 +427,7 @@ class RedefinedAction {
 				 * @param mappingType
 				 * @param scene
 				 * @param currentElement
-				 * @param currentRoleName TODO
+				 * @param currentRoleName 
 				 * @param otherRoleName
 				 * @param otherLE
 				 * @param currentOwner
@@ -473,7 +473,7 @@ class RedefinedAction {
 				 * @param mappingType
 				 * @param scene
 				 * @param currentElement
-				 * @param currentRoleName TODO
+				 * @param currentRoleName 
 				 * @param otherRoleName
 				 * @param otherLE
 				 * @param currentOwner
@@ -512,7 +512,7 @@ class RedefinedAction {
 				 * @param mappingType
 				 * @param scene
 				 * @param currentElement
-				 * @param currentRoleName TODO
+				 * @param currentRoleName 
 				 * @param otherRoleName
 				 * @param otherLE
 				 * @param currentOwner
@@ -553,7 +553,7 @@ class RedefinedAction {
 				 * @param mappingType
 				 * @param scene
 				 * @param currentElement
-				 * @param currentRoleName TODO
+				 * @param currentRoleName 
 				 * @param otherRoleName
 				 * @param otherLE
 				 * @param currentOwner
@@ -601,7 +601,7 @@ class RedefinedAction {
 				 * @param mappingType
 				 * @param scene
 				 * @param currentElement
-				 * @param currentRoleName TODO
+				 * @param currentRoleName 
 				 * @param otherRoleName
 				 * @param otherLE
 				 * @param currentOwner
@@ -639,8 +639,8 @@ class RedefinedAction {
 					}
 				}
 				
-			«ELSEIF action.perspectiveActionType == PerspectiveActionType.REDEFINED && 
-			action.langActionType == LanguageActionType.DELETE»
+			«ELSEIF action.langActionType == LanguageActionType.DELETE &&
+			action.roleName.equals(language.roleName)»
 				public void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
 					«action.methodCall»;
 					deleteOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, «action.methodParameter»);
