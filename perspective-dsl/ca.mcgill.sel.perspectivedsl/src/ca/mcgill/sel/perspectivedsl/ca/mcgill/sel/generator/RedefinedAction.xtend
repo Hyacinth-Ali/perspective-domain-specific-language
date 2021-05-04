@@ -42,13 +42,13 @@ class RedefinedAction {
 					«action.typeParameters») {
 					
 					// record existing elements.
-					BaseFacade.INSTANCE.recordElements(owner);
+					BaseFacade.INSTANCE.recordElements(owner, «action.metaclass»);
 				
 					// primary language action to create a new class
 					«action.methodCall»;
 				
 					// retrieve the new element
-					EObject newElement = BaseFacade.INSTANCE.getNewElement(owner);
+					EObject newElement = BaseFacade.INSTANCE.getNewElement(owner, «action.metaclass»);
 				
 					createOtherElementsFor«action.metaclass»(perspective, scene, currentRole, newElement,
 					 	«action.methodParameter»);
