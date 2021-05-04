@@ -54,7 +54,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 	private def compile(Perspective perspective) {
 		
 		'''
-		package ca.mcgill.sel.core.perspective.«perspective.name.toLowerCase»;
+		package ca.mcgill.sel.perspective.«perspective.name.toLowerCase»;
 		
 		import java.io.IOException;
 		import java.util.List;

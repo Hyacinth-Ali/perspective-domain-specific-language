@@ -7,7 +7,7 @@ class ElementMapping {
     def static compile(Perspective perspective) {
         
         '''
-        package ca.mcgill.sel.core.perspective.«perspective.name.toLowerCase»;
+        package ca.mcgill.sel.perspective.«perspective.name.toLowerCase»;
         
         import ca.mcgill.sel.core.CORELanguageElement;
         import ca.mcgill.sel.core.CORELanguageElementMapping;
