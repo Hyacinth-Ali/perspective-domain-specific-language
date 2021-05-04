@@ -3,6 +3,7 @@ package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.generator
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveActionType
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.LanguageActionType
 
 class RedefinedAction {
 	
@@ -35,12 +36,13 @@ class RedefinedAction {
 		
 		public class Redefined«language.name»Action {
 		«FOR action : perspective.actions»
-			«IF action.perspectiveActionType == PerspectiveActionType.REDEFINED»
+			«IF action.perspectiveActionType == PerspectiveActionType.REDEFINED && 
+			action.langActionType == LanguageActionType.CREATE»
 				public void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
 					«action.typeParameters») {
 					
-				// record existing elements.
-				BaseFacade.INSTANCE.recordElements(owner);
+					// record existing elements.
+					BaseFacade.INSTANCE.recordElements(owner);
 				
 					// primary language action to create a new class
 					«action.methodCall»;
@@ -637,7 +639,8 @@ class RedefinedAction {
 					}
 				}
 				
-			«ELSE»
+			«ELSEIF action.perspectiveActionType == PerspectiveActionType.REDEFINED && 
+			action.langActionType == LanguageActionType.DELETE»
 				public void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
 					«action.methodCall»;
 					deleteOtherElementsFor«action.metaclass»(perspective, scene, currentRole, «action.methodParameter»);
