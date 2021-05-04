@@ -68,7 +68,8 @@ PerspectiveAction:
     	'methodTypeAndParameters' ':' typeParameters = STRING';'
     	'methodCall' ':' methodCall = STRING';'
     	'methodParameters' ':' methodParameter = STRING';'
-    	'metaclass' ':' metaclass = ID';'
+    	'metaclassName' ':' metaclassName = ID';'
+    	'metaclassObject' ':' metaclassObject = STRING';'
     '}')?
 ;
 
