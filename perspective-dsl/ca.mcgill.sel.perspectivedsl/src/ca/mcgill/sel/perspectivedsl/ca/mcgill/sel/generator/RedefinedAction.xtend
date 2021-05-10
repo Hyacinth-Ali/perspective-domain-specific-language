@@ -13,6 +13,7 @@ class RedefinedAction {
 		package ca.mcgill.sel.perspective.«perspective.name.toLowerCase»;
 		
 		import java.util.ArrayList;
+		import java.util.Collection;
 		import java.util.List;
 		import java.util.Map;
 		
@@ -38,20 +39,32 @@ class RedefinedAction {
 		«FOR action : perspective.actions»
 			«IF action.langActionType == LanguageActionType.CREATE &&
 			action.roleName.equals(language.roleName)»
-				public void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
+				public static void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
 					«action.typeParameters») {
 					
+					List<EObject> createSecondaryEffects = new ArrayList<EObject>();
+					«FOR createEffect : action.createEffects»
+						createSecondaryEffects.add(«createEffect.languageElement»);
+					«ENDFOR»
+					
 					// record existing elements.
-					BaseFacade.INSTANCE.recordElements(owner, «action.metaclassObject»);
-				
+					BaseFacade.INSTANCE.setMainExistingElements(owner, «action.metaclassObject»);
+					BaseFacade.INSTANCE.setOtherExistingElements(owner, createSecondaryEffects);
+					
 					// primary language action to create a new class
 					«action.methodCall»;
 				
 					// retrieve the new element
 					EObject newElement = BaseFacade.INSTANCE.getNewElement(owner, «action.metaclassObject»);
+					
+					// get other new elements foe each language element
+					Map<EObject, Collection<EObject>> after = BaseFacade.INSTANCE.getOtherNewElements(owner, createSecondaryEffects);
 				
 					createOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, newElement,
 					 	«action.methodParameter»);
+					 	
+					HandleSecondaryEffect.INSTANCE.handleSecondaryEffects(perspective, scene, currentRole, after, 
+						«action.methodParameter»);
 				
 				//		try {
 				//			createOtherElementsForLEMA1(perspective, scene, newElement, currentRole, owner, name);
@@ -62,7 +75,7 @@ class RedefinedAction {
 				
 				}
 				
-				private void createOtherElementsFor«action.metaclassName»(COREPerspective perspective, COREScene scene, String currentRoleName,
+				public static void createOtherElementsFor«action.metaclassName»(COREPerspective perspective, COREScene scene, String currentRoleName,
 						EObject currentElement, «action.typeParameters») throws PerspectiveException {
 				
 					List<CORELanguageElementMapping> mappingTypes = COREPerspectiveUtil.INSTANCE.getMappingTypes(perspective,
@@ -179,7 +192,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void canCreateElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private static void canCreateElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -215,7 +228,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void createElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene, EObject currentElement,
+				private static void createElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene, EObject currentElement,
 						String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -243,7 +256,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void canCreateManyElementsFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private static void canCreateManyElementsFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -275,7 +288,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void createAtLeastOneElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private static void createAtLeastOneElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -308,7 +321,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void canCreateOrUseElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private static void canCreateOrUseElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -350,7 +363,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void createOrUseElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private static void createOrUseElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -388,7 +401,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void canCreateOrUseManyElementsFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private static void canCreateOrUseManyElementsFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -433,7 +446,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void createOrUseAtLeastOneElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private static void createOrUseAtLeastOneElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -479,7 +492,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void canCreateOrUseNonMappedElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private static void canCreateOrUseNonMappedElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -518,7 +531,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void createOrUseNonMappedElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+				private static void createOrUseNonMappedElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
@@ -559,7 +572,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void canCreateOrUseNonMappedManyElementsFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType,
+				private static void canCreateOrUseNonMappedManyElementsFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType,
 						COREScene scene, EObject currentElement, String currentRoleName, String otherRoleName,
 						EObject otherLE, «action.typeParameters») {
 				
@@ -607,7 +620,7 @@ class RedefinedAction {
 				 * @param currentOwner
 				 * @param name
 				 */
-				private void createOrUseNonMappedAtLeastOneElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType,
+				private static void createOrUseNonMappedAtLeastOneElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType,
 						COREScene scene, EObject currentElement, String currentRoleName, String otherRoleName,
 						EObject otherLE, «action.typeParameters») {
 				
@@ -641,12 +654,12 @@ class RedefinedAction {
 				
 			«ELSEIF action.langActionType == LanguageActionType.DELETE &&
 			action.roleName.equals(language.roleName)»
-				public void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
+				public static void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
 					«action.methodCall»;
 					deleteOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, «action.methodParameter»);
 				}
 				
-				private void deleteOtherElementsFor«action.metaclassName»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
+				private static void deleteOtherElementsFor«action.metaclassName»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
 				
 					List<COREModelElementMapping> mappings = COREPerspectiveUtil.INSTANCE.getMappings(scene, currentElement);
 					// Traditional for loop is used here to avoid

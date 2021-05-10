@@ -70,7 +70,14 @@ PerspectiveAction:
     	'methodParameters' ':' methodParameter = STRING';'
     	'metaclassName' ':' metaclassName = ID';'
     	'metaclassObject' ':' metaclassObject = STRING';'
+    	('secondaryEffects' '{'
+    		(createEffects += CreateEffect)*
+    	'}')?
     '}')?
+;
+
+CreateEffect:
+	'languageElement' ':' languageElement = STRING';'
 ;
 
 
