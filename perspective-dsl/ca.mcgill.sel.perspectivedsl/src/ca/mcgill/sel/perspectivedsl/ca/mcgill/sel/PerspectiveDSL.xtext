@@ -72,12 +72,17 @@ PerspectiveAction:
     	'metaclassObject' ':' metaclassObject = STRING';'
     	('secondaryEffects' '{'
     		(createEffects += CreateEffect)*
+    		(deleteEffects += DeleteEffect)*
     	'}')?
     '}')?
 ;
 
 CreateEffect:
 	'languageElement' ':' languageElement = STRING';'
+;
+
+DeleteEffect:
+	'element' ':' element = STRING';'
 ;
 
 

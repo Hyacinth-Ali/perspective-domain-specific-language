@@ -19,17 +19,10 @@ class RedefinedAction {
 		
 		import org.eclipse.emf.ecore.EObject;
 		
-		import ca.mcgill.sel.core.CORELanguageElementMapping;
-		import ca.mcgill.sel.core.COREModelElementMapping;
-		import ca.mcgill.sel.core.COREPerspective;
-		import ca.mcgill.sel.core.COREScene;
-		import ca.mcgill.sel.core.MappingEnd;
-		import ca.mcgill.sel.core.perspective.ActionType;
-		import ca.mcgill.sel.core.perspective.COREPerspectiveUtil;
-		import ca.mcgill.sel.core.perspective.TemplateType;
-		import ca.mcgill.sel.ram.ui.perspective.QueryAction;
-		import ca.mcgill.sel.ram.ui.perspective.controller.BasePerspectiveController;
-		import ca.mcgill.sel.ram.ui.perspective.controller.PerspectiveException;
+		import ca.mcgill.sel.core.*;
+		import ca.mcgill.sel.core.perspective.*;
+		import ca.mcgill.sel.ram.ui.perspective.*;
+		import ca.mcgill.sel.ram.ui.perspective.controller.*;
 		
 		import «language.rootPackage».*;
 		import «language.controllerPackage».*;
@@ -63,7 +56,7 @@ class RedefinedAction {
 					createOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, newElement,
 					 	«action.methodParameter»);
 					 	
-					HandleSecondaryEffect.INSTANCE.handleSecondaryEffects(perspective, scene, currentRole, after, 
+					HandleSecondaryEffect.INSTANCE.createSecondaryEffects(perspective, scene, currentRole, after, 
 						«action.methodParameter»);
 				
 				//		try {
@@ -655,11 +648,21 @@ class RedefinedAction {
 			«ELSEIF action.langActionType == LanguageActionType.DELETE &&
 			action.roleName.equals(language.roleName)»
 				public static void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
+					
+					List<EObject> deleteSecondaryEffects = new ArrayList<EObject>();
+					«FOR deleteEffect : action.deleteEffects»
+						deleteSecondaryEffects.add(«deleteEffect.element»);
+					«ENDFOR»
+										
 					«action.methodCall»;
 					deleteOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, «action.methodParameter»);
+					
+					if (deleteSecondaryEffects != null) {
+						HandleSecondaryEffect.INSTANCE.deleteSecondaryEffects(perspective, scene, currentRole, deleteSecondaryEffects);
+					}
 				}
 				
-				private static void deleteOtherElementsFor«action.metaclassName»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
+				public static void deleteOtherElementsFor«action.metaclassName»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
 				
 					List<COREModelElementMapping> mappings = COREPerspectiveUtil.INSTANCE.getMappings(scene, currentElement);
 					// Traditional for loop is used here to avoid
