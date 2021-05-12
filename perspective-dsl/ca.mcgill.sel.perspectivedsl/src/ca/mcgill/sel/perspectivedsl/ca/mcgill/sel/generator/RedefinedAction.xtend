@@ -77,8 +77,7 @@ class RedefinedAction {
 						List<COREModelElementMapping> mappings = COREPerspectiveUtil.INSTANCE.getMappings(mappingType, scene,
 								currentElement);
 				
-						// other role names, i.e., excluding the current role
-						String otherRoleName = COREPerspectiveUtil.INSTANCE.getOtherRoleName(perspective, currentRoleName);
+						String otherRoleName = COREPerspectiveUtil.INSTANCE.getOtherRoleName(mappingType, currentRoleName);
 				
 						// the metaclass of the element to be created.
 						EObject otherLE = COREPerspectiveUtil.INSTANCE
@@ -88,7 +87,7 @@ class RedefinedAction {
 				
 						// check that the number of existing mappings is not zero.
 						if (mappings.size() != 0) {
-							break;
+							continue;
 						}
 						switch (actionType) {
 				
@@ -169,7 +168,7 @@ class RedefinedAction {
 				}
 				
 				/**
-				 * CAN_CREATE (C1): This method optionally creates a new element and then
+				 * (C1): This method optionally creates a new element and then
 				 * establishes model element mapping between the "element" parameter and the
 				 * new element.
 				 * 
@@ -205,7 +204,7 @@ class RedefinedAction {
 				
 				
 				/**
-				 * CAN_CREATE (C2): This method proactively creates a new element and then
+				 * (C2): This method proactively creates a new element and then
 				 * establishes model element mapping between the "element" parameter and the
 				 * new element.
 				 * 
@@ -233,7 +232,7 @@ class RedefinedAction {
 				}
 				
 				/**
-				 * CAN_CREATE (C3): This method can create many elements and then
+				 * (C3): This method can create many elements and then
 				 * establishes model element mapping between the "element" parameter and each of
 				 * the new elements. The user determines the number of new elements that can be created.
 				 * 
@@ -265,7 +264,7 @@ class RedefinedAction {
 				}
 				
 				/**
-				 * CAN_CREATE (C4): This method proactively creates at least one element and then
+				 * (C4): This method proactively creates at least one element and then
 				 * establishes model element mapping between the "element" parameter and the
 				 * new element.
 				 * 
@@ -297,7 +296,7 @@ class RedefinedAction {
 				}
 				
 				/**
-				 * CAN_CREATE (C5): This method can create or use an existing element to
+				 * (C5): This method can create or use an existing element to
 				 * establishes model element mapping between the "element" parameter and the
 				 * new element or the existing element. The user determines whether the method
 				 * should establish the model element mapping.
@@ -340,7 +339,7 @@ class RedefinedAction {
 				}
 				
 				/**
-				 * CAN_CREATE (C6): This method proactively creates or uses an existing element to
+				 * (C6): This method proactively creates or uses an existing element to
 				 * establishes model element mapping between the "element" parameter and the
 				 * new element or the existing element.
 				 * 
@@ -377,7 +376,7 @@ class RedefinedAction {
 				}
 				
 				/**
-				 * CAN_CREATE (C7): This method can create or use an existing elements to
+				 * (C7): This method can create or use an existing elements to
 				 * establish model element mappings between the "element" parameter and each of the
 				 * new element or existing elements. Similarly, the usser decides if the method should
 				 * create the mappings.
@@ -423,7 +422,7 @@ class RedefinedAction {
 				}
 				
 				/**
-				 * CAN_CREATE (C8): This method proactively creates or uses an existing element,
+				 * (C8): This method proactively creates or uses an existing element,
 				 * at least one element, to establishes model element mapping between the 
 				 * "element" parameter and the new element or the existing element.
 				 * 
@@ -469,7 +468,7 @@ class RedefinedAction {
 				}
 				
 				/**
-				 * CAN_CREATE (C9): This method can create or use non-mapped existing element to
+				 * (C9): This method can create or use non-mapped existing element to
 				 * establishes model element mapping between the "element" parameter and the
 				 * new element or the existing element.
 				 * 
@@ -508,7 +507,7 @@ class RedefinedAction {
 				}
 				
 				/**
-				 * CAN_CREATE (C10): This method proactively creates or uses non-mapped existing element to
+				 * (C10): This method proactively creates or uses non-mapped existing element to
 				 * establishes model element mapping between the "element" parameter and the
 				 * new element or the existing element.
 				 * 
@@ -549,7 +548,7 @@ class RedefinedAction {
 				}
 				
 				/**
-				 * CAN_CREATE (C11): This method can create many elements or use non-mapped 
+				 * (C11): This method can create many elements or use non-mapped 
 				 * existing elements to establish model element mappings between the "element" parameter 
 				 * and each of the new element or the existing element.
 				 * 
@@ -597,7 +596,7 @@ class RedefinedAction {
 				}
 				
 				/**
-				 * CAN_CREATE (C12): This method proactively creates many elements or uses non-mapped 
+				 * (C12): This method proactively creates many elements or uses non-mapped 
 				 * existing elements to establish model element mappings between the "element" parameter 
 				 * and each of the new element or the existing element.
 				 * 
