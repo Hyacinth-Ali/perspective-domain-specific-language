@@ -41,17 +41,18 @@ class RedefinedAction {
 					«ENDFOR»
 					
 					// record existing elements.
-					BaseFacade.INSTANCE.setMainExistingElements(owner, «action.metaclassObject»);
-					BaseFacade.INSTANCE.setOtherExistingElements(owner, createSecondaryEffects);
+					ModelElementStatus.INSTANCE.setMainExistingElements(owner, «action.metaclassObject»);
+					ModelElementStatus.INSTANCE.setOtherExistingElements(owner, createSecondaryEffects);
 					
 					// primary language action to create a new class
 					«action.methodCall»;
 				
 					// retrieve the new element
-					EObject newElement = BaseFacade.INSTANCE.getNewElement(owner, «action.metaclassObject»);
+					EObject newElement = ModelElementStatus.INSTANCE.getNewElement(owner, «action.metaclassObject»);
 					
-					// get other new elements foe each language element
-					Map<EObject, Collection<EObject>> after = BaseFacade.INSTANCE.getOtherNewElements(owner, createSecondaryEffects);
+					// get other new elements for each language element
+					Map<EObject, Collection<EObject>> a = ModelElementStatus.INSTANCE.getOtherNewElements(owner, createSecondaryEffects);
+					Map<EObject, Collection<EObject>> after = new HashMap<EObject, Collection<EObject>>(a);
 				
 					createOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, newElement,
 					 	«action.methodParameter»);
