@@ -688,7 +688,7 @@ class RedefinedAction {
 						}
 				
 						// get other role name
-						String otherRoleName = COREPerspectiveUtil.INSTANCE.getOtherRoleName(perspective, currentRole);
+						String otherRoleName = COREPerspectiveUtil.INSTANCE.getOtherRoleName(mappingType, currentRole);
 						switch (deleteType) {
 				
 						case DELETE_OTHERS:
