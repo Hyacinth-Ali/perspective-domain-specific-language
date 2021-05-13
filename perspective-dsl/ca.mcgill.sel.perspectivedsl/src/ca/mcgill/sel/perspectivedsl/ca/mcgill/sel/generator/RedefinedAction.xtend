@@ -189,17 +189,22 @@ class RedefinedAction {
 						EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
+					boolean otherExist = true;
 					// Ask the user whether to create other model element and then establish
 					// the MEM
 					boolean isCreateMapping = QueryAction.INSTANCE.isCreateMapping();
 					if (isCreateMapping) {
-						otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
-							«action.methodParameter»);
+						otherElement = QueryAction.INSTANCE.findCorrespondingElement(scene, mappingType, currentElement.eClass(), currentElement, currentRoleName, otherRoleName);
+						if (otherElement == null) {
+							otherExist = false;
+							otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, «action.methodParameter»);
+						}
 						COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
 						// save the recent changes
 						// BasePerspectiveController.saveModel(scene);
-						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(),
-								name);
+						if(!otherExist) {
+							createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), name);	
+						}
 					}
 				}
 				
@@ -225,11 +230,19 @@ class RedefinedAction {
 						String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 				
 					EObject otherElement = null;
-					otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
-												«action.methodParameter»);
+					boolean otherExist = true;
+					otherElement = QueryAction.INSTANCE.findCorrespondingElement(scene, mappingType, currentElement.eClass(), currentElement, currentRoleName, otherRoleName);
+					if (otherElement == null) {
+						otherExist = false;
+						otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
+							«action.methodParameter»);
+					}
 					COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
 				//		BasePerspectiveController.saveModel(scene);
-					createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), name);
+					if (!otherExist) {
+						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), name);
+					}
+					
 				}
 				
 				/**
@@ -254,6 +267,7 @@ class RedefinedAction {
 				
 					EObject otherElement = null;
 					int numberOfMappings = QueryAction.INSTANCE.askNumberOfMappings();
+					List<EObject> otherElements = QueryAction.INSTANCE.findCorrespondingElements(scene, mappingType, currentElement.eClass(), currentElement, currentRoleName, otherRoleName);
 					for (int count = 0; count < numberOfMappings; count++) {
 						otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
 													«action.methodParameter»);
