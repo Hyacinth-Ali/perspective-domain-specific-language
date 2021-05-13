@@ -323,7 +323,6 @@ class RedefinedAction {
 					boolean isCreateMapping = QueryAction.INSTANCE.isCreateMapping();
 					if (isCreateMapping) {
 						// Check if a corresponding element exist, either mapped or not
-				//			otherElement = QueryAction.INSTANCE.findCorrespondingElementByName(scene, otherElement, toCreateRoleName);
 						otherElement = QueryAction.INSTANCE.findCorrespondingElement(scene, mappingType, currentElement.eClass(), currentElement, currentRoleName, otherRoleName);
 						if (otherElement == null) {
 							otherExist = false;
