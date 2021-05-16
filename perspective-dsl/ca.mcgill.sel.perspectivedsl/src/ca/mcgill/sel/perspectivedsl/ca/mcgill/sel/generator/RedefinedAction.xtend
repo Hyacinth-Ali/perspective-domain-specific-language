@@ -92,57 +92,57 @@ class RedefinedAction {
 							continue;
 						}
 						switch (actionType) {
-					
-						// C1/C5
+						
+						// C1/C9
 						case CAN_CREATE:
-						case CAN_CREATE_OR_USE:
-							canCreateOrUseElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
-									«action.methodParameter»);
-							break;
-				
-						// C2/C6
-						case CREATE:
-						case CREATE_OR_USE:
-							createOrUseElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
-									«action.methodParameter»);
-							break;
-				
-						// C3/C7
-						case CAN_CREATE_MANY:
-						case CAN_CREATE_OR_USE_MANY:
-							canCreateOrUseManyElementsFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
-									«action.methodParameter»);
-							break;
-				
-						// C4/C8
-						case CREATE_AT_LEAST_ONE:
-						case CREATE_OR_USE_AT_LEAST_ONE:
-							createOrUseAtLeastOneElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
-									«action.methodParameter»);
-							break;
-				
-						// C9
 						case CAN_CREATE_OR_USE_NON_MAPPED:
 							canCreateOrUseNonMappedElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
 									otherLE, «action.methodParameter»);
 							break;
 				
-						// C10
+						// C2/C10
+						case CREATE:
 						case CREATE_OR_USE_NON_MAPPED:
 							createOrUseNonMappedElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
 									otherLE, «action.methodParameter»);
 							break;
 				
-						// C11
+						// C3/C11
+						case CAN_CREATE_MANY:
 						case CAN_CREATE_OR_USE_NON_MAPPED_MANY:
 							canCreateOrUseNonMappedManyElementsFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName,
 									otherRoleName, otherLE, «action.methodParameter»);
 							break;
 				
-						// C12
+						// C4/C12
+						case CREATE_AT_LEAST_ONE:
 						case CREATE_OR_USE_NON_MAPPED_AT_LEAST_ONE:
 							createOrUseNonMappedAtLeastOneElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName,
 									otherRoleName, otherLE, «action.methodParameter»);
+							break;
+						
+						// C5
+						case CAN_CREATE_OR_USE:
+							canCreateOrUseElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
+									«action.methodParameter»);
+							break;
+				
+						// C6
+						case CREATE_OR_USE:
+							createOrUseElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
+									«action.methodParameter»);
+							break;
+				
+						// C7
+						case CAN_CREATE_OR_USE_MANY:
+							canCreateOrUseManyElementsFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
+									«action.methodParameter»);
+							break;
+				
+						// C8
+						case CREATE_OR_USE_AT_LEAST_ONE:
+							createOrUseAtLeastOneElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
+									«action.methodParameter»);
 							break;
 				
 						}
