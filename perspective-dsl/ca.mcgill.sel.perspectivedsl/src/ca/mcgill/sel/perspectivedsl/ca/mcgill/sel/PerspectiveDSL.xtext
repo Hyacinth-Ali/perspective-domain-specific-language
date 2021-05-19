@@ -35,7 +35,7 @@ Language:
         "packageClassName" packageClassName = ID';'
         "controllerPackage" controllerPackage = STRING';'
         "roleName" roleName = ID';'
-        'facadeActionPackage' ':' facadeActionPackage = STRING';' 
+        'utilPackage' ':' utilPackage = STRING';' 
     '}'
 ;
 

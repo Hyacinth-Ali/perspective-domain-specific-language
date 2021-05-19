@@ -27,7 +27,7 @@ class RedefinedAction {
 		
 		import «language.rootPackage».*;
 		import «language.controllerPackage».*;
-		import «language.facadeActionPackage».*;
+		import «language.utilPackage».*;
 		
 		public class Redefined«language.name»Action {
 		«FOR action : perspective.actions»
@@ -57,9 +57,10 @@ class RedefinedAction {
 				
 					createOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, newElement,
 					 	«action.methodParameter»);
-					 	
-					HandleSecondaryEffect.INSTANCE.createSecondaryEffects(perspective, scene, currentRole, after, 
-						«action.methodParameter»);
+					«IF action.createEffects.size > 0» 	
+						HandleSecondaryEffect.INSTANCE.createSecondaryEffects(perspective, scene, currentRole, after, 
+							«action.methodParameter»);
+					«ENDIF»
 				
 				//		try {
 				//			createOtherElementsForLEMA1(perspective, scene, newElement, currentRole, owner, name);
@@ -182,9 +183,10 @@ class RedefinedAction {
 						}
 						COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
 						// save the recent changes
-						// BasePerspectiveController.saveModel(scene);
+						BasePerspectiveController.saveModel(scene);
 						if(!otherExist) {
-							createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), name);	
+							owner = otherElement.eContainer();
+							createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, «action.methodParameter»);	
 						}
 					}
 				}
@@ -219,9 +221,10 @@ class RedefinedAction {
 							«action.methodParameter»);
 					}
 					COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-				//		BasePerspectiveController.saveModel(scene);
+					BasePerspectiveController.saveModel(scene);
 					if (!otherExist) {
-						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), name);
+						owner = otherElement.eContainer();
+						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, «action.methodParameter»);
 					}
 					
 				}
@@ -257,17 +260,17 @@ class RedefinedAction {
 						} else {
 							otherElement = existingElement;
 							COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-				//	  			BasePerspectiveController.saveModel(scene);
-								numberOfMappings--;
+							BasePerspectiveController.saveModel(scene);
+							numberOfMappings--;
 						}
 					}
 					for (int count = 0; count < numberOfMappings; count++) {
 						otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
 													«action.methodParameter»);
 						COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-				//	  		BasePerspectiveController.saveModel(scene);
-						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(),
-								name);
+						BasePerspectiveController.saveModel(scene);
+						owner = otherElement.eContainer();
+						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, «action.methodParameter»);
 					}
 				}
 				
@@ -301,18 +304,17 @@ class RedefinedAction {
 						} else {
 							otherElement = existingElement;
 							COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-				//	  			BasePerspectiveController.saveModel(scene);
-								numberOfMappings--;
+							BasePerspectiveController.saveModel(scene);
+							numberOfMappings--;
 						}
 					}
 					for (int count = 0; count < numberOfMappings; count++) {
 						otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
 													«action.methodParameter»);
 						COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-				//	  		BasePerspectiveController.saveModel(scene);
-						// call recursive method since a new element was used in the mapping
-						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(),
-								name);
+						BasePerspectiveController.saveModel(scene);
+						owner = otherElement.eContainer();
+						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, «action.methodParameter»);
 					}
 				}
 				
@@ -349,9 +351,10 @@ class RedefinedAction {
 														«action.methodParameter»);
 						}
 						COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-				//				BasePerspectiveController.saveModel(scene);
+						BasePerspectiveController.saveModel(scene);
 						if (!otherExist) {
-							createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), name);
+							owner = otherElement.eContainer();
+							createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, «action.methodParameter»);
 						}
 						
 				
@@ -390,11 +393,11 @@ class RedefinedAction {
 													«action.methodParameter»);
 					}
 					COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-				//		BasePerspectiveController.saveModel(scene);
+					BasePerspectiveController.saveModel(scene);
 					// stop the recursion if other element exists.
 					if (!otherExist) {
-						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(),
-								name);
+						owner = otherElement.eContainer();
+						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, «action.methodParameter»);
 					}
 				}
 				
@@ -430,7 +433,7 @@ class RedefinedAction {
 							if (COREPerspectiveUtil.INSTANCE.getMappings(mappingType, scene, existingElement).size() == 0) {
 								otherElement = existingElement;
 								COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-				//	  			BasePerspectiveController.saveModel(scene);
+					  			BasePerspectiveController.saveModel(scene);
 								numberOfMappings--;
 							}
 						}
@@ -439,9 +442,9 @@ class RedefinedAction {
 						otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
 													«action.methodParameter»);
 						COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-				//	  		BasePerspectiveController.saveModel(scene);
-						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(),
-								name);
+					  	BasePerspectiveController.saveModel(scene);
+					  	owner = otherElement.eContainer();
+						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, «action.methodParameter»);
 					}
 				}
 				
@@ -478,8 +481,8 @@ class RedefinedAction {
 							if (COREPerspectiveUtil.INSTANCE.getMappings(mappingType, scene, existingElement).size() == 0) {
 								otherElement = existingElement;
 								COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-				//		  			BasePerspectiveController.saveModel(scene);
-									numberOfMappings--;
+						  		BasePerspectiveController.saveModel(scene);
+								numberOfMappings--;
 							}
 						}
 					}
@@ -487,9 +490,9 @@ class RedefinedAction {
 						otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
 													«action.methodParameter»);
 						COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-				//	  		BasePerspectiveController.saveModel(scene);
-						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(),
-								name);
+					  	BasePerspectiveController.saveModel(scene);
+					  	owner = otherElement.eContainer();
+						createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, «action.methodParameter»);
 					}
 				}
 				
@@ -505,9 +508,9 @@ class RedefinedAction {
 					«action.methodCall»;
 					deleteOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, «action.methodParameter»);
 					
-					if (deleteSecondaryEffects != null) {
+					«IF action.deleteEffects.size > 0»
 						HandleSecondaryEffect.INSTANCE.deleteSecondaryEffects(perspective, scene, currentRole, deleteSecondaryEffects);
-					}
+					«ENDIF»
 				}
 				
 				public static void deleteOtherElementsFor«action.metaclassName»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
@@ -558,10 +561,7 @@ class RedefinedAction {
 				}
 				
 			«ENDIF»
-			 	        
-			
-
-		«ENDFOR»
+			«ENDFOR»
 		}
 		
 
