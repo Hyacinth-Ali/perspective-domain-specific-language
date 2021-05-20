@@ -40,7 +40,12 @@ Language:
         "controllerPackage" controllerPackage = STRING';'
         "roleName" roleName = ID';'
         'utilPackage' ':' utilPackage = STRING';' 
+        (otherRootPackages += OtherRootPackage)*
     '}'
+;
+
+OtherRootPackage:
+	"otherRootPackage" otherRootPackage = STRING';'
 ;
 
 LanguageElementMapping:
@@ -84,6 +89,7 @@ PerspectiveAction:
 FacadeAction:
     'facadeAction' name = ID '{'
     	'roleName' ':' roleName = ID';'
+    	'metaclassName' ':' metaclassName = ID';'
     	'methodTypeAndParameters' ':' typeParameters = STRING';'
     	'facade' 'calls' '{'
     		(facadeCalls += FacadeCall)*
@@ -93,12 +99,12 @@ FacadeAction:
 
 FacadeCall:
 	'metaclassObject' ':' metaclassObject = STRING';'
-	'methodCall' ':' methodCall = STRING';'
-    (parameter += Parameter)?
+	(mappings += ParameterMApping)*
+	'methodCall' ':' methodCall = STRING';'   
 ;
 
-Parameter:
-	'parameter' parameter = STRING';'
+ParameterMApping:
+	'mapping' mapping = STRING';'
 ;
 
 CreateEffect:

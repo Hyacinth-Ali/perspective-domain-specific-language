@@ -10,6 +10,7 @@ import org.eclipse.xtext.generator.IGeneratorContext
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.FacadeAction
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveActionType
 
 /**
@@ -31,6 +32,14 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
              		fsa.generateFile(
                  		"ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/Redefined" + language.name + "Action.java",
                 		RedefinedAction.compileActions(perspective, language)
+                	)
+             	}
+             }
+             for (Language language : perspective.languages) {
+             	if (containsFacadeAction(perspective, language)) {
+             		fsa.generateFile(
+                 		"ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/" + language.name + "FacadeAction.java",
+                		FacadeActionGen.compileFacadeActions(perspective, language)
                 	)
              	}
              }
@@ -152,13 +161,26 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		
 	}
 	
-		 /**
+	  /**
 	  * This method checks if a language contains redefined action.
 	  */
 	 def static boolean containsRedefinedAction(Perspective perspective, Language language) {
 	 	var roleName = language.roleName;
 	 	for (PerspectiveAction pA : perspective.actions) {
 	 		if (pA.roleName == roleName && pA.perspectiveActionType == PerspectiveActionType.REDEFINED) {
+	 			return true;
+	 		}
+	 	}
+	 	return false;
+	 }
+	 
+	 /**
+	  * This method checks if a language contains redefined action.
+	  */
+	 def static boolean containsFacadeAction(Perspective perspective, Language language) {
+	 	var roleName = language.roleName;
+	 	for (FacadeAction fA : perspective.facadeActions) {
+	 		if (fA.roleName == roleName) {
 	 			return true;
 	 		}
 	 	}
