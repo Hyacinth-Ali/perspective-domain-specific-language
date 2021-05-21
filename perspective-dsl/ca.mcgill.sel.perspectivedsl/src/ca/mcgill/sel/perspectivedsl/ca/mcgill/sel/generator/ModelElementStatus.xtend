@@ -1,10 +1,12 @@
 package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.generator
 
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
+
 class ModelElementStatus {
 	
-	def static compileElementStatus() {
+	def static compileElementStatus(Perspective perspective) {
 		'''
-		package ca.mcgill.sel.ram.ui.perspective.util;
+		package ca.mcgill.sel.perspective.«perspective.name.toLowerCase»;
 		
 		import java.util.ArrayList;
 		import java.util.Collection;
