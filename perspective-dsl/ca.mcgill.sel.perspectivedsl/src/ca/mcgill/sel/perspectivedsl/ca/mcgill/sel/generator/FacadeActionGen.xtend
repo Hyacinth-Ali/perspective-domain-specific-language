@@ -25,6 +25,7 @@ class FacadeActionGen {
 		import ca.mcgill.sel.core.*;
 		import ca.mcgill.sel.core.perspective.COREPerspectiveUtil;
 		
+		import «language.rootPackage».*;
 		«FOR p : language.otherRootPackages»
 			import «p.otherRootPackage».*;
 		«ENDFOR»
