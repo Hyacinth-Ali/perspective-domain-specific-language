@@ -1,10 +1,9 @@
 package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.generator
 
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.LanguageActionType
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.CreateFacadeAction
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.DeleteFacadeAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
 
 class FacadeActionGen {
 	

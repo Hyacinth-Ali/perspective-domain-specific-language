@@ -25,6 +25,11 @@ Perspective:
         ('facade' 'actions' '{'
         	(facadeActions += FacadeAction)*
         '}')?
+        
+        ('secondary' 'effects' '{'
+        	(createSecondaryEffect = CreateSecondaryEffect)?
+        	(deleteSecondaryEffect = DeleteSecondaryEffect)?
+        '}')?
 
         ('mappings' '{'
             (mappings += LanguageElementMapping)*
@@ -38,8 +43,7 @@ Language:
         "rootPackage" rootPackage = STRING';'
         "packageClassName" packageClassName = ID';'
         "controllerPackage" controllerPackage = STRING';'
-        "roleName" roleName = ID';'
-        'utilPackage' ':' utilPackage = STRING';' 
+        "roleName" roleName = ID';' 
         (otherRootPackages += OtherRootPackage)*
     '}'
 ;
@@ -83,7 +87,7 @@ PerspectiveAction:
 ;
 
 FacadeAction:
-	CreateFacadeAction | DeleteFacadeAction
+	CreateFacadeAction | DeleteFacadeAction 
 ;
 
 CreateFacadeAction:
@@ -108,6 +112,18 @@ DeleteFacadeAction:
 	'}'
 ;
 
+CreateSecondaryEffect:
+	'create' 'secondary' 'effects' '{'
+    		(facadeCalls += FacadeCall)+
+    '}'
+;
+
+DeleteSecondaryEffect:
+	'delete' 'secondary' 'effects' '{'
+    		(facadeCalls += FacadeCall)+
+    '}'
+;
+
 OtherRootPackage:
 	"otherRootPackage" otherRootPackage = STRING';'
 ;
@@ -119,11 +135,12 @@ MethodCall:
 
 FacadeCall:
 	'metaclassObject' ':' metaclassObject = STRING';'
-	(mappings += ParameterMApping)*
+	(mappings += ParameterMapping)*
 	'methodCall' ':' methodCall = STRING';'   
 ;
 
-ParameterMApping:
+
+ParameterMapping:
 	'mapping' mapping = STRING';'
 ;
 
