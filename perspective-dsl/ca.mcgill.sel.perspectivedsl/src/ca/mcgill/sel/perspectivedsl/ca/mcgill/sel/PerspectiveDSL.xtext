@@ -18,13 +18,22 @@ Perspective:
             (languages += Language)*
         '}'
 
-        'actions' '{'
+        ('actions' '{'
             (actions += PerspectiveAction)*
-        '}'
+        '}')?
+        
+        ('facade' 'actions' '{'
+        	(facadeActions += FacadeAction)*
+        '}')?
+        
+        ('secondary' 'effects' '{'
+        	(createSecondaryEffect = CreateSecondaryEffect)?
+        	(deleteSecondaryEffect = DeleteSecondaryEffect)?
+        '}')?
 
-        'mappings' '{'
+        ('mappings' '{'
             (mappings += LanguageElementMapping)*
-        '}'
+        '}')?
 
     '}'
 ;
@@ -34,8 +43,8 @@ Language:
         "rootPackage" rootPackage = STRING';'
         "packageClassName" packageClassName = ID';'
         "controllerPackage" controllerPackage = STRING';'
-        "roleName" roleName = ID';'
-        'facadeActionPackage' ':' facadeActionPackage = STRING';' 
+        "roleName" roleName = ID';' 
+        (otherRootPackages += OtherRootPackage)*
     '}'
 ;
 
@@ -75,6 +84,64 @@ PerspectiveAction:
     		(deleteEffects += DeleteEffect)*
     	'}')?
     '}')?
+;
+
+FacadeAction:
+	CreateFacadeAction | DeleteFacadeAction 
+;
+
+CreateFacadeAction:
+    'facadeAction' 'create' name = ID '{'
+    	'roleName' ':' roleName = ID';'
+    	'metaclassName' ':' metaclassName = ID';'
+    	'methodTypeAndParameters' ':' typeParameters = STRING';'
+    	'facade' 'calls' '{'
+    		(facadeCalls += FacadeCall)*
+    	'}'
+    '}'
+;
+
+DeleteFacadeAction:
+	'facadeAction' 'delete' name = ID '{'
+		'roleName' ':' roleName = ID';'
+		'elementName' ':' elementName = ID';'
+		'method' 'calls' '{'
+			(methodCalls += MethodCall)+
+		'}'
+		
+	'}'
+;
+
+CreateSecondaryEffect:
+	'create' 'secondary' 'effects' '{'
+    		(facadeCalls += FacadeCall)+
+    '}'
+;
+
+DeleteSecondaryEffect:
+	'delete' 'secondary' 'effects' '{'
+    		(facadeCalls += FacadeCall)+
+    '}'
+;
+
+OtherRootPackage:
+	"otherRootPackage" otherRootPackage = STRING';'
+;
+
+MethodCall:
+	'metaclassName' ':' metaclassName = ID';'
+	'methodCall' ':' methodCall = STRING';'
+;
+
+FacadeCall:
+	'metaclassObject' ':' metaclassObject = STRING';'
+	(mappings += ParameterMapping)*
+	'methodCall' ':' methodCall = STRING';'   
+;
+
+
+ParameterMapping:
+	'mapping' mapping = STRING';'
 ;
 
 CreateEffect:

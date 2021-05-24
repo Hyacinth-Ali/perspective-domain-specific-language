@@ -10,6 +10,7 @@ import org.eclipse.xtext.generator.IGeneratorContext
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.FacadeAction
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveActionType
 
 /**
@@ -26,11 +27,30 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
                  "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/" + perspective.name + ".java",
                 perspective.compile
                 )
+                
+           fsa.generateFile(
+                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/ModelElementStatus.java",
+                ModelElementStatus.compileElementStatus(perspective)
+                )
+                
+            fsa.generateFile(
+                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/HandleSecondaryEffect.java",
+                HandleSecondaryEffect.compileHandleSsecondaryEffects(perspective)
+                )
+                
              for (Language language : perspective.languages) {
              	if (containsRedefinedAction(perspective, language)) {
              		fsa.generateFile(
                  		"ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/Redefined" + language.name + "Action.java",
                 		RedefinedAction.compileActions(perspective, language)
+                	)
+             	}
+             }
+             for (Language language : perspective.languages) {
+             	if (containsFacadeAction(perspective, language)) {
+             		fsa.generateFile(
+                 		"ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/" + language.name + "FacadeAction.java",
+                		FacadeActionGen.compileFacadeActions(perspective, language)
                 	)
              	}
              }
@@ -113,7 +133,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        
 		
 		        // Add existing external languages, if any
-		        List<String> languages = ResourceUtil.getResourceListing("models/testlanguages/", ".core");
+		        List<String> languages = ResourceUtil.getResourceListing("models/languages/", ".core");
 		        if (languages != null) {
 		        	«FOR language : perspective.languages»
 		        		for (String l : languages) {
@@ -136,7 +156,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        // initialize perspective with perspective actions and mappings
 		        «perspective.name»Specification.initializePerspective(perspective);
 		        
-		        String fileName = "/Users/hyacinthali/workspace/TouchCORE2/touchram/ca.mcgill.sel.ram/resources/models/testperspectives/"
+		        String fileName = "/Users/hyacinthali/workspace/TouchCORE2/touchram/ca.mcgill.sel.ram/resources/models/perspectives/"
 		           + "«perspective.name»_Perspective";
 		        
 		        try {
@@ -152,13 +172,26 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		
 	}
 	
-		 /**
+	  /**
 	  * This method checks if a language contains redefined action.
 	  */
 	 def static boolean containsRedefinedAction(Perspective perspective, Language language) {
 	 	var roleName = language.roleName;
 	 	for (PerspectiveAction pA : perspective.actions) {
 	 		if (pA.roleName == roleName && pA.perspectiveActionType == PerspectiveActionType.REDEFINED) {
+	 			return true;
+	 		}
+	 	}
+	 	return false;
+	 }
+	 
+	 /**
+	  * This method checks if a language contains redefined action.
+	  */
+	 def static boolean containsFacadeAction(Perspective perspective, Language language) {
+	 	var roleName = language.roleName;
+	 	for (FacadeAction fA : perspective.facadeActions) {
+	 		if (fA.roleName == roleName) {
 	 			return true;
 	 		}
 	 	}
