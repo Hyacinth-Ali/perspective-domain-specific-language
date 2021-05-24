@@ -44,10 +44,6 @@ Language:
     '}'
 ;
 
-OtherRootPackage:
-	"otherRootPackage" otherRootPackage = STRING';'
-;
-
 LanguageElementMapping:
     'mapping' name = ID '{'
 //        'relationship' ':' relationship = Relationship';'
@@ -87,7 +83,11 @@ PerspectiveAction:
 ;
 
 FacadeAction:
-    'facadeAction' name = ID '{'
+	CreateFacadeAction | DeleteFacadeAction
+;
+
+CreateFacadeAction:
+    'facadeAction' 'create' name = ID '{'
     	'roleName' ':' roleName = ID';'
     	'metaclassName' ':' metaclassName = ID';'
     	'methodTypeAndParameters' ':' typeParameters = STRING';'
@@ -95,6 +95,26 @@ FacadeAction:
     		(facadeCalls += FacadeCall)*
     	'}'
     '}'
+;
+
+DeleteFacadeAction:
+	'facadeAction' 'delete' name = ID '{'
+		'roleName' ':' roleName = ID';'
+		'elementName' ':' elementName = ID';'
+		'method' 'calls' '{'
+			(methodCalls += MethodCall)+
+		'}'
+		
+	'}'
+;
+
+OtherRootPackage:
+	"otherRootPackage" otherRootPackage = STRING';'
+;
+
+MethodCall:
+	'metaclassName' ':' metaclassName = ID';'
+	'methodCall' ':' methodCall = STRING';'
 ;
 
 FacadeCall:

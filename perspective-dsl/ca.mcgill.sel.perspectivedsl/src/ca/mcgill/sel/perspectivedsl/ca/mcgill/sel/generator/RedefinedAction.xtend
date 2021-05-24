@@ -149,6 +149,9 @@ class RedefinedAction {
 								createOrUseAtLeastOneElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
 										owner, «action.methodParameter»);
 								break;
+								
+							default:
+								// does nothing
 					
 							}
 						}
