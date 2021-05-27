@@ -71,7 +71,7 @@ class FacadeActionGen {
 				«ELSEIF action instanceof DeleteFacadeAction»
 					«resetCounter»
 					«IF action.roleName.equals(language.roleName)»
-						public static void «action.name»(EObject «action.elementName») {
+						public static void «action.name»(COREPerspective perspective, COREScene scene, String otherRoleName, EObject «action.elementName») {
 							«FOR methodCall : action.methodCalls»
 								«IF count === 0»
 									if («action.elementName» instanceof «methodCall.metaclassName») {

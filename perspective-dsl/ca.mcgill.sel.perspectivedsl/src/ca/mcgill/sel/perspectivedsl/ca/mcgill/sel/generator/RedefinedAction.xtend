@@ -1,9 +1,8 @@
 package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.generator
 
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveActionType
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.LanguageActionType
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
 
 class RedefinedAction {
 	
@@ -540,7 +539,7 @@ class RedefinedAction {
 							switch (deleteType) {
 					
 							case DELETE_OTHERS:
-								«language.name»FacadeAction.deleteModelElement(otherElement);
+								«language.name»FacadeAction.deleteModelElement(perspective, scene, otherRoleName, otherElement);
 								deleteOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement);
 								break;
 					
@@ -548,7 +547,7 @@ class RedefinedAction {
 								List<COREModelElementMapping> otherMappings = COREPerspectiveUtil.INSTANCE.getMappings(mappingType, scene,
 										otherElement);
 								if (otherMappings.size() == 0) {
-									«language.name»FacadeAction.deleteModelElement(otherElement);
+									«language.name»FacadeAction.deleteModelElement(perspective, scene, otherRoleName, otherElement);
 									deleteOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement);
 								}
 								break;
