@@ -154,7 +154,8 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        }
 		        
 		        // initialize perspective with perspective actions and mappings
-		        «perspective.name»Specification.initializePerspective(perspective);
+		        // TODO update for TouchCORE codes
+		        «perspective.name»Specification.initializePerspective();
 		        
 		        String fileName = "/Users/hyacinthali/workspace/TouchCORE2/touchram/ca.mcgill.sel.ram/resources/models/perspectives/"
 		           + "«perspective.name»_Perspective";
