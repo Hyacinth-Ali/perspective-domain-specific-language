@@ -27,6 +27,7 @@ class PerspectiveSpecification {
 	 	import ca.mcgill.sel.core.CoreFactory;
 	 	import ca.mcgill.sel.core.MappingEnd;
 	 	//import ca.mcgill.sel.core.perspective.design.ElementMapping;
+	 	import ca.mcgill.sel.core.language.*;
 	 	
 	 	«FOR language : perspective.languages»
 	 		import «language.rootPackage».*;
