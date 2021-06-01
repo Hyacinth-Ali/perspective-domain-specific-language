@@ -556,7 +556,7 @@ class RedefinedAction {
 					}
 					
 				«ENDIF»
-				«ENDFOR»
+			«ENDFOR»
 		}
 		
 

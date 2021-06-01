@@ -74,12 +74,12 @@ class FacadeActionGen {
 						public static void «action.name»(COREPerspective perspective, COREScene scene, String otherRoleName, EObject «action.elementName») {
 							«FOR methodCall : action.methodCalls»
 								«IF count === 0»
-									if («action.elementName» instanceof «methodCall.metaclassName») {
+									if («action.elementName».eClass().equals(«methodCall.metaclassObject»)) {
 										«methodCall.methodCall»;
 									}
 								«ENDIF»
 								«IF count > 0»
-									else if («action.elementName» instanceof «methodCall.metaclassName») {
+									else if («action.elementName».eClass().equals(«methodCall.metaclassObject»)) {
 										«methodCall.methodCall»;
 									}
 								«ENDIF»

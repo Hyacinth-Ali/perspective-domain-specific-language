@@ -129,7 +129,7 @@ OtherRootPackage:
 ;
 
 MethodCall:
-	'metaclassName' ':' metaclassName = ID';'
+	'metaclassObject' ':' metaclassObject = STRING';'
 	'methodCall' ':' methodCall = STRING';'
 ;
 
