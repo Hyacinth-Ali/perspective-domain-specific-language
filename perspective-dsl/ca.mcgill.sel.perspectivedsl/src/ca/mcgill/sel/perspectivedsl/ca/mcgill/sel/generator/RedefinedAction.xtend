@@ -6,6 +6,16 @@ import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
 
 class RedefinedAction {
 	
+	var static count = 0;
+
+    private def static void resetCounter() {
+       count = 0;
+    }
+
+   private def static void counter() {
+       count++;
+   }
+	
 	def static compileActions(Perspective perspective, Language language) {
 		
 		'''
@@ -25,6 +35,9 @@ class RedefinedAction {
 		
 		import «language.rootPackage».*;
 		import «language.controllerPackage».*;
+		«FOR rootPackage : language.otherRootPackages»
+			import «rootPackage.otherRootPackage».*;
+		«ENDFOR»
 		
 		public class Redefined«language.name»Action {
 			«FOR action : perspective.actions»
@@ -57,7 +70,7 @@ class RedefinedAction {
 							 	«action.methodParameter»);						
 						}
 						«IF action.createEffects.size > 0» 	
-							HandleSecondaryEffect.INSTANCE.createSecondaryEffects(perspective, scene, currentRole, after, owner, 
+							«action.name»CreateSecondaryEffects(perspective, scene, currentRole, after, owner, 
 								«action.methodParameter»);
 						«ENDIF»
 					
@@ -504,7 +517,7 @@ class RedefinedAction {
 						deleteOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, «action.methodParameter»);
 						
 						«IF action.deleteEffects.size > 0»
-							HandleSecondaryEffect.INSTANCE.deleteSecondaryEffects(perspective, scene, currentRole, deleteSecondaryEffects);
+							«action.name»DeleteSecondaryEffects(perspective, scene, currentRole, deleteSecondaryEffects);
 						«ENDIF»
 					}
 					
@@ -556,6 +569,73 @@ class RedefinedAction {
 					}
 					
 				«ENDIF»
+				«resetCounter»
+				«IF action.createEffects.size > 0» 	
+					private static void «action.name»CreateSecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole, Map<EObject, Collection<EObject>> after, 
+							«action.typeParameters») {
+						for (Map.Entry<EObject, Collection<EObject>> e : after.entrySet()) {
+							Collection<EObject> newElements = e.getValue();
+							for (EObject newElement : newElements) {
+								«FOR createEffect : action.createEffects»
+									«IF count === 0»
+										if (newElement.eClass().equals(«createEffect.languageElement»)) {
+											«FOR m : createEffect.mappings»
+												«m.mapping»;
+											«ENDFOR»
+														
+											// Call the respective redefined recursive method
+											«createEffect.methodCall»;
+										}
+									«ENDIF»
+									«IF count > 0»
+										else if (newElement.eClass().equals(«createEffect.languageElement»)) {
+											«FOR m : createEffect.mappings»
+												«m.mapping»;
+											«ENDFOR»
+												
+											// Call the respective redefined recursive method
+											«createEffect.methodCall»;
+											}
+									«ENDIF»
+									«counter»
+								«ENDFOR»
+							}
+						}
+					}
+				«ENDIF»
+				«resetCounter»
+				«IF action.deleteEffects.size > 0»
+					private static void «action.name»DeleteSecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole,
+								List<EObject> deleteSecondaryEffects) {
+						for (EObject deletedElement : deleteSecondaryEffects) {
+								«FOR facadeCall : perspective.deleteSecondaryEffect.facadeCalls»
+									«IF count === 0»
+										if (deletedElement.eClass().equals(«facadeCall.metaclassObject»)) {
+											«FOR m : facadeCall.mappings»
+												«m.mapping»;
+											«ENDFOR»
+														
+											// Call the respective redefined recursive method
+											«facadeCall.methodCall»;
+										}
+									«ENDIF»
+									«IF count > 0»
+										else if (deletedElement.eClass().equals(«facadeCall.metaclassObject»)) {
+											«FOR m : facadeCall.mappings»
+												«m.mapping»;
+											«ENDFOR»
+												
+											// Call the respective redefined recursive method
+											«facadeCall.methodCall»;
+											}
+									«ENDIF»
+									«counter»
+								«ENDFOR»
+							}
+								
+					}
+				«ENDIF»
+
 			«ENDFOR»
 		}
 		
