@@ -80,8 +80,14 @@ PerspectiveAction:
     	'metaclassName' ':' metaclassName = ID';'
     	'metaclassObject' ':' metaclassObject = STRING';'
     	('secondaryEffects' '{'
-    		(createEffects += CreateEffect)*
-    		(deleteEffects += DeleteEffect)*
+    		('create' 'effects' '{'
+    			(createEffects += CreateEffect)*
+    		'}')?
+    		('delete' 'effects' '{'
+    			(deleteEffects += DeleteEffect)*
+    		'}')?
+    		
+    		
     	'}')?
     '}')?
 ;
@@ -146,10 +152,14 @@ ParameterMapping:
 
 CreateEffect:
 	'languageElement' ':' languageElement = STRING';'
+	(mappings += ParameterMapping)*
+	'methodCall' ':' methodCall = STRING';'
 ;
 
 DeleteEffect:
 	'element' ':' element = STRING';'
+	(mappings += ParameterMapping)*
+	'methodCall' ':' methodCall = STRING';'
 ;
 
 
