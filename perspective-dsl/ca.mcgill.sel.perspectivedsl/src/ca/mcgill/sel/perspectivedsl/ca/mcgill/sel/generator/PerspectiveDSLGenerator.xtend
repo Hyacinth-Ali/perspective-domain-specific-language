@@ -3,15 +3,14 @@
  */
 package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.generator
 
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveActionType
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveAction
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.FacadeAction
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveActionType
 
 /**
  * Generates code from your model files on save.
@@ -32,12 +31,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
                  "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/ModelElementStatus.java",
                 ModelElementStatus.compileElementStatus(perspective)
                 )
-                
-            fsa.generateFile(
-                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/HandleSecondaryEffect.java",
-                HandleSecondaryEffect.compileHandleSsecondaryEffects(perspective)
-                )
-                
+  
              for (Language language : perspective.languages) {
              	if (containsRedefinedAction(perspective, language)) {
              		fsa.generateFile(
@@ -47,7 +41,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
              	}
              }
              for (Language language : perspective.languages) {
-             	if (containsFacadeAction(perspective, language)) {
+             	if (containsRedefinedAction(perspective, language)) {
              		fsa.generateFile(
                  		"ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/" + language.name + "FacadeAction.java",
                 		FacadeActionGen.compileFacadeActions(perspective, language)
@@ -178,7 +172,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 	  */
 	 def static boolean containsRedefinedAction(Perspective perspective, Language language) {
 	 	var roleName = language.roleName;
-	 	for (PerspectiveAction pA : perspective.actions) {
+	 	for (PerspectiveAction pA : language.actions) {
 	 		if (pA.roleName == roleName && pA.perspectiveActionType == PerspectiveActionType.REDEFINED) {
 	 			return true;
 	 		}
@@ -186,16 +180,16 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 	 	return false;
 	 }
 	 
-	 /**
-	  * This method checks if a language contains redefined action.
-	  */
-	 def static boolean containsFacadeAction(Perspective perspective, Language language) {
-	 	var roleName = language.roleName;
-	 	for (FacadeAction fA : perspective.facadeActions) {
-	 		if (fA.roleName == roleName) {
-	 			return true;
-	 		}
-	 	}
-	 	return false;
-	 }
+//	 /**
+//	  * This method checks if a language contains facade action.
+//	  */
+//	 def static boolean containsFacadeAction(Perspective perspective, Language language) {
+//	 	var roleName = language.roleName;
+//	 	for (PerspectiveAction action : language.actions) {
+//	 		if (action.facadeAction.roleName == roleName) {
+//	 			return true;
+//	 		}
+//	 	}
+//	 	return false;
+//	 }
 }

@@ -63,15 +63,15 @@ class PerspectiveSpecification {
 	 	
 	 	        COREPerspectiveAction pAction = null;
 	 	        
-	 	        «FOR action : perspective.actions»
-	 	        	pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        	pAction.setName("«action.name»");
-	 	        	pAction.setForRole("«action.roleName»");
-	 	        	perspective.getActions().add(pAction);
-	 	        	
+	 	        «FOR language : perspective.languages»
+	 	        	«FOR action : language.actions»
+	 	        		pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
+	 	        		pAction.setName("«action.name»");
+	 	        		pAction.setForRole("«action.roleName»");
+	 	        		perspective.getActions().add(pAction);
+	 	        	«ENDFOR»
 	 	        «ENDFOR»
-	 	
-	 	    }
+	 	       }
 	 	
 	 	    private static void createPerspectiveMappings(COREPerspective perspective) {
 	 	
@@ -96,12 +96,10 @@ class PerspectiveSpecification {
 	 	            CORELanguageElement «mapping.name.toFirstLower»MappingToLanguageELement = «mapping.name.toFirstLower»Mapping.getToLanguageElement();
 	 	            
                     «FOR nestedMapping : mapping.nestedMappings»
-	 	            
-                          createNestedMapping(«mapping.name.toFirstLower»MappingType, «mapping.name.toFirstLower»MappingFromLanguageELement, 
-                            «mapping.name.toFirstLower»MappingToLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
+	 	            	createNestedMapping(«mapping.name.toFirstLower»MappingType, «mapping.name.toFirstLower»MappingFromLanguageELement, 
+                        «mapping.name.toFirstLower»MappingToLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
                             "«mapping.fromRoleName»", "«mapping.toRoleName»", «nestedMapping.matchMaker»);
-
-                    «ENDFOR»
+					«ENDFOR»
                   
 	 	          «ENDIF»
 	 	        		 	        

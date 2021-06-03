@@ -3,6 +3,8 @@ package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.generator
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.LanguageActionType
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.CreateAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.DeleteAction
 
 class RedefinedAction {
 	
@@ -43,14 +45,14 @@ class RedefinedAction {
 		«ENDFOR»
 		
 		public class Redefined«language.name»Action {
-			«FOR action : perspective.actions»
-				«IF action.langActionType == LanguageActionType.CREATE &&
+			«FOR action : language.actions»
+				«IF action instanceof CreateAction &&
 				action.roleName.equals(language.roleName)»
 					public static EObject «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
 						boolean isFacadeCall, «action.typeParameters») {
 						
 						EObject newElement = null;
-						if (owner != null) {
+						«IF !action.rootElement»
 							List<EObject> createSecondaryEffects = new ArrayList<EObject>();
 							«FOR createEffect : action.createEffects»
 								createSecondaryEffects.add(«createEffect.languageElement»);
@@ -78,8 +80,9 @@ class RedefinedAction {
 								«action.name»CreateSecondaryEffects(perspective, scene, currentRole, after, owner, 
 									«action.methodParameter»);
 							«ENDIF»
-						
-						} else {
+							
+						«ENDIF»
+						«IF action.rootElement»
 							// primary language action to create root model element
 							newElement = «action.methodCall»;
 
@@ -88,7 +91,7 @@ class RedefinedAction {
 								 	«action.methodParameter»);						
 							}
 
-						}
+						«ENDIF»
 
 					//		try {
 					//			createOtherElementsForLEMA1(perspective, scene, newElement, currentRole, owner, name);
@@ -520,7 +523,7 @@ class RedefinedAction {
 						}
 					}
 					
-				«ELSEIF action.langActionType == LanguageActionType.DELETE &&
+				«ELSEIF action instanceof DeleteAction &&
 				action.roleName.equals(language.roleName)»
 					public static void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
 						
@@ -585,6 +588,8 @@ class RedefinedAction {
 					}
 					
 				«ENDIF»
+				
+«««				action effects
 				«resetCounter»
 				«IF action.createEffects.size > 0» 	
 					private static void «action.name»CreateSecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole, Map<EObject, Collection<EObject>> after, 
@@ -624,25 +629,25 @@ class RedefinedAction {
 					private static void «action.name»DeleteSecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole,
 								List<EObject> deleteSecondaryEffects) {
 						for (EObject deletedElement : deleteSecondaryEffects) {
-								«FOR facadeCall : perspective.deleteSecondaryEffect.facadeCalls»
+								«FOR deleteEffect : action.deleteEffects»
 									«IF count === 0»
-										if (deletedElement.eClass().equals(«facadeCall.metaclassObject»)) {
-											«FOR m : facadeCall.mappings»
+										if (deletedElement.eClass().equals(«deleteEffect.languageElement»)) {
+											«FOR m : deleteEffect.mappings»
 												«m.mapping»;
 											«ENDFOR»
 														
 											// Call the respective redefined recursive method
-											«facadeCall.methodCall»;
+											«deleteEffect.methodCall»;
 										}
 									«ENDIF»
 									«IF count > 0»
-										else if (deletedElement.eClass().equals(«facadeCall.metaclassObject»)) {
-											«FOR m : facadeCall.mappings»
+										else if (deletedElement.eClass().equals(«deleteEffect.languageElement»)) {
+											«FOR m : deleteEffect.mappings»
 												«m.mapping»;
 											«ENDFOR»
 												
 											// Call the respective redefined recursive method
-											«facadeCall.methodCall»;
+											«deleteEffect.methodCall»;
 											}
 									«ENDIF»
 									«counter»
@@ -653,6 +658,32 @@ class RedefinedAction {
 				«ENDIF»
 
 			«ENDFOR»
+			/**
+			 * This is a helper method which retrieves the corresponding container of an
+			 * element to create.
+			 * @param perspective
+			 * @param scene -  the scene of the models
+			 * @param currentOwner
+			 * @param otherRole
+			 * @return the container of the element to create.
+			 */
+			private static EObject getOwner(COREPerspective perspective, COREScene scene, EObject currentOwner, String otherRole) {
+				EObject ownerOther = null;
+			
+				List<COREModelElementMapping> ownerMappings = COREPerspectiveUtil.INSTANCE.getMappings(currentOwner, scene);
+				outerloop: for (COREModelElementMapping mapping : ownerMappings) {
+					ownerOther = COREPerspectiveUtil.INSTANCE.getOtherElement(mapping, currentOwner);
+					CORELanguageElementMapping mappingType = COREPerspectiveUtil.INSTANCE.getMappingType(perspective, mapping);
+					for (MappingEnd mappingEnd : mappingType.getMappingEnds()) {
+						if (mappingEnd.getRoleName().equals(otherRole)) {
+							ownerOther = COREPerspectiveUtil.INSTANCE.getOtherElement(mapping, currentOwner);
+							break outerloop;
+						}
+					}
+				}
+			
+				return ownerOther;
+			}
 		}
 		
 

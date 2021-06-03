@@ -4,6 +4,8 @@ import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.CreateFacadeAct
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.DeleteFacadeAction
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.CreateAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.DeleteAction
 
 class FacadeActionGen {
 	
@@ -36,14 +38,16 @@ class FacadeActionGen {
 		«ENDFOR»
 		
 		public class «language.name»FacadeAction {
-			«FOR action : perspective.facadeActions»
-				«IF action instanceof CreateFacadeAction»
+			«FOR action : language.actions»
+				«IF action instanceof CreateAction»
+					«var createAction = action as CreateAction»
+					«var facadeAction = createAction.createFacadeAction»
 					«resetCounter»
-					«IF action.roleName.equals(language.roleName)»
-						public static EObject createOtherElementsFor«action.metaclassName»(COREPerspective perspective, EObject otherLE, String otherRoleName, COREScene scene, 
-								«action.typeParameters») {
+					«IF facadeAction.roleName.equals(language.roleName)»
+						public static EObject createOtherElementsFor«facadeAction.metaclassName»(COREPerspective perspective, EObject otherLE, String otherRoleName, COREScene scene, 
+								«facadeAction.typeParameters») {
 							EObject newElement = null;
-							«FOR facadeCall : action.facadeCalls»
+							«FOR facadeCall : facadeAction.facadeCalls»
 								«IF count === 0»
 									if (otherLE.equals(«facadeCall.metaclassObject»)) {
 										// Handle parameter mappings
@@ -68,28 +72,29 @@ class FacadeActionGen {
 							return newElement;						
 						}
 					«ENDIF»
-				«ELSEIF action instanceof DeleteFacadeAction»
-					«resetCounter»
-					«IF action.roleName.equals(language.roleName)»
-						public static void «action.name»(COREPerspective perspective, COREScene scene, String otherRoleName, EObject «action.elementName») {
-							«FOR methodCall : action.methodCalls»
-								«IF count === 0»
-									if («action.elementName».eClass().equals(«methodCall.metaclassObject»)) {
-										«methodCall.methodCall»;
-									}
-								«ENDIF»
-								«IF count > 0»
-									else if («action.elementName».eClass().equals(«methodCall.metaclassObject»)) {
-										«methodCall.methodCall»;
-									}
-								«ENDIF»
-								«counter»
-							«ENDFOR»						
+				«ENDIF»
+			«ENDFOR»
+
+			«var facadeAction = language.deleteFacadeAction»
+			«resetCounter»
+			«IF facadeAction.roleName.equals(language.roleName)»
+			public static void «facadeAction.name»(COREPerspective perspective, COREScene scene, String otherRoleName, EObject «facadeAction.elementName») {
+				«FOR methodCall : facadeAction.methodCalls»
+					«IF count === 0»
+						if («facadeAction.elementName».eClass().equals(«methodCall.metaclassObject»)) {
+							«methodCall.methodCall»;
 						}
 					«ENDIF»
-				«ENDIF»
+					«IF count > 0»
+						else if («facadeAction.elementName».eClass().equals(«methodCall.metaclassObject»)) {
+							«methodCall.methodCall»;
+						}
+					«ENDIF»
+					«counter»
+				«ENDFOR»						
+			}
+			«ENDIF»
 
-			«ENDFOR»
 			/**
 			 * This is a helper method which retrieves the corresponding container of an
 			 * element to create.

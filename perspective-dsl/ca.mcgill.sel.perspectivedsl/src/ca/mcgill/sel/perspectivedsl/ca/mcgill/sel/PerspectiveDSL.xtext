@@ -18,19 +18,6 @@ Perspective:
             (languages += Language)*
         '}'
 
-        ('actions' '{'
-            (actions += PerspectiveAction)*
-        '}')?
-        
-        ('facade' 'actions' '{'
-        	(facadeActions += FacadeAction)*
-        '}')?
-        
-        ('secondary' 'effects' '{'
-        	(createSecondaryEffect = CreateSecondaryEffect)?
-        	(deleteSecondaryEffect = DeleteSecondaryEffect)?
-        '}')?
-
         ('mappings' '{'
             (mappings += LanguageElementMapping)*
         '}')?
@@ -46,6 +33,12 @@ Language:
         "roleName" roleName = ID';' 
         (otherRootPackages += OtherRootPackage)*
         (explicitPackages += ExplicitPackage)*
+        
+        ('actions' '{'
+            (actions += PerspectiveAction)*
+            deleteFacadeAction = DeleteFacadeAction
+        '}')?
+        
     '}'
 ;
 
@@ -71,9 +64,35 @@ NestedMapping:
     '}'
 ;
 
-
 PerspectiveAction:
-    perspectiveActionType = PerspectiveActionType langActionType = LanguageActionType 'action' name = ID (end ?= ';')? ('{'
+	CreateAction | DeleteAction
+;
+
+
+CreateAction:
+    perspectiveActionType = PerspectiveActionType 'create' 'action' name = ID (end ?= ';')? ('{'
+    	(rootElement ?= 'rootElement'';')?
+    	'roleName' ':' roleName = ID';'
+    	'methodTypeAndParameters' ':' typeParameters = STRING';'
+    	'methodCall' ':' methodCall = STRING';'
+    	'methodParameters' ':' methodParameter = STRING';'
+    	'metaclassName' ':' metaclassName = ID';'
+    	'metaclassObject' ':' metaclassObject = STRING';'
+    	createFacadeAction = CreateFacadeAction
+    	('secondaryEffects' '{'
+    		('create' 'effects' '{'
+    			(createEffects += CreateEffect)*
+    		'}')?
+    		('delete' 'effects' '{'
+    			(deleteEffects += DeleteEffect)*
+    		'}')?
+    	'}')?
+    '}')?
+;
+
+DeleteAction:
+    perspectiveActionType = PerspectiveActionType 'delete' 'action' name = ID (end ?= ';')? ('{'
+    	(rootElement ?= 'rootElement'';')?
     	'roleName' ':' roleName = ID';'
     	'methodTypeAndParameters' ':' typeParameters = STRING';'
     	'methodCall' ':' methodCall = STRING';'
@@ -87,14 +106,8 @@ PerspectiveAction:
     		('delete' 'effects' '{'
     			(deleteEffects += DeleteEffect)*
     		'}')?
-    		
-    		
     	'}')?
     '}')?
-;
-
-FacadeAction:
-	CreateFacadeAction | DeleteFacadeAction 
 ;
 
 CreateFacadeAction:
@@ -117,18 +130,6 @@ DeleteFacadeAction:
 		'}'
 		
 	'}'
-;
-
-CreateSecondaryEffect:
-	'create' 'secondary' 'effects' '{'
-    		(facadeCalls += FacadeCall)+
-    '}'
-;
-
-DeleteSecondaryEffect:
-	'delete' 'secondary' 'effects' '{'
-    		(facadeCalls += FacadeCall)+
-    '}'
 ;
 
 OtherRootPackage:
@@ -163,18 +164,15 @@ CreateEffect:
 
 DeleteEffect:
 	'element' ':' element = STRING';'
+	'languageElement' ':' languageElement = STRING';'
 	(mappings += ParameterMapping)*
 	'methodCall' ':' methodCall = STRING';'
 ;
 
 
 
-//enum Relationship:
-//    EQUALITY='equality' | REFINES='refines' | USES='uses' | EXTENDS='extends' | REQUIRES='requires'
-//;
-
 enum Cardinality:
-    COMPULSORY='1' | OPTIONAL='0..1' | COMPULSORY_MULTIPLE='1..*' | OPTIONAL_MULTIPLE='0..*'
+    COMPULSORY = '1' | OPTIONAL='0..1' | COMPULSORY_MULTIPLE='1..*' | OPTIONAL_MULTIPLE='0..*'
 ;
 
 enum PerspectiveActionType :
@@ -182,7 +180,7 @@ enum PerspectiveActionType :
 ;
 
 enum LanguageActionType :
-	CREATE ='create' | DELETE='delete' | UPDATE='update'
+	CREATE = 'create' | DELETE = 'delete' | UPDATE = 'update'
 ;
 
 enum MatchMaker:
