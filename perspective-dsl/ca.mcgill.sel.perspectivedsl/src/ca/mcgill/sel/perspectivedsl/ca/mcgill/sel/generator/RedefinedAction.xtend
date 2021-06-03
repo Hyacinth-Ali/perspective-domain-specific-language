@@ -38,6 +38,9 @@ class RedefinedAction {
 		«FOR rootPackage : language.otherRootPackages»
 			import «rootPackage.otherRootPackage».*;
 		«ENDFOR»
+		«FOR explicitPackage : language.explicitPackages»
+			import «explicitPackage.explicitPackage»;
+		«ENDFOR»
 		
 		public class Redefined«language.name»Action {
 			«FOR action : perspective.actions»
@@ -46,34 +49,47 @@ class RedefinedAction {
 					public static EObject «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
 						boolean isFacadeCall, «action.typeParameters») {
 						
-						List<EObject> createSecondaryEffects = new ArrayList<EObject>();
-						«FOR createEffect : action.createEffects»
-							createSecondaryEffects.add(«createEffect.languageElement»);
-						«ENDFOR»
+						EObject newElement = null;
+						if (owner != null) {
+							List<EObject> createSecondaryEffects = new ArrayList<EObject>();
+							«FOR createEffect : action.createEffects»
+								createSecondaryEffects.add(«createEffect.languageElement»);
+							«ENDFOR»
+							
+							// record existing elements.
+							ModelElementStatus.INSTANCE.setMainExistingElements(owner, «action.metaclassObject»);
+							ModelElementStatus.INSTANCE.setOtherExistingElements(owner, createSecondaryEffects);
+							
+							// primary language action to create a new element
+							«action.methodCall»;
 						
-						// record existing elements.
-						ModelElementStatus.INSTANCE.setMainExistingElements(owner, «action.metaclassObject»);
-						ModelElementStatus.INSTANCE.setOtherExistingElements(owner, createSecondaryEffects);
+							// retrieve the new element
+							newElement = ModelElementStatus.INSTANCE.getNewElement(owner, «action.metaclassObject»);
+							
+							// get other new elements for each language element
+							Map<EObject, Collection<EObject>> a = ModelElementStatus.INSTANCE.getOtherNewElements(owner, createSecondaryEffects);
+							Map<EObject, Collection<EObject>> after = new HashMap<EObject, Collection<EObject>>(a);
+							
+							if (!isFacadeCall) {
+								createOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, newElement, owner,
+								 	«action.methodParameter»);						
+							}
+							«IF action.createEffects.size > 0» 	
+								«action.name»CreateSecondaryEffects(perspective, scene, currentRole, after, owner, 
+									«action.methodParameter»);
+							«ENDIF»
 						
-						// primary language action to create a new class
-						«action.methodCall»;
-					
-						// retrieve the new element
-						EObject newElement = ModelElementStatus.INSTANCE.getNewElement(owner, «action.metaclassObject»);
-						
-						// get other new elements for each language element
-						Map<EObject, Collection<EObject>> a = ModelElementStatus.INSTANCE.getOtherNewElements(owner, createSecondaryEffects);
-						Map<EObject, Collection<EObject>> after = new HashMap<EObject, Collection<EObject>>(a);
-					
-						if (!isFacadeCall) {
-							createOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, newElement, owner,
-							 	«action.methodParameter»);						
+						} else {
+							// primary language action to create root model element
+							newElement = «action.methodCall»;
+
+							if (!isFacadeCall) {
+								createOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, newElement, owner,
+								 	«action.methodParameter»);						
+							}
+
 						}
-						«IF action.createEffects.size > 0» 	
-							«action.name»CreateSecondaryEffects(perspective, scene, currentRole, after, owner, 
-								«action.methodParameter»);
-						«ENDIF»
-					
+
 					//		try {
 					//			createOtherElementsForLEMA1(perspective, scene, newElement, currentRole, owner, name);
 					//		} catch (PerspectiveException e) {

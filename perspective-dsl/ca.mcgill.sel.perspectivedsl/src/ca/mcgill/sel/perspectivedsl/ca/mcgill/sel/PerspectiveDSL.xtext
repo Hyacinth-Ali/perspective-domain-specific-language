@@ -45,6 +45,7 @@ Language:
         "controllerPackage" controllerPackage = STRING';'
         "roleName" roleName = ID';' 
         (otherRootPackages += OtherRootPackage)*
+        (explicitPackages += ExplicitPackage)*
     '}'
 ;
 
@@ -132,6 +133,10 @@ DeleteSecondaryEffect:
 
 OtherRootPackage:
 	"otherRootPackage" otherRootPackage = STRING';'
+;
+
+ExplicitPackage:
+	"explicitPackage" explicitPackage = STRING';'
 ;
 
 MethodCall:
