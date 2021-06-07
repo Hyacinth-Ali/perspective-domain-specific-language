@@ -13,6 +13,10 @@ Perspective:
         ('default' default = ID';')?
         
         'display' 'name' displayName = STRING';'
+        
+        ('root' 'facade' 'calls' '{'
+    		(rootFacades += FacadeCall)*
+    	'}')?
 
         'languages' '{'
             (languages += Language)*
@@ -45,6 +49,8 @@ Language:
 LanguageElementMapping:
     'mapping' name = ID '{'
 //        'relationship' ':' relationship = Relationship';'
+		'fromIsRootElement' ':' fromIsRootElement = BooleanType';'
+		'toIsRootElement' ':' toIsRootElement = BooleanType';'
         'fromCardinality' ':' fromCardinality = Cardinality';'
         'toCardinality' ':' toCardinality = Cardinality';'
         'fromElement' ':' fromElement = ID 'from' fromRoleName = ID 'fromGetElement' fromGetElement = STRING';'
@@ -58,9 +64,9 @@ LanguageElementMapping:
 
 NestedMapping:
     'nested' 'mapping' name = ID '{'
-    	'matchMaker' ':' matchMaker = MatchMaker';'
-        'fromElement' ':' 'elementName' fromElementName = STRING 'from' fromRoleName = ID';'
-        'toELement' ':' 'elementName' toElementName = STRING 'from' toRoleName = ID';'
+    	'matchMaker' ':' matchMaker = BooleanType';'
+        'fromElement' ':' fromElementName = STRING 'from' fromRoleName = ID';'
+        'toElement' ':' toElementName = STRING 'from' toRoleName = ID';'
     '}'
 ;
 
@@ -183,6 +189,6 @@ enum LanguageActionType :
 	CREATE = 'create' | DELETE = 'delete' | UPDATE = 'update'
 ;
 
-enum MatchMaker:
-    TRUE='true' | FALSE='false' 
+enum BooleanType:
+    TRUE = 'true' | FALSE = 'false' 
 ;

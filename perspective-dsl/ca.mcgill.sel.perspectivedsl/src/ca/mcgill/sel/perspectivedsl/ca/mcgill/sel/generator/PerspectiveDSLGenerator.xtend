@@ -31,6 +31,11 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
                  "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/ModelElementStatus.java",
                 ModelElementStatus.compileElementStatus(perspective)
                 )
+                
+           fsa.generateFile(
+                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/CreateModel.java",
+                CreateModel.compileCreateModel(perspective)
+                )
   
              for (Language language : perspective.languages) {
              	if (containsRedefinedAction(perspective, language)) {

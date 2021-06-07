@@ -29,6 +29,8 @@ class RedefinedAction {
 		import java.util.List;
 		import java.util.Map;
 		
+		import org.eclipse.emf.common.util.BasicEList;
+		import org.eclipse.emf.common.util.EList;
 		import org.eclipse.emf.ecore.EObject;
 		
 		import ca.mcgill.sel.core.*;
@@ -112,77 +114,92 @@ class RedefinedAction {
 						for (CORELanguageElementMapping mappingType : mappingTypes) {
 							List<COREModelElementMapping> mappings = COREPerspectiveUtil.INSTANCE.getMappings(mappingType, scene,
 									currentElement);
+						
+						if (COREPerspectiveUtil.INSTANCE.mappingsContainsElement(mappings, currentElement)) {
+							continue;
+						}
+						
+						MappingEnd currentMappingEnd = COREPerspectiveUtil.INSTANCE.getMappingEnd(mappingType, currentElement.eClass(), currentRoleName);
+						MappingEnd otherMappingEnd = COREPerspectiveUtil.INSTANCE.getOtherMappingEnds(currentMappingEnd).get(0);
 					
-							String otherRoleName = COREPerspectiveUtil.INSTANCE.getOtherRoleName(mappingType, currentRoleName);
-					
-							// the metaclass of the element to be created.
-							EObject otherLE = COREPerspectiveUtil.INSTANCE
-									.getOtherLanguageElements(mappingType, currentElement.eClass(), currentRoleName).get(0);
-					
-							ActionType actionType = TemplateType.INSTANCE.getCreateType(mappingType, currentRoleName);
-					
-							// check that the number of existing mappings is not zero.
-							if (mappings.size() != 0) {
-								continue;
-							}
-							switch (actionType) {
+						if (otherMappingEnd.isRootMappingEnd()) {
+							CreateModel.createOtherRootModels(perspective, mappingType, scene, currentRoleName, currentElement, name);
+						} else {
+							createOtherElementsFor«action.metaclassName»(perspective, mappingType, scene, currentRoleName, currentElement, owner,
+															 	«action.methodParameter»);
+						}
 							
-							// C1/C9
-							case CAN_CREATE:
-							case CAN_CREATE_OR_USE_NON_MAPPED:
-								canCreateOrUseNonMappedElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
-										otherLE, owner, «action.methodParameter»);
-								break;
+						}
+					}
 					
-							// C2/C10
-							case CREATE:
-							case CREATE_OR_USE_NON_MAPPED:
-								createOrUseNonMappedElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
-										otherLE, owner, «action.methodParameter»);
-								break;
-					
-							// C3/C11
-							case CAN_CREATE_MANY:
-							case CAN_CREATE_OR_USE_NON_MAPPED_MANY:
-								canCreateOrUseNonMappedManyElementsFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName,
-										otherRoleName, otherLE, owner, «action.methodParameter»);
-								break;
-					
-							// C4/C12
-							case CREATE_AT_LEAST_ONE:
-							case CREATE_OR_USE_NON_MAPPED_AT_LEAST_ONE:
-								createOrUseNonMappedAtLeastOneElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName,
-										otherRoleName, otherLE, owner, «action.methodParameter»);
-								break;
+					private static void createOtherElementsFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene, String currentRoleName,
+								EObject currentElement, «action.typeParameters») {
 							
-							// C5
-							case CAN_CREATE_OR_USE:
-								canCreateOrUseElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
-										owner, «action.methodParameter»);
-								break;
+						String otherRoleName = COREPerspectiveUtil.INSTANCE.getOtherRoleName(mappingType, currentRoleName);
 					
-							// C6
-							case CREATE_OR_USE:
-								createOrUseElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
-										owner, «action.methodParameter»);
-								break;
+						// the metaclass of the element to be created.
+						EObject otherLE = COREPerspectiveUtil.INSTANCE
+								.getOtherLanguageElements(mappingType, currentElement.eClass(), currentRoleName).get(0);
 					
-							// C7
-							case CAN_CREATE_OR_USE_MANY:
-								canCreateOrUseManyElementsFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
-										owner, «action.methodParameter»);
-								break;
+						ActionType actionType = TemplateType.INSTANCE.getCreateType(mappingType, currentRoleName);
+
+						switch (actionType) {
+							
+						// C1/C9
+						case CAN_CREATE:
+						case CAN_CREATE_OR_USE_NON_MAPPED:
+							canCreateOrUseNonMappedElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
+									otherLE, owner, «action.methodParameter»);
+							break;
 					
-							// C8
-							case CREATE_OR_USE_AT_LEAST_ONE:
-								createOrUseAtLeastOneElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
-										owner, «action.methodParameter»);
-								break;
+						// C2/C10
+						case CREATE:
+						case CREATE_OR_USE_NON_MAPPED:
+							createOrUseNonMappedElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
+									otherLE, owner, «action.methodParameter»);
+							break;
+					
+						// C3/C11
+						case CAN_CREATE_MANY:
+						case CAN_CREATE_OR_USE_NON_MAPPED_MANY:
+							canCreateOrUseNonMappedManyElementsFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName,
+									otherRoleName, otherLE, owner, «action.methodParameter»);
+							break;
+					
+						// C4/C12
+						case CREATE_AT_LEAST_ONE:
+						case CREATE_OR_USE_NON_MAPPED_AT_LEAST_ONE:
+							createOrUseNonMappedAtLeastOneElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName,
+									otherRoleName, otherLE, owner, «action.methodParameter»);
+							break;
+							
+						// C5
+						case CAN_CREATE_OR_USE:
+							canCreateOrUseElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
+									owner, «action.methodParameter»);
+							break;
+					
+						// C6
+						case CREATE_OR_USE:
+							createOrUseElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
+									owner, «action.methodParameter»);
+							break;
+					
+						// C7
+						case CAN_CREATE_OR_USE_MANY:
+							canCreateOrUseManyElementsFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
+									owner, «action.methodParameter»);
+							break;
+					
+						// C8
+						case CREATE_OR_USE_AT_LEAST_ONE:
+							createOrUseAtLeastOneElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
+									owner, «action.methodParameter»);
+							break;
 								
-							default:
-								// does nothing
+						default:
+							// does nothing
 					
-							}
 						}
 					}
 					

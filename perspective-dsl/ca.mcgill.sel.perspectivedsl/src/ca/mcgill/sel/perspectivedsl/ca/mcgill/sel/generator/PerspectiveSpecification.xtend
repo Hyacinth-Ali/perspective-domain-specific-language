@@ -79,13 +79,13 @@ class PerspectiveSpecification {
 	 	        «FOR mapping : perspective.mappings»
 	 	         «IF mapping.nestedMappings.empty» 
 	 	             createLanguageElementMapping(perspective, «getCardinality(mapping, true)», "«mapping.fromRoleName»", 
-	 	             «mapping.fromGetElement», «getCardinality(mapping, false)», "«mapping.toRoleName»", «mapping.toGetElement»);
+	 	             «mapping.fromGetElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»", «mapping.toGetElement», «mapping.toIsRootElement»);
 	 	                 
 	 	         «ELSE»
 	 	            
 	 	            ElementMapping «mapping.name.toFirstLower»Mapping = createLanguageElementMapping(perspective, «getCardinality(mapping, true)»,
-	 	             "«mapping.fromRoleName»", «mapping.fromGetElement», «getCardinality(mapping, false)», "«mapping.toRoleName»",
-                     «mapping.toGetElement»);
+	 	             "«mapping.fromRoleName»", «mapping.fromGetElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»",
+                     «mapping.toGetElement», «mapping.toIsRootElement»);
 	 	            
 	 	            CORELanguageElementMapping «mapping.name.toFirstLower»MappingType = «mapping.name.toFirstLower»Mapping.getMappingType();
 	 	            
@@ -121,14 +121,15 @@ class PerspectiveSpecification {
 	 	     * @author Hyacinth Ali
 	 	     */
 	 	    private static ElementMapping createLanguageElementMapping(COREPerspective perspective,
-	 	            Cardinality fromCardinality, String fromRoleName, EObject fromMetaclass, Cardinality toCardinality, 
-	 	            String toRoleName, EObject toMetaclass) {
+	 	                Cardinality fromCardinality, String fromRoleName, EObject fromMetaclass, boolean fromIsRootMapping, Cardinality toCardinality, 
+	 	                String toRoleName, EObject toMetaclass, boolean toIsRootMapping) {
 	 	
 	 	        CORELanguageElementMapping mappingType = CoreFactory.eINSTANCE.createCORELanguageElementMapping();
 	 	        mappingType.setIdentifier(getNextMappingId(perspective));
-	 	
+	 			
 	 	        // from mapping end settings
 	 	        MappingEnd fromMappingEnd = CoreFactory.eINSTANCE.createMappingEnd();
+	 	        fromMappingEnd.setRootMappingEnd(fromIsRootMapping);
 	 	        fromMappingEnd.setCardinality(fromCardinality);
 	 	        fromMappingEnd.setRoleName(fromRoleName);
 	 	        COREExternalLanguage fromLanguage = (COREExternalLanguage) perspective.getLanguages().get(fromRoleName);
@@ -137,6 +138,7 @@ class PerspectiveSpecification {
 	 	
 	 	        // to mapping end settings
 	 	        MappingEnd toMappingEnd = CoreFactory.eINSTANCE.createMappingEnd();
+	 	        toMappingEnd.setRootMappingEnd(toIsRootMapping);
 	 	        toMappingEnd.setCardinality(toCardinality);
 	 	        toMappingEnd.setRoleName(toRoleName);
 	 	        COREExternalLanguage toLanguage = (COREExternalLanguage) perspective.getLanguages().get(toRoleName);
