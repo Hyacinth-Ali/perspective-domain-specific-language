@@ -103,7 +103,6 @@ class RedefinedAction {
 					
 					return newElement;
 					
-					
 					}
 					
 					public static void createOtherElementsFor«action.metaclassName»(COREPerspective perspective, COREScene scene, String currentRoleName,
@@ -132,7 +131,7 @@ class RedefinedAction {
 						}
 					}
 					
-					private static void createOtherElementsFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene, String currentRoleName,
+					public static void createOtherElementsFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene, String currentRoleName,
 								EObject currentElement, «action.typeParameters») {
 							
 						String otherRoleName = COREPerspectiveUtil.INSTANCE.getOtherRoleName(mappingType, currentRoleName);
