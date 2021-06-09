@@ -65,8 +65,11 @@ class CreateModel {
 			private static Map<CORELanguage, ModelUtil> modelUtils;
 		
 			private CreateModel() {
-				existingModels = new HashMap<String, List<EObject>>();
 				modelUtils = new HashMap<CORELanguage, ModelUtil>();
+			}
+			
+			public void initializeExistingModel() {
+				existingModels = new HashMap<String, List<EObject>>();	
 			}
 		
 			/**
@@ -79,21 +82,23 @@ class CreateModel {
 			 * @param scene
 			 * @param role - role name of the language model
 			 * @param name - name of the model
+			 * @param isFacadeCall - yes if the call is from facade action.
 			 * @return
 			 */
-			public COREScene createNewModel(COREPerspective perspective, COREScene scene, String role, String name) {
+			public EObject createNewModel(COREPerspective perspective, COREScene scene, String role, String name, boolean isFacadeCall) {
 		
 				EObject externalModel = createModel(perspective, scene, role, name);
 		
 				// Check if there are any mandatory CORELanguageElementMappings that
 				// dictate
 				// that other models must be created
-				createOtherModels(perspective, scene, role, externalModel, name);
-		
+				if (!isFacadeCall) {
+					createOtherModels(perspective, scene, role, externalModel, name);
+				}
 				// clear existing role names
 		//		existingModels.clear();
 		
-				return scene;
+				return externalModel;
 		
 			}
 		
@@ -588,14 +593,16 @@ class CreateModel {
 				ModelUtil mu = modelUtils.get(l);
 				externalModel = mu.createNewEmptyModel(name);
 		
-				// create a COREExternalArtefact that refers to the new model and return
-				// it
+				// create a COREExternalArtefact that refers to the new model 
 				COREExternalArtefact externalArtefact = CoreFactory.eINSTANCE.createCOREExternalArtefact();
 				externalArtefact.setLanguageName(l.getName());
 				externalArtefact.setRootModelElement(externalModel);
 				externalArtefact.setName(name);
-				
-				EList<COREArtefact> artefacts = new BasicEList<COREArtefact>();
+		
+				EList<COREArtefact> artefacts = scene.getArtefacts().get(role);
+				if (artefacts == null) {
+					artefacts = new BasicEList<COREArtefact>();
+				}
 				artefacts.add(externalArtefact);
 				scene.getArtefacts().put(role, artefacts);
 				externalArtefact.setScene(scene);
