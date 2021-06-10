@@ -33,6 +33,9 @@ class FacadeActionGen {
 		«FOR p : language.otherRootPackages»
 			import «p.otherRootPackage».*;
 		«ENDFOR»
+		«FOR p : language.explicitPackages»
+			import «p.explicitPackage».*;
+		«ENDFOR»
 		«FOR l : perspective.languages»
 			import «l.controllerPackage».*;
 		«ENDFOR»
