@@ -51,7 +51,7 @@ class RedefinedAction {
 				«IF action instanceof CreateAction &&
 				action.roleName.equals(language.roleName)»
 					public static EObject «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
-						boolean isFacadeCall, «action.typeParameters») {
+						«action.typeParameters») {
 						
 						EObject newElement = null;
 						«IF !action.rootElement»
@@ -74,32 +74,25 @@ class RedefinedAction {
 							Map<EObject, Collection<EObject>> a = ModelElementStatus.INSTANCE.getOtherNewElements(owner, createSecondaryEffects);
 							Map<EObject, Collection<EObject>> after = new HashMap<EObject, Collection<EObject>>(a);
 							
-							if (!isFacadeCall) {
-								createOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, newElement, owner,
-								 	«action.methodParameter»);						
-							}
+							createOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, newElement, owner,
+								«action.methodParameter»);
+							
 							«IF action.createEffects.size > 0» 	
-								«action.name»CreateSecondaryEffects(perspective, scene, currentRole, after, owner, 
+								«action.name»SecondaryEffects(perspective, scene, currentRole, after, owner, 
 									«action.methodParameter»);
 							«ENDIF»
 							
 						«ENDIF»
-						«IF action.rootElement»
-							// primary language action to create root model element
-							newElement = «action.methodCall»;
-
-							if (!isFacadeCall) {
-								createOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, newElement, owner,
-								 	«action.methodParameter»);						
-							}
-
-						«ENDIF»
-
-					//		try {
-					//			createOtherElementsForLEMA1(perspective, scene, newElement, currentRole, owner, name);
-					//		} catch (PerspectiveException e) {
-					//			RamApp.getActiveScene().displayPopup(e.getMessage());
-					//		}
+«««						«IF action.rootElement»
+«««							// primary language action to create root model element
+«««							newElement = «action.methodCall»;
+«««
+«««							if (!isFacadeCall) {
+«««								createOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, newElement, owner,
+«««								 	«action.methodParameter»);						
+«««							}
+«««
+«««						«ENDIF»
 					
 					return newElement;
 					
@@ -552,7 +545,7 @@ class RedefinedAction {
 						deleteOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, «action.methodParameter»);
 						
 						«IF action.deleteEffects.size > 0»
-							«action.name»DeleteSecondaryEffects(perspective, scene, currentRole, deleteSecondaryEffects);
+							«action.name»SecondaryEffects(perspective, scene, currentRole, deleteSecondaryEffects);
 						«ENDIF»
 					}
 					
@@ -608,7 +601,7 @@ class RedefinedAction {
 «««				action effects
 				«resetCounter»
 				«IF action.createEffects.size > 0» 	
-					private static void «action.name»CreateSecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole, Map<EObject, Collection<EObject>> after, 
+					private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole, Map<EObject, Collection<EObject>> after, 
 							«action.typeParameters») {
 						for (Map.Entry<EObject, Collection<EObject>> e : after.entrySet()) {
 							Collection<EObject> newElements = e.getValue();
