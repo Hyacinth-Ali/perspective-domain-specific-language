@@ -57,6 +57,17 @@ class PerspectiveSpecification {
 	 	
 	 	        return perspective;
 	 	    }
+	 	    
+	 	    public static COREPerspective initializePerspective(COREPerspective perspective) {
+	 	
+	 	        // create perspective actions
+	 	        createPerspectiveAction(perspective);
+	 	
+	 	        // create perspective mappings
+	 	        createPerspectiveMappings(perspective);
+	 	
+	 	        return perspective;
+	 	    }
 	 	
 	 	    private static void createPerspectiveAction(COREPerspective perspective) {
 	 	        // create perspective actions
