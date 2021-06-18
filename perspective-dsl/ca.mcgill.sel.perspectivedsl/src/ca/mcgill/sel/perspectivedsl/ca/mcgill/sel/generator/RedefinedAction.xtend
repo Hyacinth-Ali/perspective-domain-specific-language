@@ -635,7 +635,7 @@ class RedefinedAction {
 				«ENDIF»
 				«resetCounter»
 				«IF action.deleteEffects.size > 0»
-					private static void «action.name»DeleteSecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole,
+					private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole,
 								List<EObject> deleteSecondaryEffects) {
 						for (EObject deletedElement : deleteSecondaryEffects) {
 								«FOR deleteEffect : action.deleteEffects»

@@ -53,6 +53,7 @@ class FacadeActionGen {
 					«var facadeAction = createAction.createFacadeAction»
 					«resetCounter»
 					«IF facadeAction.roleName.equals(language.roleName)»
+«««					The main facade action
 						public static EObject createOtherElementsFor«facadeAction.metaclassName»(COREPerspective perspective, EObject otherLE, String otherRoleName, COREScene scene, 
 								«facadeAction.typeParameters») {
 							EObject newElement = null;
@@ -82,6 +83,7 @@ class FacadeActionGen {
 						}
 					«ENDIF»
 					
+«««					The main create action
 					public static EObject «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
 						«action.typeParameters») {
 							
@@ -120,6 +122,7 @@ class FacadeActionGen {
 				
 «««				action effects
 				«resetCounter»
+«««				CReate effects
 				«IF action.createEffects.size > 0» 	
 					private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole, Map<EObject, Collection<EObject>> after, 
 							«action.typeParameters») {
@@ -154,8 +157,9 @@ class FacadeActionGen {
 					}
 				«ENDIF»
 				«resetCounter»
+«««				Delete effects
 				«IF action.deleteEffects.size > 0»
-					private static void «action.name»DeleteSecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole,
+					private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole,
 								List<EObject> deleteSecondaryEffects) {
 						for (EObject deletedElement : deleteSecondaryEffects) {
 								«FOR deleteEffect : action.deleteEffects»
@@ -188,6 +192,7 @@ class FacadeActionGen {
 				
 			«ENDFOR»
 
+«««			Delete facade action
 			«var facadeAction = language.deleteFacadeAction»
 			«resetCounter»
 			«IF facadeAction.roleName.equals(language.roleName)»
