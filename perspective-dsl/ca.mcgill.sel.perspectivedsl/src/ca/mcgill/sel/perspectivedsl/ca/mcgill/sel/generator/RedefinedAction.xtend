@@ -61,20 +61,20 @@ class RedefinedAction {
 							«ENDFOR»
 							
 							// record existing elements.
-							ModelElementStatus.INSTANCE.setMainExistingElements(owner, «action.metaclassObject»);
+							ModelElementStatus.INSTANCE.setMainExistingElements(owner, «action.languageElement»);
 							ModelElementStatus.INSTANCE.setOtherExistingElements(owner, createSecondaryEffects);
 							
 							// primary language action to create a new element
 							«action.methodCall»;
 						
 							// retrieve the new element
-							newElement = ModelElementStatus.INSTANCE.getNewElement(owner, «action.metaclassObject»);
+							newElement = ModelElementStatus.INSTANCE.getNewElement(owner, «action.languageElement»);
 							
 							// get other new elements for each language element
 							Map<EObject, Collection<EObject>> a = ModelElementStatus.INSTANCE.getOtherNewElements(owner, createSecondaryEffects);
 							Map<EObject, Collection<EObject>> after = new HashMap<EObject, Collection<EObject>>(a);
 							
-							createOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, newElement, owner,
+							createOtherElementsFor«action.languageElementName»(perspective, scene, currentRole, newElement, owner,
 								«action.methodParameter»);
 							
 							«IF action.createEffects.size > 0» 	
@@ -88,7 +88,7 @@ class RedefinedAction {
 «««							newElement = «action.methodCall»;
 «««
 «««							if (!isFacadeCall) {
-«««								createOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, newElement, owner,
+«««								createOtherElementsFor«action.languageElementName»(perspective, scene, currentRole, newElement, owner,
 «««								 	«action.methodParameter»);						
 «««							}
 «««
@@ -98,7 +98,7 @@ class RedefinedAction {
 					
 					}
 					
-					public static void createOtherElementsFor«action.metaclassName»(COREPerspective perspective, COREScene scene, String currentRoleName,
+					public static void createOtherElementsFor«action.languageElementName»(COREPerspective perspective, COREScene scene, String currentRoleName,
 							EObject currentElement, «action.typeParameters») throws PerspectiveException {
 					
 						List<CORELanguageElementMapping> mappingTypes = COREPerspectiveUtil.INSTANCE.getMappingTypes(perspective,
@@ -117,14 +117,14 @@ class RedefinedAction {
 						if (otherMappingEnd.isRootMappingEnd()) {
 							CreateModel.createOtherRootModels(perspective, mappingType, scene, currentRoleName, currentElement, name);
 						} else {
-							createOtherElementsFor«action.metaclassName»(perspective, mappingType, scene, currentRoleName, currentElement, owner,
+							createOtherElementsFor«action.languageElementName»(perspective, mappingType, scene, currentRoleName, currentElement, owner,
 															 	«action.methodParameter»);
 						}
 							
 						}
 					}
 					
-					public static void createOtherElementsFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene, String currentRoleName,
+					public static void createOtherElementsFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene, String currentRoleName,
 								EObject currentElement, «action.typeParameters») {
 							
 						String otherRoleName = COREPerspectiveUtil.INSTANCE.getOtherRoleName(mappingType, currentRoleName);
@@ -140,52 +140,52 @@ class RedefinedAction {
 						// C1/C9
 						case CAN_CREATE:
 						case CAN_CREATE_OR_USE_NON_MAPPED:
-							canCreateOrUseNonMappedElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
+							canCreateOrUseNonMappedElementFor«action.languageElementName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
 									otherLE, owner, «action.methodParameter»);
 							break;
 					
 						// C2/C10
 						case CREATE:
 						case CREATE_OR_USE_NON_MAPPED:
-							createOrUseNonMappedElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
+							createOrUseNonMappedElementFor«action.languageElementName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName,
 									otherLE, owner, «action.methodParameter»);
 							break;
 					
 						// C3/C11
 						case CAN_CREATE_MANY:
 						case CAN_CREATE_OR_USE_NON_MAPPED_MANY:
-							canCreateOrUseNonMappedManyElementsFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName,
+							canCreateOrUseNonMappedManyElementsFor«action.languageElementName»(perspective, mappingType, scene, currentElement, currentRoleName,
 									otherRoleName, otherLE, owner, «action.methodParameter»);
 							break;
 					
 						// C4/C12
 						case CREATE_AT_LEAST_ONE:
 						case CREATE_OR_USE_NON_MAPPED_AT_LEAST_ONE:
-							createOrUseNonMappedAtLeastOneElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName,
+							createOrUseNonMappedAtLeastOneElementFor«action.languageElementName»(perspective, mappingType, scene, currentElement, currentRoleName,
 									otherRoleName, otherLE, owner, «action.methodParameter»);
 							break;
 							
 						// C5
 						case CAN_CREATE_OR_USE:
-							canCreateOrUseElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
+							canCreateOrUseElementFor«action.languageElementName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
 									owner, «action.methodParameter»);
 							break;
 					
 						// C6
 						case CREATE_OR_USE:
-							createOrUseElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
+							createOrUseElementFor«action.languageElementName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
 									owner, «action.methodParameter»);
 							break;
 					
 						// C7
 						case CAN_CREATE_OR_USE_MANY:
-							canCreateOrUseManyElementsFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
+							canCreateOrUseManyElementsFor«action.languageElementName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE,
 									owner, «action.methodParameter»);
 							break;
 					
 						// C8
 						case CREATE_OR_USE_AT_LEAST_ONE:
-							createOrUseAtLeastOneElementFor«action.metaclassName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
+							createOrUseAtLeastOneElementFor«action.languageElementName»(perspective, mappingType, scene, currentElement, currentRoleName, otherRoleName, otherLE, 
 									owner, «action.methodParameter»);
 							break;
 								
@@ -212,7 +212,7 @@ class RedefinedAction {
 					 * @param currentOwner
 					 * @param name
 					 */
-					private static void canCreateOrUseElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+					private static void canCreateOrUseElementFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 					
 						EObject otherElement = null;
@@ -224,13 +224,13 @@ class RedefinedAction {
 							otherElement = QueryAction.INSTANCE.findCorrespondingElement(scene, mappingType, currentElement.eClass(), currentElement, currentRoleName, otherRoleName);
 							if (otherElement == null) {
 								otherExist = false;
-								otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, owner, «action.methodParameter»);
+								otherElement = «language.name»FacadeAction.createOtherElementsFor«action.languageElementName»(perspective, otherLE, otherRoleName, scene, owner, «action.methodParameter»);
 							}
 							COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
 							// save the recent changes
 							// BasePerspectiveController.saveModel(scene);
 							if(!otherExist) {
-								createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);	
+								createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);	
 							}
 						}
 					}
@@ -252,7 +252,7 @@ class RedefinedAction {
 					 * @param currentOwner
 					 * @param name
 					 */
-					private static void createOrUseElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene, EObject currentElement,
+					private static void createOrUseElementFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene, EObject currentElement,
 							String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 					
 						EObject otherElement = null;
@@ -260,13 +260,13 @@ class RedefinedAction {
 						otherElement = QueryAction.INSTANCE.findCorrespondingElement(scene, mappingType, currentElement.eClass(), currentElement, currentRoleName, otherRoleName);
 						if (otherElement == null) {
 							otherExist = false;
-							otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
+							otherElement = «language.name»FacadeAction.createOtherElementsFor«action.languageElementName»(perspective, otherLE, otherRoleName, scene, 
 								owner, «action.methodParameter»);
 						}
 						COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
 						// BasePerspectiveController.saveModel(scene);
 						if (!otherExist) {
-							createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
+							createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
 						}
 						
 					}
@@ -289,7 +289,7 @@ class RedefinedAction {
 					 * @param currentOwner
 					 * @param name
 					 */
-					private static void canCreateOrUseManyElementsFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+					private static void canCreateOrUseManyElementsFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 					
 						EObject otherElement = null;
@@ -307,11 +307,11 @@ class RedefinedAction {
 							}
 						}
 						for (int count = 0; count < numberOfMappings; count++) {
-							otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
+							otherElement = «language.name»FacadeAction.createOtherElementsFor«action.languageElementName»(perspective, otherLE, otherRoleName, scene, 
 														owner, «action.methodParameter»);
 							COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
 							// BasePerspectiveController.saveModel(scene);
-							createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
+							createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
 						}
 					}
 					
@@ -332,7 +332,7 @@ class RedefinedAction {
 					 * @param currentOwner
 					 * @param name
 					 */
-					private static void createOrUseAtLeastOneElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+					private static void createOrUseAtLeastOneElementFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 					
 						EObject otherElement = null;
@@ -350,11 +350,11 @@ class RedefinedAction {
 							}
 						}
 						for (int count = 0; count < numberOfMappings; count++) {
-							otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
+							otherElement = «language.name»FacadeAction.createOtherElementsFor«action.languageElementName»(perspective, otherLE, otherRoleName, scene, 
 														owner, «action.methodParameter»);
 							COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
 							// BasePerspectiveController.saveModel(scene);
-							createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
+							createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
 						}
 					}
 					
@@ -375,7 +375,7 @@ class RedefinedAction {
 					 * @param currentOwner
 					 * @param name
 					 */
-					private static void canCreateOrUseNonMappedElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+					private static void canCreateOrUseNonMappedElementFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 					
 						EObject otherElement = null;
@@ -387,13 +387,13 @@ class RedefinedAction {
 							// already mapped.
 							if (otherElement == null || COREPerspectiveUtil.INSTANCE.getMappings(mappingType, scene, otherElement).size() != 0) {
 								otherExist = false;
-								otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
+								otherElement = «language.name»FacadeAction.createOtherElementsFor«action.languageElementName»(perspective, otherLE, otherRoleName, scene, 
 															owner, «action.methodParameter»);
 							}
 							COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
 							// BasePerspectiveController.saveModel(scene);
 							if (!otherExist) {
-								createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
+								createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
 							}
 							
 					
@@ -417,7 +417,7 @@ class RedefinedAction {
 					 * @param currentOwner
 					 * @param name
 					 */
-					private static void createOrUseNonMappedElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
+					private static void createOrUseNonMappedElementFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
 							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
 					
 						EObject otherElement = null;
@@ -428,14 +428,14 @@ class RedefinedAction {
 						// or mapped.
 						if (otherElement == null || COREPerspectiveUtil.INSTANCE.getMappings(mappingType, scene, otherElement).size() > 0) {
 							otherExist = false;
-							otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
+							otherElement = «language.name»FacadeAction.createOtherElementsFor«action.languageElementName»(perspective, otherLE, otherRoleName, scene, 
 														owner, «action.methodParameter»);
 						}
 						COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
 						// BasePerspectiveController.saveModel(scene);
 						// stop the recursion if other element exists.
 						if (!otherExist) {
-							createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
+							createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
 						}
 					}
 					
@@ -456,7 +456,7 @@ class RedefinedAction {
 					 * @param currentOwner
 					 * @param name
 					 */
-					private static void canCreateOrUseNonMappedManyElementsFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType,
+					private static void canCreateOrUseNonMappedManyElementsFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType,
 							COREScene scene, EObject currentElement, String currentRoleName, String otherRoleName,
 							EObject otherLE, «action.typeParameters») {
 					
@@ -477,11 +477,11 @@ class RedefinedAction {
 							}
 						}
 						for (int count = 0; count < numberOfMappings; count++) {
-							otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
+							otherElement = «language.name»FacadeAction.createOtherElementsFor«action.languageElementName»(perspective, otherLE, otherRoleName, scene, 
 														owner, «action.methodParameter»);
 							COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
 						  	// BasePerspectiveController.saveModel(scene);
-						  	createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
+						  	createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
 						}
 					}
 					
@@ -502,7 +502,7 @@ class RedefinedAction {
 					 * @param currentOwner
 					 * @param name
 					 */
-					private static void createOrUseNonMappedAtLeastOneElementFor«action.metaclassName»(COREPerspective perspective, CORELanguageElementMapping mappingType,
+					private static void createOrUseNonMappedAtLeastOneElementFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType,
 							COREScene scene, EObject currentElement, String currentRoleName, String otherRoleName,
 							EObject otherLE, «action.typeParameters») {
 					
@@ -524,32 +524,32 @@ class RedefinedAction {
 							}
 						}
 						for (int count = 0; count < numberOfMappings; count++) {
-							otherElement = «language.name»FacadeAction.createOtherElementsFor«action.metaclassName»(perspective, otherLE, otherRoleName, scene, 
+							otherElement = «language.name»FacadeAction.createOtherElementsFor«action.languageElementName»(perspective, otherLE, otherRoleName, scene, 
 														owner, «action.methodParameter»);
 							COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
 						  	// BasePerspectiveController.saveModel(scene);
-						  	createOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
+						  	createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
 						}
 					}
-					
+«««				Redefined delete action
 				«ELSEIF action instanceof DeleteAction &&
 				action.roleName.equals(language.roleName)»
 					public static void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
-						
-						List<EObject> deleteSecondaryEffects = new ArrayList<EObject>();
-						«FOR deleteEffect : action.deleteEffects»
-							deleteSecondaryEffects.add(«deleteEffect.element»);
-						«ENDFOR»
 											
 						«action.methodCall»;
-						deleteOtherElementsFor«action.metaclassName»(perspective, scene, currentRole, «action.methodParameter»);
+						deleteOtherElementsFor«action.languageElementName»(perspective, scene, currentRole, «action.methodParameter»);
 						
 						«IF action.deleteEffects.size > 0»
+							List<EObject> deleteSecondaryEffects = new ArrayList<EObject>();
+							«FOR deleteEffect : action.deleteEffects»
+								deleteSecondaryEffects.add(«deleteEffect.element»);
+							«ENDFOR»
 							«action.name»SecondaryEffects(perspective, scene, currentRole, deleteSecondaryEffects);
 						«ENDIF»
 					}
 					
-					public static void deleteOtherElementsFor«action.metaclassName»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
+«««					Delete other elements
+					public static void deleteOtherElementsFor«action.languageElementName»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
 					
 						List<COREModelElementMapping> mappings = COREPerspectiveUtil.INSTANCE.getMappings(scene, currentElement);
 						// Traditional for loop is used here to avoid
@@ -580,18 +580,21 @@ class RedefinedAction {
 							switch (deleteType) {
 					
 							case DELETE_OTHERS:
-								«language.name»FacadeAction.deleteModelElement(perspective, scene, otherRoleName, otherElement);
-								deleteOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement);
+								«language.name»FacadeAction.deleteOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement);
+								deleteOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement);
 								break;
 					
 							case DELETE_SINGLEMAPPED:
 								List<COREModelElementMapping> otherMappings = COREPerspectiveUtil.INSTANCE.getMappings(mappingType, scene,
 										otherElement);
 								if (otherMappings.size() == 0) {
-									«language.name»FacadeAction.deleteModelElement(perspective, scene, otherRoleName, otherElement);
-									deleteOtherElementsFor«action.metaclassName»(perspective, scene, otherRoleName, otherElement);
+									«language.name»FacadeAction.deleteOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement);
+									deleteOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement);
 								}
 								break;
+								
+							default:
+								// do nothing
 							}
 						}
 					}

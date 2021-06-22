@@ -37,10 +37,8 @@ Language:
         "roleName" roleName = ID';' 
         (otherRootPackages += OtherRootPackage)*
         (explicitPackages += ExplicitPackage)*
-        
         ('actions' '{'
             (actions += PerspectiveAction)*
-            deleteFacadeAction = DeleteFacadeAction
         '}')?
         
     '}'
@@ -82,8 +80,8 @@ CreateAction:
     	'methodTypeAndParameters' ':' typeParameters = STRING';'
     	'methodCall' ':' methodCall = STRING';'
     	'methodParameters' ':' methodParameter = STRING';'
-    	'metaclassName' ':' metaclassName = ID';'
-    	'metaclassObject' ':' metaclassObject = STRING';'
+    	'languageElementName' ':' languageElementName = ID';'
+    	'languageElement' ':' languageElement = STRING';'
     	createFacadeAction = CreateFacadeAction
     	('secondaryEffects' '{'
     		('create' 'effects' '{'
@@ -103,8 +101,9 @@ DeleteAction:
     	'methodTypeAndParameters' ':' typeParameters = STRING';'
     	'methodCall' ':' methodCall = STRING';'
     	'methodParameters' ':' methodParameter = STRING';'
-    	'metaclassName' ':' metaclassName = ID';'
-    	'metaclassObject' ':' metaclassObject = STRING';'
+    	'languageElementName' ':' languageElementName = ID';'
+    	'languageElement' ':' languageElement = STRING';'
+    	deleteFacadeAction = DeleteFacadeAction
     	('secondaryEffects' '{'
     		('create' 'effects' '{'
     			(createEffects += CreateEffect)*
@@ -118,9 +117,6 @@ DeleteAction:
 
 CreateFacadeAction:
     'facadeAction' 'create' name = ID '{'
-    	'roleName' ':' roleName = ID';'
-    	'metaclassName' ':' metaclassName = ID';'
-    	'methodTypeAndParameters' ':' typeParameters = STRING';'
     	'facade' 'calls' '{'
     		(facadeCalls += FacadeCall)*
     	'}'
@@ -129,10 +125,8 @@ CreateFacadeAction:
 
 DeleteFacadeAction:
 	'facadeAction' 'delete' name = ID '{'
-		'roleName' ':' roleName = ID';'
-		'elementName' ':' elementName = ID';'
-		'method' 'calls' '{'
-			(methodCalls += MethodCall)+
+		'facade' 'calls' '{'
+			(facadeCalls += FacadeCall)+
 		'}'
 		
 	'}'
@@ -146,13 +140,13 @@ ExplicitPackage:
 	"explicitPackage" explicitPackage = STRING';'
 ;
 
-MethodCall:
-	'metaclassObject' ':' metaclassObject = STRING';'
-	'methodCall' ':' methodCall = STRING';'
-;
+//MethodCall:
+//	'metaclassObject' ':' metaclassObject = STRING';'
+//	'methodCall' ':' methodCall = STRING';'
+//;
 
 FacadeCall:
-	'metaclassObject' ':' metaclassObject = STRING';'
+	'languageElement' ':' languageElement = STRING';'
 	(mappings += ParameterMapping)*
 	'methodCall' ':' methodCall = STRING';'   
 ;

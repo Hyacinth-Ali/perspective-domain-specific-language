@@ -40,7 +40,7 @@ class FacadeActionGen {
 			import «p.otherRootPackage».*;
 		«ENDFOR»
 		«FOR p : language.explicitPackages»
-			import «p.explicitPackage».*;
+			import «p.explicitPackage»;
 		«ENDFOR»
 		«FOR l : perspective.languages»
 			import «l.controllerPackage».*;
@@ -52,14 +52,14 @@ class FacadeActionGen {
 					«var createAction = action as CreateAction»
 					«var facadeAction = createAction.createFacadeAction»
 					«resetCounter»
-					«IF facadeAction.roleName.equals(language.roleName)»
+					«IF action.roleName.equals(language.roleName)»
 «««					The main facade action
-						public static EObject createOtherElementsFor«facadeAction.metaclassName»(COREPerspective perspective, EObject otherLE, String otherRoleName, COREScene scene, 
-								«facadeAction.typeParameters») {
+						public static EObject createOtherElementsFor«action.languageElementName»(COREPerspective perspective, EObject otherLE, String otherRoleName, COREScene scene, 
+								«action.typeParameters») {
 							EObject newElement = null;
 							«FOR facadeCall : facadeAction.facadeCalls»
 								«IF count === 0»
-									if (otherLE.equals(«facadeCall.metaclassObject»)) {
+									if (otherLE.equals(«facadeCall.languageElement»)) {
 										// Handle parameter mappings
 										«FOR m : facadeCall.mappings»
 											«m.mapping»;
@@ -68,7 +68,7 @@ class FacadeActionGen {
 									}
 								«ENDIF»
 								«IF count > 0»
-									else if (otherLE.equals(«facadeCall.metaclassObject»)) {
+									else if (otherLE.equals(«facadeCall.languageElement»)) {
 										// Handle parameter mappings
 										«FOR m : facadeCall.mappings»
 											«m.mapping»;
@@ -83,7 +83,7 @@ class FacadeActionGen {
 						}
 					«ENDIF»
 					
-«««					The main create action
+«««					The main create facade action
 					public static EObject «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
 						«action.typeParameters») {
 							
@@ -95,14 +95,14 @@ class FacadeActionGen {
 							«ENDFOR»
 								
 							// record existing elements.
-							ModelElementStatus.INSTANCE.setMainExistingElements(owner, «action.metaclassObject»);
+							ModelElementStatus.INSTANCE.setMainExistingElements(owner, «action.languageElement»);
 							ModelElementStatus.INSTANCE.setOtherExistingElements(owner, createSecondaryEffects);
 								
 							// primary language action to create a new element
 							«action.methodCall»;
 							
 							// retrieve the new element
-							newElement = ModelElementStatus.INSTANCE.getNewElement(owner, «action.metaclassObject»);
+							newElement = ModelElementStatus.INSTANCE.getNewElement(owner, «action.languageElement»);
 								
 							// get other new elements for each language element
 							Map<EObject, Collection<EObject>> a = ModelElementStatus.INSTANCE.getOtherNewElements(owner, createSecondaryEffects);
@@ -116,13 +116,49 @@ class FacadeActionGen {
 						«ENDIF»
 						
 						return newElement;
-						
+														
 					}
+«««				Delete facade actions
+				«ELSEIF action instanceof DeleteAction»
+				
+					«var deleteAction = action as DeleteAction»
+					«var facadeAction = deleteAction.deleteFacadeAction»
+					«resetCounter»
+					public static void deleteOtherElementsFor«action.languageElementName»(COREPerspective perspective, COREScene scene, String otherRoleName, EObject otherElement) {
+						«FOR facadeCall : facadeAction.facadeCalls»
+							«IF count === 0»
+								if (otherElement.eClass().equals(«facadeCall.languageElement»)) {
+									«facadeCall.methodCall»;
+								}
+							«ENDIF»
+							«IF count > 0»
+								else if (otherElement.eClass().equals(«facadeCall.languageElement»)) {
+									«facadeCall.methodCall»;
+								}
+							«ENDIF»
+							«counter»
+						«ENDFOR»						
+					}
+					
+«««					The main delete facade action
+					public static void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
+
+						«action.methodCall»;
+							
+						«IF action.deleteEffects.size > 0»
+							List<EObject> deleteSecondaryEffects = new ArrayList<EObject>();
+							«FOR deleteEffect : action.deleteEffects»
+								deleteSecondaryEffects.add(«deleteEffect.element»);
+							«ENDFOR»
+							«action.name»SecondaryEffects(perspective, scene, currentRole, deleteSecondaryEffects);
+						«ENDIF»
+					}
+			
 				«ENDIF»
 				
 «««				action effects
 				«resetCounter»
-«««				CReate effects
+«««				Create effects
 				«IF action.createEffects.size > 0» 	
 					private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole, Map<EObject, Collection<EObject>> after, 
 							«action.typeParameters») {
@@ -156,6 +192,7 @@ class FacadeActionGen {
 						}
 					}
 				«ENDIF»
+				
 				«resetCounter»
 «««				Delete effects
 				«IF action.deleteEffects.size > 0»
@@ -191,27 +228,6 @@ class FacadeActionGen {
 				«ENDIF»
 				
 			«ENDFOR»
-
-«««			Delete facade action
-			«var facadeAction = language.deleteFacadeAction»
-			«resetCounter»
-			«IF facadeAction.roleName.equals(language.roleName)»
-			public static void «facadeAction.name»(COREPerspective perspective, COREScene scene, String otherRoleName, EObject «facadeAction.elementName») {
-				«FOR methodCall : facadeAction.methodCalls»
-					«IF count === 0»
-						if («facadeAction.elementName».eClass().equals(«methodCall.metaclassObject»)) {
-							«methodCall.methodCall»;
-						}
-					«ENDIF»
-					«IF count > 0»
-						else if («facadeAction.elementName».eClass().equals(«methodCall.metaclassObject»)) {
-							«methodCall.methodCall»;
-						}
-					«ENDIF»
-					«counter»
-				«ENDFOR»						
-			}
-			«ENDIF»
 
 			/**
 			 * This is a helper method which retrieves the corresponding container of an

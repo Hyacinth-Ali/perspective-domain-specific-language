@@ -148,7 +148,7 @@ class CreateModel {
 				«resetCounter»
 				«FOR facade : perspective.rootFacades»
 					«IF count === 0»
-						if (otherLE.equals(«facade.metaclassObject»)) {
+						if (otherLE.equals(«facade.languageElement»)) {
 							// Handle parameter mappings
 							«FOR m : facade.mappings»
 								«m.mapping»;
@@ -157,7 +157,7 @@ class CreateModel {
 						}
 					«ENDIF»
 					«IF count > 0»
-						else if (otherLE.equals(«facade.metaclassObject»)) {
+						else if (otherLE.equals(«facade.languageElement»)) {
 							// Handle parameter mappings
 							«FOR m : facade.mappings»
 								«m.mapping»;
