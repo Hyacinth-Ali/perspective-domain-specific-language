@@ -132,7 +132,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        
 		
 		        // Add existing external languages, if any
-		        List<String> languages = ResourceUtil.getResourceListing("models/languages/", ".core");
+		        List<String> languages = ResourceUtil.getResourceListing("models/testlanguages/", ".core");
 		        if (languages != null) {
 		        	«FOR language : perspective.languages»
 		        		for (String l : languages) {
@@ -154,9 +154,9 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        
 		        // initialize perspective with perspective actions and mappings
 		        // TODO update for TouchCORE codes
-		        «perspective.name»Specification.initializePerspective();
+		        «perspective.name»Specification.initializePerspective(perspective);
 		        
-		        String fileName = "/Users/hyacinthali/workspace/TouchCORE2/touchram/ca.mcgill.sel.ram/resources/models/perspectives/"
+		        String fileName = "/Users/hyacinthali/workspace/TouchCORE2/touchram/ca.mcgill.sel.ram/resources/models/testperspectives/"
 		           + "«perspective.name»_Perspective";
 		        
 		        try {

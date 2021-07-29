@@ -79,17 +79,17 @@ class LanguageRegistration {
 
             createLanguageActions(language);
 
-            // langConcern.getArtefacts().add(language);
+            langConcern.getArtefacts().add(language);
 
-            // String language1FileName = "/Users/hyacinthali/workspace/TouchCORE2/touchram/ca.mcgill.sel.ram/resources/models/languages/"
-            //         + "«language.getName()»";
+            String language1FileName = "/Users/hyacinthali/workspace/TouchCORE2/touchram/ca.mcgill.sel.ram/resources/models/testlanguages/"
+                     + "«language.getName()»";
 
-            // try {
-            //     ResourceManager.saveModel(langConcern, language1FileName.concat("." + "core"));
-            // } catch (IOException e) {
-            //     // Shouldn't happen.
-            //    e.printStackTrace();
-            // }
+             try {
+                 ResourceManager.saveModel(langConcern, language1FileName.concat("." + "core"));
+             } catch (IOException e) {
+                 // Shouldn't happen.
+                e.printStackTrace();
+             }
 
              return language;
             }
