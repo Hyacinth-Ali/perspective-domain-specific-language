@@ -153,7 +153,7 @@ FacadeCall:
 
 
 ParameterMapping:
-	'mapping' mapping = STRING';'
+	'derivedParameter' mapping = STRING';'
 ;
 
 CreateEffect:
