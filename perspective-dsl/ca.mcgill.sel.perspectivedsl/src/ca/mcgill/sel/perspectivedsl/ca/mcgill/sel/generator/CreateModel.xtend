@@ -24,14 +24,17 @@ class CreateModel {
 		import java.util.HashMap;
 		import java.util.List;
 		import java.util.Map;
+		import java.io.IOException;
 		import java.lang.Class;
 		
 		import org.eclipse.emf.common.util.BasicEList;
 		import org.eclipse.emf.common.util.EList;
 		import org.eclipse.emf.ecore.EObject;
+		import org.eclipse.emf.ecore.util.EcoreUtil;
 		
 		import ca.mcgill.sel.core.*;
 		import ca.mcgill.sel.core.controller.ModelUtil;
+		import ca.mcgill.sel.core.language.registry.CORELanguageRegistry;
 		import ca.mcgill.sel.core.perspective.ActionType;
 		import ca.mcgill.sel.core.perspective.COREPerspectiveUtil;
 		import ca.mcgill.sel.core.perspective.TemplateType;
@@ -87,6 +90,10 @@ class CreateModel {
 			 */
 			public EObject createNewModel(COREPerspective perspective, COREScene scene, String role, String name, boolean isFacadeCall) {
 		
+				// initialize existing model maps
+				existingModels = new HashMap<String, List<EObject>>();
+				
+				// create new model
 				EObject externalModel = createModel(perspective, scene, role, name);
 		
 				// Check if there are any mandatory CORELanguageElementMappings that
@@ -589,8 +596,9 @@ class CreateModel {
 				EObject externalModel;
 		
 				CORELanguage l = perspective.getLanguages().get(role);
+				
 				// create the model using the language's model util
-				ModelUtil mu = modelUtils.get(l);
+				ModelUtil mu = CORELanguageRegistry.getRegistry().getModelUtil(l);
 				externalModel = mu.createNewEmptyModel(name);
 		
 				// create a COREExternalArtefact that refers to the new model 
@@ -606,7 +614,13 @@ class CreateModel {
 				artefacts.add(externalArtefact);
 				scene.getArtefacts().put(role, artefacts);
 				externalArtefact.setScene(scene);
-		
+				
+				try {
+					COREConcern concern = (COREConcern) EcoreUtil.getRootContainer(scene);
+					COREPerspectiveUtil.INSTANCE.saveModel(concern, role, externalArtefact);
+				} catch (IOException e) {
+				}
+				
 				return externalModel;
 			}
 			

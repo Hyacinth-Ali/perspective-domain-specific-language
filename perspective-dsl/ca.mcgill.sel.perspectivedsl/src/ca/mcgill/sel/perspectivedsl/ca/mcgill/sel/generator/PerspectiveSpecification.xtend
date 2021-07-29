@@ -34,29 +34,6 @@ class PerspectiveSpecification {
 	 	«ENDFOR»
 	 	
 	 	public class «perspective.name»Specification {
-	 	
-	 	    public static COREPerspective initializePerspective(COREPerspective perspective) {
-	 	
-«««	 			// Remove these lines of code while generating for TouchCORE
-«««	 			COREPerspective perspective = CoreFactory.eINSTANCE.createCOREPerspective();
-«««	 			perspective.setName("«perspective.name»");
-«««	 			
-«««	 			// create external languages, if any
-«««	 			COREExternalLanguage language = null;
-«««	 			«FOR Language l : perspective.languages»
-«««	 				language = «l.name».createLanguage();
-«««	 				perspective.getLanguages().put("«l.roleName»", language);	
-«««	 			«ENDFOR»
-«««	 			// End of codes to be removed
-	 			
-	 	        // create perspective actions
-	 	        createPerspectiveAction(perspective);
-	 	
-	 	        // create perspective mappings
-	 	        createPerspectiveMappings(perspective);
-	 	
-	 	        return perspective;
-	 	    }
 	 	    
 	 	    public static COREPerspective initializePerspective(COREPerspective perspective) {
 	 	
