@@ -33,6 +33,7 @@ class CreateModel {
 		import org.eclipse.emf.ecore.util.EcoreUtil;
 		
 		import ca.mcgill.sel.core.*;
+		import ca.mcgill.sel.ram.ui.perspective.*;
 		import ca.mcgill.sel.core.controller.ModelUtil;
 		import ca.mcgill.sel.core.language.registry.CORELanguageRegistry;
 		import ca.mcgill.sel.core.perspective.ActionType;
