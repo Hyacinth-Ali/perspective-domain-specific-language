@@ -71,6 +71,10 @@ class CreateModel {
 				modelUtils = new HashMap<CORELanguage, ModelUtil>();
 			}
 			
+			public static CreateModel getInstance() {
+				return INSTANCE;
+			}
+			
 			public void initializeExistingModel() {
 				existingModels = new HashMap<String, List<EObject>>();	
 			}

@@ -126,6 +126,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        
 		        COREPerspective perspective = CoreFactory.eINSTANCE.createCOREPerspective();
 		        perspective.setName("«perspective.displayName»");
+		        perspective.setCreateModel("«perspective.createModel»");
 		        
 		        //Add perspective to the concern
 		        perspectiveConcern.getArtefacts().add(perspective);

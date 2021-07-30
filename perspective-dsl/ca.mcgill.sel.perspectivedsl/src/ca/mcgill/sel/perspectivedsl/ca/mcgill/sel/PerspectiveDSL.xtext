@@ -10,6 +10,7 @@ PerspectiveModel:
 Perspective:
     'perspective' name = ID '{'
 
+		'createModel' createModel = STRING';'
         ('default' default = ID';')?
         
         'display' 'name' displayName = STRING';'
