@@ -40,7 +40,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
              for (Language language : perspective.languages) {
              	if (containsRedefinedAction(perspective, language)) {
              		fsa.generateFile(
-                 		"ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/Redefined" + language.name + "Action.java",
+                 		"ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/" + perspective.namePrefix + "Redefined" + language.name + "Action.java",
                 		RedefinedAction.compileActions(perspective, language)
                 	)
              	}

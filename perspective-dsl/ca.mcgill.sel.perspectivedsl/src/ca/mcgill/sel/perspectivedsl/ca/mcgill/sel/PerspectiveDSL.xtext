@@ -12,8 +12,8 @@ Perspective:
 
 		'createModel' createModel = STRING';'
         ('default' default = ID';')?
-        
         'display' 'name' displayName = STRING';'
+        'namePrefix' namePrefix = ID';'
         
         ('root' 'facade' 'calls' '{'
     		(rootFacades += FacadeCall)*

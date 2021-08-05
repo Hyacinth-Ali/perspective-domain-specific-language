@@ -46,7 +46,7 @@ class RedefinedAction {
 			import «explicitPackage.explicitPackage»;
 		«ENDFOR»
 		
-		public class Redefined«language.name»Action {
+		public class «perspective.namePrefix»Redefined«language.name»Action {
 			«FOR action : language.actions»
 				«IF action instanceof CreateAction &&
 				action.roleName.equals(language.roleName)»
