@@ -243,7 +243,6 @@ class FacadeActionGen {
 			
 				List<COREModelElementMapping> ownerMappings = COREPerspectiveUtil.INSTANCE.getMappings(currentOwner, scene);
 				outerloop: for (COREModelElementMapping mapping : ownerMappings) {
-					ownerOther = COREPerspectiveUtil.INSTANCE.getOtherElement(mapping, currentOwner);
 					CORELanguageElementMapping mappingType = COREPerspectiveUtil.INSTANCE.getMappingType(perspective, mapping);
 					for (MappingEnd mappingEnd : mappingType.getMappingEnds()) {
 						if (mappingEnd.getRoleName().equals(otherRole)) {

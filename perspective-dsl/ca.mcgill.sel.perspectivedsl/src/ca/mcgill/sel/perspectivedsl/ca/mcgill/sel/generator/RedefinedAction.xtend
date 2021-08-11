@@ -115,6 +115,7 @@ class RedefinedAction {
 						MappingEnd otherMappingEnd = COREPerspectiveUtil.INSTANCE.getOtherMappingEnds(currentMappingEnd).get(0);
 					
 						if (otherMappingEnd.isRootMappingEnd()) {
+							// TODO make name dynamic
 							ModelFactory.createOtherRootModels(perspective, mappingType, scene, currentRoleName, currentElement, name);
 						} else {
 							createOtherElementsFor«action.languageElementName»(perspective, mappingType, scene, currentRoleName, currentElement, owner,

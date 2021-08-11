@@ -24,6 +24,7 @@ class ModelFactory {
 		import java.util.HashMap;
 		import java.util.List;
 		import java.util.Map;
+		import java.util.Map.Entry;
 		import java.io.IOException;
 		import java.lang.Class;
 		
@@ -272,7 +273,7 @@ class ModelFactory {
 				// the MEM
 				boolean isCreateMapping = QueryAction.INSTANCE.isCreateMapping();
 				if (isCreateMapping) {
-					otherModel = findExistingNewModel(otherRoleName);
+					otherModel = findExistingNewModel(otherRoleName, scene);
 					if (otherModel == null) {
 						otherExist = false;
 						otherModel = createModel(perspective, scene, otherRoleName, name);
@@ -308,7 +309,7 @@ class ModelFactory {
 		
 				EObject otherModel = null;
 				boolean otherExist = true;
-				otherModel = findExistingNewModel(otherRoleName);
+				otherModel = findExistingNewModel(otherRoleName, scene);
 				if (otherModel == null) {
 					otherExist = false;
 					otherModel = createModel(perspective, scene, otherRoleName, name);
@@ -346,7 +347,7 @@ class ModelFactory {
 				EObject otherModel = null;
 				// Ask user how many mappings to create
 				int numberOfMappings = QueryAction.INSTANCE.askNumberOfMappings();
-				List<EObject> otherElements = findExistingNewModels(otherRoleName);
+				List<EObject> otherElements = findExistingNewModels(otherRoleName, scene);
 				for (EObject existingElement : otherElements) {
 					if (numberOfMappings <= 0) {
 						break;
@@ -390,7 +391,7 @@ class ModelFactory {
 				EObject otherModel = null;
 				// Ask user how many mappings to create
 				int numberOfMappings = QueryAction.INSTANCE.askNumberOfMappingsAtLeastOne();
-				List<EObject> otherElements = findExistingNewModels(otherRoleName);
+				List<EObject> otherElements = findExistingNewModels(otherRoleName, scene);
 				for (EObject existingElement : otherElements) {
 					if (numberOfMappings <= 0) {
 						break;
@@ -435,7 +436,7 @@ class ModelFactory {
 				boolean otherExist = true;
 				boolean isCreateMapping = QueryAction.INSTANCE.isCreateMapping();
 				if (isCreateMapping) {
-					otherModel = findExistingNewModel(otherRoleName);
+					otherModel = findExistingNewModel(otherRoleName, scene);
 					// creates new element if other element does not exist or it is
 					// already mapped.
 					if (otherModel == null
@@ -476,7 +477,7 @@ class ModelFactory {
 		
 				EObject otherModel = null;
 				boolean otherExist = true;
-				otherModel = findExistingNewModel(otherRoleName);
+				otherModel = findExistingNewModel(otherRoleName, scene);
 		
 				// create other element if the corresponding element is null
 				// or mapped.
@@ -516,7 +517,7 @@ class ModelFactory {
 		
 				EObject otherModel = null;
 				int numberOfMappings = QueryAction.INSTANCE.askNumberOfMappings();
-				List<EObject> otherElements = findExistingNewModels(otherRoleName);
+				List<EObject> otherElements = findExistingNewModels(otherRoleName, scene);
 				// create mapping for each corresponding element which is not mapped
 				for (EObject existingElement : otherElements) {
 					if (numberOfMappings <= 0) {
@@ -563,7 +564,7 @@ class ModelFactory {
 				EObject otherModel = null;
 				// Ask user how many mappings to create (at least one)
 				int numberOfMappings = QueryAction.INSTANCE.askNumberOfMappingsAtLeastOne();
-				List<EObject> otherElements = findExistingNewModels(otherRoleName);
+				List<EObject> otherElements = findExistingNewModels(otherRoleName, scene);
 				// create mapping for each corresponding element which is not mapped
 				for (EObject existingElement : otherElements) {
 					if (numberOfMappings <= 0) {
@@ -654,19 +655,22 @@ class ModelFactory {
 			 * Checks if a model with the role "role" already exist.
 			 * 
 			 * @param role - the role of the model
+			 * @param scene 
 			 * @return the model
 			 */
-			private static EObject findExistingNewModel(String role) {
+			private static EObject findExistingNewModel(String role, COREScene scene) {
 				EObject existingModel = null;
-				for (Map.Entry<String, List<EObject>> entry : existingModels.entrySet()) {
+				for (Entry<String, EList<COREArtefact>> entry : scene.getArtefacts()) {
 					String key = entry.getKey();
-					if (key.equals(role)) {
-						existingModel = entry.getValue().get(0);
+					if (key.equals(role) & entry.getValue().get(0) instanceof COREExternalArtefact) {
+						COREExternalArtefact extArt = (COREExternalArtefact) entry.getValue().get(0);
+						existingModel = extArt.getRootModelElement();
 						break;
 					}
 				}
 				return existingModel;
 			}
+			
 			
 			/**
 			 * Returns existing models with the role "role".
@@ -674,12 +678,18 @@ class ModelFactory {
 			 * @param role - the role of the models
 			 * @return the model
 			 */
-			private static List<EObject> findExistingNewModels(String role) {
+			private static List<EObject> findExistingNewModels(String role, COREScene scene) {
 				List<EObject> models = new ArrayList<>();
-				for (Map.Entry<String, List<EObject>> entry : existingModels.entrySet()) {
+				for (Entry<String, EList<COREArtefact>> entry : scene.getArtefacts()) {
 					String key = entry.getKey();
 					if (key.equals(role)) {
-						models.addAll(entry.getValue());
+						for (EObject o : entry.getValue()) {
+							if (o instanceof COREExternalArtefact) {
+								COREExternalArtefact extArt = (COREExternalArtefact) o;
+								models.add(extArt.getRootModelElement());
+							}
+						} 
+						
 						break;
 					}
 				}
