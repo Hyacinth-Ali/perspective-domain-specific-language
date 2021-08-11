@@ -2,7 +2,7 @@ package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.generator
 
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
 
-class CreateModel {
+class ModelFactory {
 	
 	var static count = 0;
 
@@ -54,7 +54,7 @@ class CreateModel {
 		 *
 		 * @generated
 		 */
-		public class CreateModel {
+		public class ModelFactory {
 		
 			/**
 			 * Map of existing models, each with their corresponding role names.
@@ -64,15 +64,15 @@ class CreateModel {
 			/**
 			 * Singleton pattern - initialize only a single create model.
 			 */
-			public static CreateModel INSTANCE = new CreateModel();
+			public static ModelFactory INSTANCE = new ModelFactory();
 		
 			private static Map<CORELanguage, ModelUtil> modelUtils;
 		
-			private CreateModel() {
+			private ModelFactory() {
 				modelUtils = new HashMap<CORELanguage, ModelUtil>();
 			}
 			
-			public static CreateModel getInstance() {
+			public static ModelFactory getInstance() {
 				return INSTANCE;
 			}
 			
@@ -158,7 +158,7 @@ class CreateModel {
 						.getOtherLanguageElements(mappingType, currentModel.eClass(), currentRoleName).get(0);
 				String otherRoleName = COREPerspectiveUtil.INSTANCE.getOtherRoleName(mappingType, currentRoleName);
 				«resetCounter»
-				«FOR facade : perspective.rootFacades»
+				«FOR facade : perspective.modelFacades»
 					«IF count === 0»
 						if (otherLE.equals(«facade.languageElement»)) {
 							// Handle parameter mappings

@@ -33,8 +33,8 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
                 )
                 
            fsa.generateFile(
-                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/CreateModel.java",
-                CreateModel.compileCreateModel(perspective)
+                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/ModelFactory.java",
+                ModelFactory.compileCreateModel(perspective)
                 )
   
              for (Language language : perspective.languages) {
@@ -125,8 +125,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        COREConcern perspectiveConcern = COREModelUtil.createConcern("«perspective.displayName»");
 		        
 		        COREPerspective perspective = CoreFactory.eINSTANCE.createCOREPerspective();
-		        perspective.setName("«perspective.displayName»");
-		        perspective.setCreateModel("«perspective.createModel»");
+		        perspective.setName("«perspective.name»");
 		        
 		        //Add perspective to the concern
 		        perspectiveConcern.getArtefacts().add(perspective);
