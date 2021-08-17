@@ -13,7 +13,7 @@ class PerspectiveSpecification {
 	 	
 	 	'''
 	 	
-	 	package ca.mcgill.sel.perspective.«perspective.name.toLowerCase»;
+	 	package ca.mcgill.sel.perspective.«perspective.name.toLowerCase.replaceAll("\\s", "")»;
 	 	
 	 	import org.eclipse.emf.ecore.EObject;
 	 	
@@ -33,7 +33,7 @@ class PerspectiveSpecification {
 	 		import «language.rootPackage».*;
 	 	«ENDFOR»
 	 	
-	 	public class «perspective.name»Specification {
+	 	public class «perspective.name.replaceAll("\\s", "")»Specification {
 	 	    
 	 	    public static COREPerspective initializePerspective(COREPerspective perspective) {
 	 	

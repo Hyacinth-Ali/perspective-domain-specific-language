@@ -64,7 +64,7 @@ class LanguageRegistration {
             public static COREExternalLanguage createLanguage() {
 
             // create a language concern
-            // COREConcern langConcern = COREModelUtil.createConcern("«language.name»");
+            COREConcern langConcern = COREModelUtil.createConcern("«language.name»");
 
             COREExternalLanguage language = CoreFactory.eINSTANCE.createCOREExternalLanguage();
             language.setName("«language.name»");

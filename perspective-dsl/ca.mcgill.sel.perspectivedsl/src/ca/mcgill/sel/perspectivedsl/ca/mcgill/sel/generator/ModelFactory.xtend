@@ -17,7 +17,7 @@ class ModelFactory {
 	def static compileCreateModel(Perspective perspective) {
 		
 		'''
-		package ca.mcgill.sel.perspective.«perspective.name.toLowerCase»;
+		package ca.mcgill.sel.perspective.«perspective.name.toLowerCase.replaceAll("\\s", "")»;
 		
 		import java.lang.reflect.InvocationTargetException;
 		import java.util.ArrayList;
@@ -58,11 +58,6 @@ class ModelFactory {
 		public class ModelFactory {
 		
 			/**
-			 * Map of existing models, each with their corresponding role names.
-			 */
-			private static Map<String, List<EObject>> existingModels;
-		
-			/**
 			 * Singleton pattern - initialize only a single create model.
 			 */
 			public static ModelFactory INSTANCE = new ModelFactory();
@@ -76,11 +71,7 @@ class ModelFactory {
 			public static ModelFactory getInstance() {
 				return INSTANCE;
 			}
-			
-			public void initializeExistingModel() {
-				existingModels = new HashMap<String, List<EObject>>();	
-			}
-		
+
 			/**
 			 * This method creates creates a new model using the language that plays the role "role" in the perspective.
 			 * Finally, calls the recursive method "createOtherExternalModels" to create
@@ -96,21 +87,14 @@ class ModelFactory {
 			 */
 			public EObject createNewModel(COREPerspective perspective, COREScene scene, String role, String name, boolean isFacadeCall) {
 		
-				// initialize existing model maps
-				existingModels = new HashMap<String, List<EObject>>();
-				
 				// create new model
 				EObject externalModel = createModel(perspective, scene, role, name);
 		
-				// Check if there are any mandatory CORELanguageElementMappings that
-				// dictate
-				// that other models must be created
+				// Create other models if needed
 				if (!isFacadeCall) {
 					createOtherModels(perspective, scene, role, externalModel, name);
 				}
-				// clear existing role names
-		//		existingModels.clear();
-		
+				
 				return externalModel;
 		
 			}
@@ -128,8 +112,6 @@ class ModelFactory {
 			 */
 			private static void createOtherModels(COREPerspective perspective, COREScene scene, String currentRoleName,
 					EObject extModel, String name) {
-		
-				addNewElement(extModel, currentRoleName);
 		
 				List<CORELanguageElementMapping> mappingTypes = COREPerspectiveUtil.INSTANCE.getMappingTypes(perspective,
 						extModel.eClass(), currentRoleName);
@@ -612,6 +594,9 @@ class ModelFactory {
 				externalArtefact.setLanguageName(l.getName());
 				externalArtefact.setRootModelElement(externalModel);
 				externalArtefact.setName(name);
+				
+				COREConcern concern = (COREConcern) EcoreUtil.getRootContainer(scene);
+				concern.getArtefacts().add(externalArtefact);
 		
 				EList<COREArtefact> artefacts = scene.getArtefacts().get(role);
 				if (artefacts == null) {
@@ -622,7 +607,6 @@ class ModelFactory {
 				externalArtefact.setScene(scene);
 				
 				try {
-					COREConcern concern = (COREConcern) EcoreUtil.getRootContainer(scene);
 					COREPerspectiveUtil.INSTANCE.saveModel(concern, role, externalArtefact);
 				} catch (IOException e) {
 				}
@@ -694,15 +678,6 @@ class ModelFactory {
 					}
 				}
 				return models;
-			}
-			
-			private static void addNewElement(EObject newElement, String role) {
-				List<EObject> elements = new ArrayList<>();
-				if (existingModels.keySet().contains(role)) {
-					elements = existingModels.get(role);
-				}
-				elements.add(newElement);
-				existingModels.put(role, elements);
 			}
 			
 			/**

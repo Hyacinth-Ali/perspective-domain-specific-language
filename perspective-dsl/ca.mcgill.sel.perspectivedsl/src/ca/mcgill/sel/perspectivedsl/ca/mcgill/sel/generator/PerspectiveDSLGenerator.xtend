@@ -23,24 +23,24 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		
 		for (perspective : resource.allContents.toIterable.filter(Perspective)){
             fsa.generateFile(
-                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/" + perspective.name + ".java",
+                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase().replaceAll("\\s", "") + "/" + getPerspectiveName(perspective) + ".java",
                 perspective.compile
                 )
                 
            fsa.generateFile(
-                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/ModelElementStatus.java",
+                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase().replaceAll("\\s", "") + "/ModelElementStatus.java",
                 ModelElementStatus.compileElementStatus(perspective)
                 )
                 
            fsa.generateFile(
-                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/ModelFactory.java",
+                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase().replaceAll("\\s", "") + "/ModelFactory.java",
                 ModelFactory.compileCreateModel(perspective)
                 )
   
              for (Language language : perspective.languages) {
              	if (containsRedefinedAction(perspective, language)) {
              		fsa.generateFile(
-                 		"ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/" + perspective.namePrefix + "Redefined" + language.name + "Action.java",
+                 		"ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase().replaceAll("\\s", "") + "/" + getPerspectiveName(perspective) + "Redefined" + language.name + "Action.java",
                 		RedefinedAction.compileActions(perspective, language)
                 	)
              	}
@@ -48,7 +48,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
              for (Language language : perspective.languages) {
              	if (containsRedefinedAction(perspective, language)) {
              		fsa.generateFile(
-                 		"ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/" + language.name + "FacadeAction.java",
+                 		"ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase().replaceAll("\\s", "") + "/" + language.name + "FacadeAction.java",
                 		FacadeActionGen.compileFacadeActions(perspective, language)
                 	)
              	}
@@ -57,14 +57,14 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
         
         for (perspective : resource.allContents.toIterable.filter(Perspective)){
             fsa.generateFile(
-                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/" + perspective.name + "Specification.java",
+                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase().replaceAll("\\s", "") + "/" + getPerspectiveName(perspective) + "Specification.java",
                 PerspectiveSpecification.compile(perspective)
                 )
         }
         
         for (perspective : resource.allContents.toIterable.filter(Perspective)){
             fsa.generateFile(
-                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase() + "/" + "ElementMapping.java",
+                 "ca/mcgill/sel/perspective/"  + perspective.name.toLowerCase().replaceAll("\\s", "") + "/" + "ElementMapping.java",
                 ElementMapping.compile(perspective)
                 )
         }
@@ -73,7 +73,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 	private def compile(Perspective perspective) {
 		
 		'''
-		package ca.mcgill.sel.perspective.«perspective.name.toLowerCase»;
+		package ca.mcgill.sel.perspective.«perspective.name.toLowerCase.replaceAll("\\s", "")»;
 		
 		import java.io.IOException;
 		import java.util.List;
@@ -103,7 +103,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		 *@generated
 		 *
 		 */
-		public class «perspective.name» {
+		public class «getPerspectiveName(perspective)» {
 		    
 		 public static void main(String[] args) {
 		        
@@ -122,7 +122,7 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        ResourceUtils.loadLibraries();
 		       
 		        // create a perspective
-		        COREConcern perspectiveConcern = COREModelUtil.createConcern("«perspective.displayName»");
+		        COREConcern perspectiveConcern = COREModelUtil.createConcern("«perspective.name»");
 		        
 		        COREPerspective perspective = CoreFactory.eINSTANCE.createCOREPerspective();
 		        perspective.setName("«perspective.name»");
@@ -153,11 +153,10 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		        }
 		        
 		        // initialize perspective with perspective actions and mappings
-		        // TODO update for TouchCORE codes
-		        «perspective.name»Specification.initializePerspective(perspective);
+		        «getPerspectiveName(perspective)»Specification.initializePerspective(perspective);
 		        
 		        String fileName = "/Users/hyacinthali/workspace/TouchCORE2/touchram/ca.mcgill.sel.ram/resources/models/testperspectives/"
-		           + "«perspective.name»_Perspective";
+		           + "«getPerspectiveName(perspective)»_Perspective";
 		        
 		        try {
 		            ResourceManager.saveModel(perspectiveConcern, fileName.concat("." + "core"));
@@ -185,16 +184,14 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 	 	return false;
 	 }
 	 
-//	 /**
-//	  * This method checks if a language contains facade action.
-//	  */
-//	 def static boolean containsFacadeAction(Perspective perspective, Language language) {
-//	 	var roleName = language.roleName;
-//	 	for (PerspectiveAction action : language.actions) {
-//	 		if (action.facadeAction.roleName == roleName) {
-//	 			return true;
-//	 		}
-//	 	}
-//	 	return false;
-//	 }
+	 /**
+	  * Returns the name of a perspective without white space.
+	  */
+	 def static String getPerspectiveName(Perspective perspective) {
+	 	return perspective.name.replaceAll("\\s", "");
+	 }
+	 
+	 
+	 
+
 }

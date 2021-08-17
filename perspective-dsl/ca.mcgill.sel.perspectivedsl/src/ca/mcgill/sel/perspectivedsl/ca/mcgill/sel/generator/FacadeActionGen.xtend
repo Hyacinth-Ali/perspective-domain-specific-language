@@ -21,7 +21,7 @@ class FacadeActionGen {
 	
 	def static compileFacadeActions(Perspective perspective, Language language) {
 		'''
-		package ca.mcgill.sel.perspective.«perspective.name.toLowerCase»;
+		package ca.mcgill.sel.perspective.«perspective.name.toLowerCase.replaceAll("\\s", "")»;
 		
 		import java.util.ArrayList;
 		import java.util.Collection;

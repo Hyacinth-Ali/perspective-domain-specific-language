@@ -10,7 +10,7 @@ LanguageModel:
 Language:
     'language' name = ID '{'
         'rootPackage' rootPackage = STRING';'
-        'rootControllerPackage' rootControllerPackage = STRING';'
+//        'rootControllerPackage' rootControllerPackage = STRING';'
         'packageClassName' packageClassName = ID';'
         'nsURI' nsURI = STRING';'
         'resourceFactory' resourceFactory = STRING';'  

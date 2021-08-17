@@ -21,7 +21,7 @@ class RedefinedAction {
 	def static compileActions(Perspective perspective, Language language) {
 		
 		'''
-		package ca.mcgill.sel.perspective.«perspective.name.toLowerCase»;
+		package ca.mcgill.sel.perspective.«perspective.name.toLowerCase.replaceAll("\\s", "")»;
 		
 		import java.util.ArrayList;
 		import java.util.Collection;
@@ -46,7 +46,7 @@ class RedefinedAction {
 			import «explicitPackage.explicitPackage»;
 		«ENDFOR»
 		
-		public class «perspective.namePrefix»Redefined«language.name»Action {
+		public class «perspective.name.replaceAll("\\s", "")»Redefined«language.name»Action {
 			«FOR action : language.actions»
 				«IF action instanceof CreateAction &&
 				action.roleName.equals(language.roleName)»

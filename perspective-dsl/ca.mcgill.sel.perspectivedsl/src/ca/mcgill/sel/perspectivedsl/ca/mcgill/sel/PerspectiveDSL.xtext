@@ -8,11 +8,10 @@ PerspectiveModel:
 
 
 Perspective:
-    'perspective' name = ID '{'
+    'perspective' '{'
     
-        ('default' default = ID';')?
-        'display' 'name' displayName = STRING';'
-        'namePrefix' namePrefix = ID';'
+    	'name'':' name = STRING';'
+        ('default'':' default = ID';')?
         
         ('model' 'factory' 'facade' 'calls' '{'
     		(modelFacades += FacadeCall)*

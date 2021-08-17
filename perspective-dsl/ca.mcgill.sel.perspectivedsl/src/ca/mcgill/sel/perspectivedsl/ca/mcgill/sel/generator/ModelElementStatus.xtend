@@ -6,7 +6,7 @@ class ModelElementStatus {
 	
 	def static compileElementStatus(Perspective perspective) {
 		'''
-		package ca.mcgill.sel.perspective.«perspective.name.toLowerCase»;
+		package ca.mcgill.sel.perspective.«perspective.name.toLowerCase.replaceAll("\\s", "")»;
 		
 		import java.util.ArrayList;
 		import java.util.Collection;
