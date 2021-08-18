@@ -36,6 +36,7 @@ class RedefinedAction {
 		import ca.mcgill.sel.core.*;
 		import ca.mcgill.sel.core.perspective.*;
 		import ca.mcgill.sel.ram.ui.perspective.*;
+		import ca.mcgill.sel.ram.ui.perspective.controller.*;
 		
 		import «language.rootPackage».*;
 		import «language.controllerPackage».*;
