@@ -54,7 +54,7 @@ class FacadeActionGen {
 					«resetCounter»
 					«IF action.roleName.equals(language.roleName)»
 «««					The main facade action
-						public static EObject createOtherElementsFor«action.languageElementName»(COREPerspective perspective, EObject otherLE, String otherRoleName, COREScene scene, 
+						public static EObject createOtherElementsFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, EObject otherLE, String otherRoleName, COREScene scene, 
 								«action.typeParameters») {
 							EObject newElement = null;
 							«FOR facadeCall : facadeAction.facadeCalls»

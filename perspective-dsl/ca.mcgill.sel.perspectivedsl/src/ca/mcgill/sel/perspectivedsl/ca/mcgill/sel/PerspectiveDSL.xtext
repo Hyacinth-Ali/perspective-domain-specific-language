@@ -45,7 +45,7 @@ Language:
 
 LanguageElementMapping:
     'mapping' name = ID '{'
-//        'relationship' ':' relationship = Relationship';'
+    	('tag' ':' tag = ID';')?
 		'fromIsRootElement' ':' fromIsRootElement = BooleanType';'
 		'toIsRootElement' ':' toIsRootElement = BooleanType';'
         'fromCardinality' ':' fromCardinality = Cardinality';'
