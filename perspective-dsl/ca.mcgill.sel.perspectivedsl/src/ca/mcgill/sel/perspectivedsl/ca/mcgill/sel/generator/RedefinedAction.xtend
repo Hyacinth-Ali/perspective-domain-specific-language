@@ -32,6 +32,8 @@ class RedefinedAction {
 		import org.eclipse.emf.common.util.BasicEList;
 		import org.eclipse.emf.common.util.EList;
 		import org.eclipse.emf.ecore.EObject;
+		import ca.mcgill.sel.ram.ui.utils.BasicActionsUtils;
+		import org.eclipse.emf.ecore.util.EcoreUtil;
 		
 		import ca.mcgill.sel.core.*;
 		import ca.mcgill.sel.core.perspective.*;
@@ -67,9 +69,12 @@ class RedefinedAction {
 							
 							// primary language action to create a new element
 							«action.methodCall»;
-						
+							
 							// retrieve the new element
 							newElement = ModelElementStatus.INSTANCE.getNewElement(owner, «action.languageElement»);
+							
+							// save the model
+							BasicActionsUtils.saveModel(EcoreUtil.getRootContainer(newElement), null);
 							
 							// get other new elements for each language element
 							Map<EObject, Collection<EObject>> a = ModelElementStatus.INSTANCE.getOtherNewElements(owner, createSecondaryEffects);

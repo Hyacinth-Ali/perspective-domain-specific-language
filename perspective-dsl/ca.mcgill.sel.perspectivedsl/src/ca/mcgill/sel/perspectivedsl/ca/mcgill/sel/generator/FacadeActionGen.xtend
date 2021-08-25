@@ -33,6 +33,8 @@ class FacadeActionGen {
 		
 		import ca.mcgill.sel.core.*;
 		import ca.mcgill.sel.core.perspective.COREPerspectiveUtil;
+		import ca.mcgill.sel.ram.ui.utils.BasicActionsUtils;
+		import org.eclipse.emf.ecore.util.EcoreUtil;
 		
 		import «language.rootPackage».*;
 		import «language.controllerPackage».*;
@@ -65,6 +67,9 @@ class FacadeActionGen {
 											«m.mapping»;
 										«ENDFOR»
 										newElement = «facadeCall.methodCall»;
+										
+										// save the model
+										BasicActionsUtils.saveModel(EcoreUtil.getRootContainer(newElement), null);
 									}
 								«ENDIF»
 								«IF count > 0»
@@ -74,6 +79,9 @@ class FacadeActionGen {
 											«m.mapping»;
 										«ENDFOR»
 										newElement = «facadeCall.methodCall»;
+										
+										// save the model
+										BasicActionsUtils.saveModel(EcoreUtil.getRootContainer(newElement), null);
 									}
 								«ENDIF»
 								«counter»
