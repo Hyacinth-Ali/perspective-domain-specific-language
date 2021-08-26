@@ -45,7 +45,7 @@ Language:
 
 LanguageElementMapping:
     'mapping' name = ID '{'
-    	('tag' ':' tag = ID';')?
+    	('tag' ':' tag = STRING';')?
 		'fromIsRootElement' ':' fromIsRootElement = BooleanType';'
 		'toIsRootElement' ':' toIsRootElement = BooleanType';'
         'fromCardinality' ':' fromCardinality = Cardinality';'
@@ -81,6 +81,9 @@ CreateAction:
     	'methodParameters' ':' methodParameter = STRING';'
     	'languageElementName' ':' languageElementName = ID';'
     	'languageElement' ':' languageElement = STRING';'
+    	
+    	// constraints for root model elements
+		(constraints += Constraint)*
     	createFacadeAction = CreateFacadeAction
     	('secondaryEffects' '{'
     		('create' 'effects' '{'
@@ -102,6 +105,9 @@ DeleteAction:
     	'methodParameters' ':' methodParameter = STRING';'
     	'languageElementName' ':' languageElementName = ID';'
     	'languageElement' ':' languageElement = STRING';'
+    	
+    	// constraints for root model elements
+		(constraints += Constraint)*
     	deleteFacadeAction = DeleteFacadeAction
     	('secondaryEffects' '{'
     		('create' 'effects' '{'
@@ -146,6 +152,8 @@ ExplicitPackage:
 
 FacadeCall:
 	'languageElement' ':' languageElement = STRING';'
+	// constraints
+	(constraints += Constraint)*
 	(mappings += ParameterMapping)*
 	'methodCall' ':' methodCall = STRING';'   
 ;
@@ -166,6 +174,10 @@ DeleteEffect:
 	'languageElement' ':' languageElement = STRING';'
 	(mappings += ParameterMapping)*
 	'methodCall' ':' methodCall = STRING';'
+;
+
+Constraint:
+	'invariant' 'constraint' ':' definition = STRING';'
 ;
 
 

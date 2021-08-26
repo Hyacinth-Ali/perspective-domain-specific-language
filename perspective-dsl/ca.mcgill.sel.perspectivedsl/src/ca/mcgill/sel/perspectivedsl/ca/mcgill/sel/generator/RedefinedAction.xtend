@@ -109,24 +109,28 @@ class RedefinedAction {
 					
 						List<CORELanguageElementMapping> mappingTypes = COREPerspectiveUtil.INSTANCE.getMappingTypes(perspective,
 								currentElement.eClass(), currentRoleName);
+								
 						for (CORELanguageElementMapping mappingType : mappingTypes) {
+
 							List<COREModelElementMapping> mappings = COREPerspectiveUtil.INSTANCE.getMappings(mappingType, scene,
 									currentElement);
+							if (COREPerspectiveUtil.INSTANCE.mappingsContainsElement(mappings, currentElement)) {
+								continue;
+							}
+							
+							MappingEnd currentMappingEnd = COREPerspectiveUtil.INSTANCE.getMappingEnd(mappingType, currentElement.eClass(), currentRoleName);
+							MappingEnd otherMappingEnd = COREPerspectiveUtil.INSTANCE.getOtherMappingEnds(currentMappingEnd).get(0);
 						
-						if (COREPerspectiveUtil.INSTANCE.mappingsContainsElement(mappings, currentElement)) {
-							continue;
-						}
-						
-						MappingEnd currentMappingEnd = COREPerspectiveUtil.INSTANCE.getMappingEnd(mappingType, currentElement.eClass(), currentRoleName);
-						MappingEnd otherMappingEnd = COREPerspectiveUtil.INSTANCE.getOtherMappingEnds(currentMappingEnd).get(0);
-					
-						if (otherMappingEnd.isRootMappingEnd()) {
-							// TODO make name dynamic
-							ModelFactory.createOtherRootModels(perspective, mappingType, scene, currentRoleName, currentElement, name);
-						} else {
-							createOtherElementsFor«action.languageElementName»(perspective, mappingType, scene, currentRoleName, currentElement, owner,
-															 	«action.methodParameter»);
-						}
+							if (otherMappingEnd.isRootMappingEnd()) {
+								// TODO make name dynamic
+								«FOR c : action.constraints»
+									«c.definition»;
+								«ENDFOR»
+								ModelFactory.createOtherRootModels(perspective, mappingType, scene, currentRoleName, currentElement, name);
+							} else {
+								createOtherElementsFor«action.languageElementName»(perspective, mappingType, scene, currentRoleName, currentElement, owner,
+																 	«action.methodParameter»);
+							}
 							
 						}
 					}

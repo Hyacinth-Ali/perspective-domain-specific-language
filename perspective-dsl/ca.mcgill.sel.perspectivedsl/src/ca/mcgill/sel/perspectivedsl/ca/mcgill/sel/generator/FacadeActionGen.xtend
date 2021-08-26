@@ -62,7 +62,10 @@ class FacadeActionGen {
 							«FOR facadeCall : facadeAction.facadeCalls»
 								«IF count === 0»
 									if (otherLE.equals(«facadeCall.languageElement»)) {
-										// Handle parameter mappings
+										
+										«FOR c : facadeCall.constraints»
+											«c.definition»;
+										«ENDFOR»
 										«FOR m : facadeCall.mappings»
 											«m.mapping»;
 										«ENDFOR»
@@ -74,7 +77,9 @@ class FacadeActionGen {
 								«ENDIF»
 								«IF count > 0»
 									else if (otherLE.equals(«facadeCall.languageElement»)) {
-										// Handle parameter mappings
+										«FOR c : facadeCall.constraints»
+											«c.definition»;
+										«ENDFOR»
 										«FOR m : facadeCall.mappings»
 											«m.mapping»;
 										«ENDFOR»
