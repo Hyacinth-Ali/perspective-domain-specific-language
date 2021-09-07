@@ -71,8 +71,9 @@ class FacadeActionGen {
 										«ENDFOR»
 										newElement = «facadeCall.methodCall»;
 										
-										// save the model
-										BasicActionsUtils.saveModel(EcoreUtil.getRootContainer(newElement), null);
+										«IF perspective.saveModel !== null»
+											«perspective.saveModel»;
+										«ENDIF»
 									}
 								«ENDIF»
 								«IF count > 0»
@@ -84,9 +85,10 @@ class FacadeActionGen {
 											«m.mapping»;
 										«ENDFOR»
 										newElement = «facadeCall.methodCall»;
-										
-										// save the model
-										BasicActionsUtils.saveModel(EcoreUtil.getRootContainer(newElement), null);
+						
+										«IF perspective.saveModel !== null»
+											«perspective.saveModel»;
+										«ENDIF»
 									}
 								«ENDIF»
 								«counter»

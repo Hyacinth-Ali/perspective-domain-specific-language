@@ -57,7 +57,7 @@ class LanguageRegistration {
              * This method registers existing language (with its details) in TouchCORE.
              *
              * @author Hyacinth Ali
-             * @return the class diagram {@link COREExternalLanguage}
+             * @return the new language {@link COREExternalLanguage}
              *
              * @generated
              */
@@ -90,6 +90,32 @@ class LanguageRegistration {
                  // Shouldn't happen.
                 e.printStackTrace();
              }
+
+             return language;
+            }
+            
+            /**
+             * This method creates languages for testing purposes.
+             *
+             * @author Hyacinth Ali
+             * @return the new language {@link COREExternalLanguage}
+             *
+             * @generated
+             */
+            public static COREExternalLanguage createTestLanguage() {
+
+            COREExternalLanguage language = CoreFactory.eINSTANCE.createCOREExternalLanguage();
+            language.setName("«language.name»");
+            language.setNsURI("«language.nsURI»");
+            language.setResourceFactory("«language.resourceFactory»");
+            language.setAdapterFactory("«language.adapterFactory»");
+            language.setWeaverClassName("«language.weaverClassName»");
+            language.setFileExtension("«language.fileExtension»");
+            language.setModelUtilClassName("«language.modelUtilClassName»");
+
+            createLanguageElements(language);
+
+            createLanguageActions(language);
 
              return language;
             }

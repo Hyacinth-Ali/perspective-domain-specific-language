@@ -33,10 +33,32 @@ class PerspectiveSpecification {
 	 		import «language.rootPackage».*;
 	 	«ENDFOR»
 	 	
+	 	
 	 	public class «perspective.name.replaceAll("\\s", "")»Specification {
 	 	    
 	 	    public static COREPerspective initializePerspective(COREPerspective perspective) {
 	 	
+	 	        // create perspective actions
+	 	        createPerspectiveAction(perspective);
+	 	
+	 	        // create perspective mappings
+	 	        createPerspectiveMappings(perspective);
+	 	
+	 	        return perspective;
+	 	    }
+	 	    
+	 	    public static COREPerspective initializePerspective() {
+	 	
+	 			COREPerspective perspective = CoreFactory.eINSTANCE.createCOREPerspective();
+	 			perspective.setName("«perspective.name»");
+	 			
+	 			// create external languages, if any
+	 			COREExternalLanguage language = null;
+	 			«FOR Language l : perspective.languages»
+	 				language = «l.name».createTestLanguage();
+	 				perspective.getLanguages().put("«l.roleName»", language);	
+	 			«ENDFOR»
+	 			
 	 	        // create perspective actions
 	 	        createPerspectiveAction(perspective);
 	 	

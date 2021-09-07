@@ -12,6 +12,8 @@ Perspective:
     
     	'name'':' name = STRING';'
         ('default'':' default = ID';')?
+        ('saveConcern'':' saveConcern = STRING';')?
+        ('saveModel'':' saveModel = STRING';')?
         
         ('model' 'factory' 'facade' 'calls' '{'
     		(modelFacades += FacadeCall)*
