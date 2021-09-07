@@ -176,7 +176,7 @@ class PerspectiveSpecification {
 	 	
 	 	        CORELanguageElementMapping mappingType = CoreFactory.eINSTANCE.createCORELanguageElementMapping();
 	 	        mappingType.setIdentifier(getNextMappingId(perspective));
-	 			mappingType.setTag(tag);
+	 			// mappingType.setTag(tag);
 	 				 			
 	 	        // from mapping end settings
 	 	        MappingEnd fromMappingEnd = CoreFactory.eINSTANCE.createMappingEnd();
