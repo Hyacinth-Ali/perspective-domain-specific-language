@@ -57,9 +57,8 @@ LanguageElementMapping:
     'mapping' name = ID '{'
     	('tag' ':' tag = STRING';')?
     	
-		fromMappingEnd = FromMappingEnd
-		
-		toMappingEnd = ToMappingEnd
+		'fromMappingEnd' ':' fromMappingEnd = [MappingEnd]';'
+		'toMappingEnd' ':' toMappingEnd = [MappingEnd]';'
         
         ('nested' 'mappings' '{'
             (nestedMappings += NestedMapping)*
@@ -68,22 +67,11 @@ LanguageElementMapping:
 ;
 
 MappingEnd:
-	FromMappingEnd | FromMappingEnd
-;
-
-FromMappingEnd:
-	'from' 'mappingEnd' name = ID '{'
+	'mappingEnd' name = ID '{'
 		'isRootElement' ':' isRootElement = BooleanType';'
     	'cardinality' ':' cardinality = Cardinality';'
-    	'language' 'element' ':' elementName = ID 'from' roleName = ID 'getElement' getElement = STRING';'
-	'}'	
-;
-
-ToMappingEnd:
-	'to' 'mappingEnd' name = ID '{'
-		'isRootElement' ':' isRootElement = BooleanType';'
-    	'cardinality' ':' cardinality = Cardinality';'
-    	'language' 'element' ':' elementName = ID 'from' roleName = ID 'getElement' getElement = STRING';'
+    	'roleName' ':' roleName = ID';'
+    	'languageElement' ':' languageElement = STRING';'
 	'}'	
 ;
 
@@ -239,10 +227,7 @@ InterLanguageMappingEnd:
 	'mapping' 'end' name = ID '{'
 		(origin ?= 'origin')?
 		(destination ?= 'destination')?
-		// These are two optional references to either from or to mapping end 
-		// The perspective designer has to use one of them, because each instance
-		// of an InterLanguageMappingEnd references one instance of the MappingEnd metaclass.
-		'mappingEnd' ':' fromMappingEnd = [FromMappingEnd]
+		'mappingEnd' ':' mappingEnd = [MappingEnd]';'
 	'}'
 ;
 
