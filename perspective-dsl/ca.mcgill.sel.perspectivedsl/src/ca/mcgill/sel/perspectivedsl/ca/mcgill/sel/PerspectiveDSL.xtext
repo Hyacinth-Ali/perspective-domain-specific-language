@@ -22,9 +22,17 @@ Perspective:
         'languages' '{'
             (languages += Language)*
         '}'
+        
+        ('mapping' 'ends' '{'
+            (mappingEnds += MappingEnd)*
+        '}')?
 
         ('mappings' '{'
             (mappings += LanguageElementMapping)*
+        '}')?
+        
+        ('navigation' 'mappings' '{'
+            (navigationMappings += NavigationMapping)*
         '}')?
 
     '}'
@@ -48,17 +56,35 @@ Language:
 LanguageElementMapping:
     'mapping' name = ID '{'
     	('tag' ':' tag = STRING';')?
-		'fromIsRootElement' ':' fromIsRootElement = BooleanType';'
-		'toIsRootElement' ':' toIsRootElement = BooleanType';'
-        'fromCardinality' ':' fromCardinality = Cardinality';'
-        'toCardinality' ':' toCardinality = Cardinality';'
-        'fromElement' ':' fromElement = ID 'from' fromRoleName = ID 'fromGetElement' fromGetElement = STRING';'
-        'toELement' ':' toElement = ID 'from' toRoleName = ID 'toGetElement' toGetElement = STRING';'
-
+    	
+		fromMappingEnd = FromMappingEnd
+		
+		toMappingEnd = ToMappingEnd
+        
         ('nested' 'mappings' '{'
             (nestedMappings += NestedMapping)*
         '}')?
     '}'
+;
+
+MappingEnd:
+	FromMappingEnd | FromMappingEnd
+;
+
+FromMappingEnd:
+	'from' 'mappingEnd' name = ID '{'
+		'isRootElement' ':' isRootElement = BooleanType';'
+    	'cardinality' ':' cardinality = Cardinality';'
+    	'language' 'element' ':' elementName = ID 'from' roleName = ID 'getElement' getElement = STRING';'
+	'}'	
+;
+
+ToMappingEnd:
+	'to' 'mappingEnd' name = ID '{'
+		'isRootElement' ':' isRootElement = BooleanType';'
+    	'cardinality' ':' cardinality = Cardinality';'
+    	'language' 'element' ':' elementName = ID 'from' roleName = ID 'getElement' getElement = STRING';'
+	'}'	
 ;
 
 NestedMapping:
@@ -176,6 +202,52 @@ DeleteEffect:
 	'languageElement' ':' languageElement = STRING';'
 	(mappings += ParameterMapping)*
 	'methodCall' ':' methodCall = STRING';'
+;
+
+NavigationMapping:
+	InterLanguageMapping | IntraLanguageMapping
+	
+;
+
+InterLanguageMapping:
+	'interLanguage' 'mapping' name = ID '{'
+		(active ?= 'active')?
+		(default ?= 'default')?
+		'languageMapping' ':' languageMapping = [LanguageElementMapping]';'
+		'interLanguage' 'mappingEnds' '{'
+			(interLanguageMappingEnds += InterLanguageMappingEnd)*
+		'}' 
+	'}'
+	
+;
+
+IntraLanguageMapping:
+	'intraLanguage' 'mapping' name = ID '{'
+		(active ?= 'active')?
+		(closure ?= 'closure')?
+		(reuse ?= 'reuse')?
+		(increaseDepth ?= 'increaseDepth')?
+		(changeModel ?= 'changeModel')?
+		'from' ':' from = ID';'
+		'hops' '{'
+			(hop += Hop)*
+		'}'
+	'}'	
+;
+
+InterLanguageMappingEnd:
+	'mapping' 'end' name = ID '{'
+		(origin ?= 'origin')?
+		(destination ?= 'destination')?
+		// These are two optional references to either from or to mapping end 
+		// The perspective designer has to use one of them, because each instance
+		// of an InterLanguageMappingEnd references one instance of the MappingEnd metaclass.
+		'mappingEnd' ':' fromMappingEnd = [FromMappingEnd]
+	'}'
+;
+
+Hop:
+	'hop' ':' hop = ID';'
 ;
 
 Constraint:

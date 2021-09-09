@@ -89,21 +89,19 @@ class PerspectiveSpecification {
 	 	        «FOR mapping : perspective.mappings»
 	 	         «IF mapping.nestedMappings.empty» 
 	 	         	«IF mapping.tag === null»
-	 	         		createLanguageElementMapping(perspective, «getCardinality(mapping, true)», "«mapping.fromRoleName»", 
-	 	         		«mapping.fromGetElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»", «mapping.toGetElement», «mapping.toIsRootElement»);
+	 	         		createLanguageElementMapping(perspective, «getCardinality(mapping, true)», "«mapping.fromMappingEnd.roleName»", 
+	 	         		«mapping.fromMappingEnd.getElement», «mapping.fromMappingEnd.isRootElement», «getCardinality(mapping, false)», "«mapping.toMappingEnd.roleName»", «mapping.toMappingEnd.getElement», «mapping.toMappingEnd.isRootElement»);
 	 	         	«ELSE»
-	 	         		createLanguageElementMapping(perspective, "«mapping.tag»", «getCardinality(mapping, true)», "«mapping.fromRoleName»", 
-	 	         		«mapping.fromGetElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»", «mapping.toGetElement», «mapping.toIsRootElement»);
+	 	         		createLanguageElementMapping(perspective, "«mapping.tag»", «getCardinality(mapping, true)», "«mapping.fromMappingEnd.roleName»", 
+	 	         			 	         		«mapping.fromMappingEnd.getElement», «mapping.fromMappingEnd.isRootElement», «getCardinality(mapping, false)», "«mapping.toMappingEnd.roleName»", «mapping.toMappingEnd.getElement», «mapping.toMappingEnd.isRootElement»);
 	 	         	«ENDIF»
 	 	         «ELSE»
 	 	            «IF mapping.tag === null»
-	 	            	ElementMapping «mapping.name.toFirstLower»Mapping = createLanguageElementMapping(perspective, «getCardinality(mapping, true)»,
-	 	            	"«mapping.fromRoleName»", «mapping.fromGetElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»",
-                     	«mapping.toGetElement», «mapping.toIsRootElement»);	 	            
+	 	            	ElementMapping «mapping.name.toFirstLower»Mapping = createLanguageElementMapping(perspective, «getCardinality(mapping, true)», "«mapping.fromMappingEnd.roleName»", 
+	 	            		 	         		«mapping.fromMappingEnd.getElement», «mapping.fromMappingEnd.isRootElement», «getCardinality(mapping, false)», "«mapping.toMappingEnd.roleName»", «mapping.toMappingEnd.getElement», «mapping.toMappingEnd.isRootElement»);	            
 	 	            «ELSE»
-	 	            	ElementMapping «mapping.name.toFirstLower»Mapping = createLanguageElementMapping(perspective, "«mapping.tag»", «getCardinality(mapping, true)»,
-	 	            	"«mapping.fromRoleName»", «mapping.fromGetElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»",
-                     	«mapping.toGetElement», «mapping.toIsRootElement»);	 	            
+	 	            	ElementMapping «mapping.name.toFirstLower»Mapping = createLanguageElementMapping(perspective, "«mapping.tag»", «getCardinality(mapping, true)», "«mapping.fromMappingEnd.roleName»", 
+	 	            		 	         		«mapping.fromMappingEnd.getElement», «mapping.fromMappingEnd.isRootElement», «getCardinality(mapping, false)», "«mapping.toMappingEnd.roleName»", «mapping.toMappingEnd.getElement», «mapping.toMappingEnd.isRootElement»);	 	            
 	 	            «ENDIF»
 
 	 	            CORELanguageElementMapping «mapping.name.toFirstLower»MappingType = «mapping.name.toFirstLower»Mapping.getMappingType();
@@ -116,12 +114,12 @@ class PerspectiveSpecification {
 	 	            
                     «FOR nestedMapping : mapping.nestedMappings»
 	 	            	createNestedMapping(«mapping.name.toFirstLower»MappingType, «mapping.name.toFirstLower»MappingFromLanguageELement, 
-                        «mapping.name.toFirstLower»MappingToLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
-                            "«mapping.fromRoleName»", "«mapping.toRoleName»", «nestedMapping.matchMaker»);
+                        	«mapping.name.toFirstLower»MappingToLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
+                    		"«mapping.fromMappingEnd.roleName»", "«mapping.toMappingEnd.roleName»", «nestedMapping.matchMaker»);
 					«ENDFOR»
-                  
+	 	            
 	 	          «ENDIF»
-	 	        		 	        
+	 	         
 	 	        «ENDFOR»
 	 	        
 	 	    }
@@ -342,7 +340,7 @@ class PerspectiveSpecification {
 	
 	     if (isFrom) {
 	         
-	         switch(mapping.fromCardinality) {
+	         switch(mapping.fromMappingEnd.cardinality) {
             case COMPULSORY: {
                 cardinality = "Cardinality.COMPULSORY"
             }
@@ -360,7 +358,7 @@ class PerspectiveSpecification {
 	         
 	     } else {
 	         
-	         switch(mapping.toCardinality) {
+	         switch(mapping.toMappingEnd.cardinality) {
             case COMPULSORY: {
                 cardinality = "Cardinality.COMPULSORY"
             }
