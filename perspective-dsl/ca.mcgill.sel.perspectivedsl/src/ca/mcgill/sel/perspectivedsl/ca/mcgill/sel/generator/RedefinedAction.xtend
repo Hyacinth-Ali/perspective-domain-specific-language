@@ -239,8 +239,8 @@ class RedefinedAction {
 							}
 							if (otherElement != null) {
 								COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-								«IF perspective.saveConcern !== null»
-									«perspective.saveConcern»;
+								«IF perspective.savePerspective !== null»
+									«perspective.savePerspective»;
 								«ENDIF»
 								if(!otherExist) {
 									createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);	
@@ -280,8 +280,8 @@ class RedefinedAction {
 						}
 						if (otherElement != null) {
 							COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-							«IF perspective.saveConcern !== null»
-								«perspective.saveConcern»;
+							«IF perspective.savePerspective !== null»
+								«perspective.savePerspective»;
 							«ENDIF»
 							if (!otherExist) {
 								createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
@@ -321,8 +321,8 @@ class RedefinedAction {
 							} else {
 								otherElement = existingElement;
 								COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-								«IF perspective.saveConcern !== null»
-									«perspective.saveConcern»;
+								«IF perspective.savePerspective !== null»
+									«perspective.savePerspective»;
 								«ENDIF»
 								numberOfMappings--;
 							}
@@ -332,8 +332,8 @@ class RedefinedAction {
 														owner, «action.methodParameter»);
 							if (otherElement != null) {
 								COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-								«IF perspective.saveConcern !== null»
-									«perspective.saveConcern»;
+								«IF perspective.savePerspective !== null»
+									«perspective.savePerspective»;
 								«ENDIF»
 								createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);								
 							}
@@ -370,8 +370,8 @@ class RedefinedAction {
 							} else {
 								otherElement = existingElement;
 								COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-								«IF perspective.saveConcern !== null»
-									«perspective.saveConcern»;
+								«IF perspective.savePerspective !== null»
+									«perspective.savePerspective»;
 								«ENDIF»
 								numberOfMappings--;
 							}
@@ -381,8 +381,8 @@ class RedefinedAction {
 														owner, «action.methodParameter»);
 							if (otherElement != null) {
 								COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-								«IF perspective.saveConcern !== null»
-									«perspective.saveConcern»;
+								«IF perspective.savePerspective !== null»
+									«perspective.savePerspective»;
 								«ENDIF»
 								createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);								
 							}
@@ -423,8 +423,8 @@ class RedefinedAction {
 							}
 							if (otherElement != null) {
 								COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-								«IF perspective.saveConcern !== null»
-									«perspective.saveConcern»;
+								«IF perspective.savePerspective !== null»
+									«perspective.savePerspective»;
 								«ENDIF»
 								if (!otherExist) {
 									createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);
@@ -466,8 +466,8 @@ class RedefinedAction {
 						}
 						if (otherElement != null) {
 							COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-								«IF perspective.saveConcern !== null»
-									«perspective.saveConcern»;
+								«IF perspective.savePerspective !== null»
+									«perspective.savePerspective»;
 								«ENDIF»
 							// stop the recursion if other element exists.
 							if (!otherExist) {
@@ -508,8 +508,8 @@ class RedefinedAction {
 								if (COREPerspectiveUtil.INSTANCE.getMappings(mappingType, scene, existingElement).size() == 0) {
 									otherElement = existingElement;
 									COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-									«IF perspective.saveConcern !== null»
-										«perspective.saveConcern»;
+									«IF perspective.savePerspective !== null»
+										«perspective.savePerspective»;
 									«ENDIF»
 									numberOfMappings--;
 								}
@@ -520,8 +520,8 @@ class RedefinedAction {
 														owner, «action.methodParameter»);
 							if (otherElement != null) {
 								COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-								«IF perspective.saveConcern !== null»
-									«perspective.saveConcern»;
+								«IF perspective.savePerspective !== null»
+									«perspective.savePerspective»;
 								«ENDIF»
 							  	createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);								
 							}
@@ -561,8 +561,8 @@ class RedefinedAction {
 								if (COREPerspectiveUtil.INSTANCE.getMappings(mappingType, scene, existingElement).size() == 0) {
 									otherElement = existingElement;
 									COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-									«IF perspective.saveConcern !== null»
-										«perspective.saveConcern»;
+									«IF perspective.savePerspective !== null»
+										«perspective.savePerspective»;
 									«ENDIF»
 									numberOfMappings--;
 								}
@@ -573,8 +573,8 @@ class RedefinedAction {
 														owner, «action.methodParameter»);
 							if (otherElement != null) {
 								COREPerspectiveUtil.INSTANCE.createMapping(perspective, scene, mappingType, currentElement, otherElement, false);
-								«IF perspective.saveConcern !== null»
-									«perspective.saveConcern»;
+								«IF perspective.savePerspective !== null»
+									«perspective.savePerspective»;
 								«ENDIF»
 							  	createOtherElementsFor«action.languageElementName»(perspective, scene, otherRoleName, otherElement, otherElement.eContainer(), «action.methodParameter»);								
 							}

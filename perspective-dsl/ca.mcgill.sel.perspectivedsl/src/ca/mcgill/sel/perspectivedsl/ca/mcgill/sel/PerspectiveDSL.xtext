@@ -12,7 +12,7 @@ Perspective:
     
     	'name'':' name = STRING';'
         ('default'':' default = ID';')?
-        ('saveConcern'':' saveConcern = STRING';')?
+        ('savePerspective'':' savePerspective = STRING';')?
         ('saveModel'':' saveModel = STRING';')?
         
         ('model' 'factory' 'facade' 'calls' '{'
