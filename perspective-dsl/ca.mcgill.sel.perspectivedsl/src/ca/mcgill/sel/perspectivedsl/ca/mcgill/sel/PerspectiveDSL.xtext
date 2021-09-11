@@ -11,18 +11,34 @@ Perspective:
     'perspective' '{'
     
     	'name'':' name = STRING';'
+        // to dictate the model shown by default with the perspective
         ('default'':' default = ID';')?
+        
+        // customizes the perspective to support persistence for both
+        // language models and the perspective. Note that in TouchCORE,
+        // the scene should be used as the parameter since the model element mappings are contained
+        // in the concern of the models. The perspective containing the model element
+        // mappings is only for formal description of the Thesis work.
+        // See sample DSL models for further illustration.
         ('savePerspective'':' savePerspective = STRING';')?
         ('saveModel'':' saveModel = STRING';')?
         
+        // When a root model is mapped with another regular language element,
+        // a facade call is required to call the recursive action of the regular 
+        // language element to propagate the changes after creating the model in
+        // question. See sample models for further illustration
         ('model' 'factory' 'facade' 'calls' '{'
     		(modelFacades += FacadeCall)*
     	'}')?
 
+		// language registration as well as the perspective actions
+		// of each language
         'languages' '{'
             (languages += Language)*
         '}'
         
+        // enumerate mapping ends which can be referenced from the language
+        // element mapping or inter language mapping end.
         ('mapping' 'ends' '{'
             (mappingEnds += MappingEnd)*
         '}')?
@@ -41,7 +57,6 @@ Perspective:
 Language:
     'existing' 'language' name = ID '{'
         "rootPackage" rootPackage = STRING';'
-        "packageClassName" packageClassName = ID';'
         "controllerPackage" controllerPackage = STRING';'
         "roleName" roleName = ID';' 
         (otherRootPackages += OtherRootPackage)*
