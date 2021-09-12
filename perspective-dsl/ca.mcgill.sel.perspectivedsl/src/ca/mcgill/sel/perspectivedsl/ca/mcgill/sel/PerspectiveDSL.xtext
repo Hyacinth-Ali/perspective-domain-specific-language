@@ -37,20 +37,10 @@ Perspective:
             (languages += Language)*
         '}'
         
-        // enumerate mapping ends which can be referenced from the language
-        // element mapping or inter language mapping end.
-        ('mapping' 'ends' '{'
-            (mappingEnds += MappingEnd)*
-        '}')?
-
         ('mappings' '{'
             (mappings += LanguageElementMapping)*
         '}')?
         
-        ('navigation' 'mappings' '{'
-            (navigationMappings += NavigationMapping)*
-        '}')?
-
     '}'
 ;
 
@@ -65,29 +55,36 @@ Language:
             (actions += PerspectiveAction)*
         '}')?
         
+        ('intraLanguage' 'mappings' '{'
+        	(mappings += IntraLanguageMapping)*
+        '}')?
+        
     '}'
 ;
 
 LanguageElementMapping:
-    'mapping' name = ID '{'
+    (biDirectional ?= 'bi-directional')? (uniDirectional ?= 'uni-directional')? 'mapping' name = ID '{'
+    	
     	('tag' ':' tag = STRING';')?
     	
-		'fromMappingEnd' ':' fromMappingEnd = [MappingEnd]';'
-		'toMappingEnd' ':' toMappingEnd = [MappingEnd]';'
-        
+    	(fromOrigin ?= 'origin')? (fromDestination ?= 'destination')? 'fromMappingEnd' fromMappingEndName = ID '{'
+			'isRootElement' ':' fromIsRootElement = BooleanType';'
+    		'cardinality' ':' fromCardinality = Cardinality';'
+    		'roleName' ':' fromRoleName = ID';'
+    		'languageElement' ':' fromLanguageElement = STRING';'
+		'}'
+		
+		(toOrigin ?= 'origin')? (toDestination ?= 'destination')?'toMappingEnd' toMappingEndName = ID '{'
+			'isRootElement' ':' toIsRootElement = BooleanType';'
+    		'cardinality' ':' toCardinality = Cardinality';'
+    		'roleName' ':' toRoleName = ID';'
+    		'languageElement' ':' toLanguageElement = STRING';'
+		'}'
+		
         ('nested' 'mappings' '{'
             (nestedMappings += NestedMapping)*
         '}')?
     '}'
-;
-
-MappingEnd:
-	'mappingEnd' name = ID '{'
-		'isRootElement' ':' isRootElement = BooleanType';'
-    	'cardinality' ':' cardinality = Cardinality';'
-    	'roleName' ':' roleName = ID';'
-    	'languageElement' ':' languageElement = STRING';'
-	'}'	
 ;
 
 NestedMapping:
@@ -113,7 +110,7 @@ CreateAction:
     	'languageElementName' ':' languageElementName = ID';'
     	'languageElement' ':' languageElement = STRING';'
     	
-    	// constraints for root model elements
+    	// constraint condition for root model elements
 		(constraints += Constraint)*
     	createFacadeAction = CreateFacadeAction
     	('secondaryEffects' '{'
@@ -207,51 +204,29 @@ DeleteEffect:
 	'methodCall' ':' methodCall = STRING';'
 ;
 
-NavigationMapping:
-	InterLanguageMapping | IntraLanguageMapping
-	
-;
-
-InterLanguageMapping:
-	'interLanguage' 'mapping' name = ID '{'
-		(active ?= 'active')?
-		(default ?= 'default')?
-		'languageMapping' ':' languageMapping = [LanguageElementMapping]';'
-		'interLanguage' 'mappingEnds' '{'
-			(interLanguageMappingEnds += InterLanguageMappingEnd)*
-		'}' 
-	'}'
-	
-;
-
 IntraLanguageMapping:
-	'intraLanguage' 'mapping' name = ID '{'
-		(active ?= 'active')?
-		(closure ?= 'closure')?
-		(reuse ?= 'reuse')?
-		(increaseDepth ?= 'increaseDepth')?
-		(changeModel ?= 'changeModel')?
-		'from' ':' from = ID';'
+	'mapping' name = ID '{'
+		'active' ':' active = BooleanType';'
+		'closure' ':' closure = BooleanType';'
+		'reuse' ':' reuse = BooleanType';'
+		'increaseDepth' ':' increaseDepth = BooleanType';'
+		'changeModel' ':' changeModel = BooleanType';'
+		'from' ':' from = STRING';'
 		'hops' '{'
 			(hop += Hop)*
 		'}'
 	'}'	
 ;
 
-InterLanguageMappingEnd:
-	'mapping' 'end' name = ID '{'
-		(origin ?= 'origin')?
-		(destination ?= 'destination')?
-		'mappingEnd' ':' mappingEnd = [MappingEnd]';'
-	'}'
-;
-
 Hop:
-	'hop' ':' hop = ID';'
+	'hop' ':' hop = STRING';'
 ;
 
 Constraint:
-	'invariant' 'constraint' ':' definition = STRING';'
+	'constraint' 'condition' '{'
+		'attributeName' ':' attributeName = ID';' 
+		'value' ':' value = STRING';'
+	'}' 
 ;
 
 
