@@ -59,12 +59,21 @@ class FacadeActionGen {
 						public static EObject createOtherElementsFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, EObject otherLE, String otherRoleName, COREScene scene, 
 								«action.typeParameters») {
 							EObject newElement = null;
+							Object primitiveAttribute = null;
 							«FOR facadeCall : facadeAction.facadeCalls»
 								«IF count === 0»
 									if (otherLE.equals(«facadeCall.languageElement»)) {
-										
 										«FOR c : facadeCall.constraints»
-											«c.definition»;
+											primitiveAttribute = «c.attributeName»;
+											if (isPrimitiveType(primitiveAttribute.getClass())) {
+												if (!(«c.attributeName» == «c.value»)) {
+													return null;	
+												} 		 
+											} else {
+												if (!(«c.attributeName».equals(«c.value»))) {
+													return null;	
+												}
+											}
 										«ENDFOR»
 										«FOR m : facadeCall.mappings»
 											«m.mapping»;
@@ -79,7 +88,16 @@ class FacadeActionGen {
 								«IF count > 0»
 									else if (otherLE.equals(«facadeCall.languageElement»)) {
 										«FOR c : facadeCall.constraints»
-											«c.definition»;
+											primitiveAttribute = «c.attributeName»;
+											if (isPrimitiveType(primitiveAttribute.getClass())) {
+												if (!(«c.attributeName» == «c.value»)) {
+													return null;	
+												} 		 
+											} else {
+												if (!(«c.attributeName».equals(«c.value»))) {
+													return null;	
+												}
+											}
 										«ENDFOR»
 										«FOR m : facadeCall.mappings»
 											«m.mapping»;
@@ -268,6 +286,17 @@ class FacadeActionGen {
 				}
 			
 				return ownerOther;
+			}
+			
+			private static boolean isPrimitiveType(java.lang.Class<?> clazz) {
+				return clazz.equals(Boolean.class) || 
+				clazz.equals(Integer.class) ||
+				clazz.equals(Character.class) ||
+				clazz.equals(Byte.class) ||
+				clazz.equals(Short.class) ||
+				clazz.equals(Double.class) ||
+				clazz.equals(Long.class) ||
+				clazz.equals(Float.class);
 			}
 		}
 

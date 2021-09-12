@@ -31,7 +31,7 @@ Perspective:
     		(modelFacades += FacadeCall)*
     	'}')?
 
-		// language registration as well as the perspective actions
+		// Adding languages in a perspective as well as the perspective actions
 		// of each language
         'languages' '{'
             (languages += Language)*

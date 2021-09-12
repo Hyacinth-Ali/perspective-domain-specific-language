@@ -123,8 +123,19 @@ class RedefinedAction {
 						
 							if (otherMappingEnd.isRootMappingEnd()) {
 								// TODO make name dynamic
+«««								root model elements constraint conditions
+								Object primitiveAttribute = null;
 								«FOR c : action.constraints»
-									«c.definition»;
+									primitiveAttribute = «c.attributeName»;
+									if (isPrimitiveType(primitiveAttribute.getClass())) {
+										if (!(«c.attributeName» == «c.value»)) {
+											return;	
+										} 		 
+									} else {
+										if (!(«c.attributeName».equals(«c.value»))) {
+											return;	
+										}
+									}
 								«ENDFOR»
 								ModelFactory.createOtherRootModels(perspective, mappingType, scene, currentRoleName, currentElement, name);
 							} else {
@@ -744,6 +755,17 @@ class RedefinedAction {
 				}
 			
 				return ownerOther;
+			}
+			
+			private static boolean isPrimitiveType(java.lang.Class<?> clazz) {
+				return clazz.equals(Boolean.class) || 
+				clazz.equals(Integer.class) ||
+				clazz.equals(Character.class) ||
+				clazz.equals(Byte.class) ||
+				clazz.equals(Short.class) ||
+				clazz.equals(Double.class) ||
+				clazz.equals(Long.class) ||
+				clazz.equals(Float.class);
 			}
 		}
 		
