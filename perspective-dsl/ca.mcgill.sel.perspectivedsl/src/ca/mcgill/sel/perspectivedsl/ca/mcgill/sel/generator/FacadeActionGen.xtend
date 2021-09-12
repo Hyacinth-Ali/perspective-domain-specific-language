@@ -6,6 +6,7 @@ import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.CreateAction
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.DeleteAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.BooleanType
 
 class FacadeActionGen {
 	
@@ -37,15 +38,8 @@ class FacadeActionGen {
 		import org.eclipse.emf.ecore.util.EcoreUtil;
 		
 		import «language.rootPackage».*;
-		import «language.controllerPackage».*;
-		«FOR p : language.otherRootPackages»
-			import «p.otherRootPackage».*;
-		«ENDFOR»
-		«FOR p : language.explicitPackages»
-			import «p.explicitPackage»;
-		«ENDFOR»
-		«FOR l : perspective.languages»
-			import «l.controllerPackage».*;
+		«FOR p : language.otherPackages»
+			import «p.otherPackage»;
 		«ENDFOR»
 		
 		public class «language.name»FacadeAction {
@@ -54,7 +48,7 @@ class FacadeActionGen {
 					«var createAction = action as CreateAction»
 					«var facadeAction = createAction.createFacadeAction»
 					«resetCounter»
-					«IF action.roleName.equals(language.roleName)»
+					
 «««					The main facade action
 						public static EObject createOtherElementsFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, EObject otherLE, String otherRoleName, COREScene scene, 
 								«action.typeParameters») {
@@ -114,14 +108,14 @@ class FacadeActionGen {
 							
 							return newElement;						
 						}
-					«ENDIF»
 					
 «««					The main create facade action
-					public static EObject «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
-						«action.typeParameters») {
+					«IF action.rootElement === BooleanType.FALSE»
+						public static EObject «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
+							«action.typeParameters») {
 							
-						EObject newElement = null;
-						«IF !action.rootElement»
+							EObject newElement = null;
+						
 							List<EObject> createSecondaryEffects = new ArrayList<EObject>();
 							«FOR createEffect : action.createEffects»
 								createSecondaryEffects.add(«createEffect.languageElement»);
@@ -145,12 +139,11 @@ class FacadeActionGen {
 								«action.name»SecondaryEffects(perspective, scene, currentRole, after, owner, 
 									«action.methodParameter»);
 							«ENDIF»
-								
-						«ENDIF»
 						
-						return newElement;
+							return newElement;
 														
-					}
+						}
+					«ENDIF»
 «««				Delete facade actions
 				«ELSEIF action instanceof DeleteAction»
 				

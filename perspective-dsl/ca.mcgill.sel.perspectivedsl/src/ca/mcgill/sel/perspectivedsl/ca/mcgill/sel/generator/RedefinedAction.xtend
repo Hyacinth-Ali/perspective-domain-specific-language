@@ -5,6 +5,7 @@ import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.LanguageActionT
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.CreateAction
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.DeleteAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.BooleanType
 
 class RedefinedAction {
 	
@@ -40,23 +41,19 @@ class RedefinedAction {
 		import ca.mcgill.sel.ram.ui.perspective.*;
 		
 		import «language.rootPackage».*;
-		import «language.controllerPackage».*;
-		«FOR rootPackage : language.otherRootPackages»
-			import «rootPackage.otherRootPackage».*;
-		«ENDFOR»
-		«FOR explicitPackage : language.explicitPackages»
-			import «explicitPackage.explicitPackage»;
+		«FOR rootPackage : language.otherPackages»
+			import «rootPackage.otherPackage»;
 		«ENDFOR»
 		
 		public class «perspective.name.replaceAll("\\s", "")»Redefined«language.name»Action {
 			«FOR action : language.actions»
-				«IF action instanceof CreateAction &&
-				action.roleName.equals(language.roleName)»
-					public static EObject «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
-						«action.typeParameters») {
+				«IF action instanceof CreateAction»
+«««					The redefined action for the respective language action
+					«IF action.rootElement === BooleanType.FALSE»
+						public static EObject «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
+							«action.typeParameters») {
 						
-						EObject newElement = null;
-						«IF !action.rootElement»
+							EObject newElement = null;
 							List<EObject> createSecondaryEffects = new ArrayList<EObject>();
 							«FOR createEffect : action.createEffects»
 								createSecondaryEffects.add(«createEffect.languageElement»);
@@ -87,22 +84,11 @@ class RedefinedAction {
 								«action.name»SecondaryEffects(perspective, scene, currentRole, after, owner, 
 									«action.methodParameter»);
 							«ENDIF»
-							
-						«ENDIF»
-«««						«IF action.rootElement»
-«««							// primary language action to create root model element
-«««							newElement = «action.methodCall»;
-«««
-«««							if (!isFacadeCall) {
-«««								createOtherElementsFor«action.languageElementName»(perspective, scene, currentRole, newElement, owner,
-«««								 	«action.methodParameter»);						
-«««							}
-«««
-«««						«ENDIF»
+						
+							return newElement;
 					
-					return newElement;
-					
-					}
+						}
+					«ENDIF»
 					
 					public static void createOtherElementsFor«action.languageElementName»(COREPerspective perspective, COREScene scene, String currentRoleName,
 							EObject currentElement, «action.typeParameters») throws PerspectiveException {
@@ -592,8 +578,7 @@ class RedefinedAction {
 						}
 					}
 «««				Redefined delete action
-				«ELSEIF action instanceof DeleteAction &&
-				action.roleName.equals(language.roleName)»
+				«ELSEIF action instanceof DeleteAction»
 					public static void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
 											
 						«action.methodCall»;

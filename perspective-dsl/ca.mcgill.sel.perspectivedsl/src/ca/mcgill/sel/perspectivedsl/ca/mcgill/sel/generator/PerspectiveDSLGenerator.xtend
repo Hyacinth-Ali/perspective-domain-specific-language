@@ -175,9 +175,8 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 	  * This method checks if a language contains redefined action.
 	  */
 	 def static boolean containsRedefinedAction(Perspective perspective, Language language) {
-	 	var roleName = language.roleName;
 	 	for (PerspectiveAction pA : language.actions) {
-	 		if (pA.roleName == roleName && pA.perspectiveActionType == PerspectiveActionType.REDEFINED) {
+	 		if (pA.perspectiveActionType == PerspectiveActionType.REDEFINED) {
 	 			return true;
 	 		}
 	 	}

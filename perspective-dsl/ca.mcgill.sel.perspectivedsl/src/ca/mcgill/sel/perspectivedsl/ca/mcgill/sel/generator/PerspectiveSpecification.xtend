@@ -77,7 +77,7 @@ class PerspectiveSpecification {
 	 	        	«FOR action : language.actions»
 	 	        		pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
 	 	        		pAction.setName("«action.name»");
-	 	        		pAction.setForRole("«action.roleName»");
+	 	        		pAction.setForRole("«language.roleName»");
 	 	        		perspective.getActions().add(pAction);
 	 	        	«ENDFOR»
 	 	        «ENDFOR»

@@ -46,11 +46,10 @@ Perspective:
 
 Language:
     'existing' 'language' name = ID '{'
-        "rootPackage" rootPackage = STRING';'
-        "controllerPackage" controllerPackage = STRING';'
-        "roleName" roleName = ID';' 
-        (otherRootPackages += OtherRootPackage)*
-        (explicitPackages += ExplicitPackage)*
+    	"roleName" roleName = ID';'
+        "rootPackage" rootPackage = STRING';' 
+        (otherPackages += OtherPackage)*
+        
         ('actions' '{'
             (actions += PerspectiveAction)*
         '}')?
@@ -102,8 +101,7 @@ PerspectiveAction:
 
 CreateAction:
     perspectiveActionType = PerspectiveActionType 'create' 'action' name = ID (end ?= ';')? ('{'
-    	(rootElement ?= 'rootElement'';')?
-    	'roleName' ':' roleName = ID';'
+    	('rootElement' ':' rootElement = BooleanType';')?
     	'methodTypeAndParameters' ':' typeParameters = STRING';'
     	'methodCall' ':' methodCall = STRING';'
     	'methodParameters' ':' methodParameter = STRING';'
@@ -127,7 +125,6 @@ CreateAction:
 DeleteAction:
     perspectiveActionType = PerspectiveActionType 'delete' 'action' name = ID (end ?= ';')? ('{'
     	(rootElement ?= 'rootElement'';')?
-    	'roleName' ':' roleName = ID';'
     	'methodTypeAndParameters' ':' typeParameters = STRING';'
     	'methodCall' ':' methodCall = STRING';'
     	'methodParameters' ':' methodParameter = STRING';'
@@ -165,13 +162,10 @@ DeleteFacadeAction:
 	'}'
 ;
 
-OtherRootPackage:
-	"otherRootPackage" otherRootPackage = STRING';'
+OtherPackage:
+	"otherPackage" otherPackage = STRING';'
 ;
 
-ExplicitPackage:
-	"explicitPackage" explicitPackage = STRING';'
-;
 
 //MethodCall:
 //	'metaclassObject' ':' metaclassObject = STRING';'
@@ -244,7 +238,7 @@ enum LanguageActionType :
 ;
 
 enum BooleanType:
-    TRUE = 'true' | FALSE = 'false' 
+    FALSE = 'false' | TRUE = 'true' 
 ;
 
 
