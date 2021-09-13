@@ -95,12 +95,12 @@ NestedMapping:
 ;
 
 PerspectiveAction:
-	CreateAction | DeleteAction
+	 RedefinedCreateAction | RedefinedDeleteAction | HiddenAction
 ;
 
 
-CreateAction:
-    perspectiveActionType = PerspectiveActionType 'create' 'action' name = ID (end ?= ';')? ('{'
+RedefinedCreateAction:
+    'redefined' 'create' 'action' name = ID '{'
     	('rootElement' ':' rootElement = BooleanType';')?
     	'methodTypeAndParameters' ':' typeParameters = STRING';'
     	'methodCall' ':' methodCall = STRING';'
@@ -119,11 +119,11 @@ CreateAction:
     			(deleteEffects += DeleteEffect)*
     		'}')?
     	'}')?
-    '}')?
+    '}'
 ;
 
-DeleteAction:
-    perspectiveActionType = PerspectiveActionType 'delete' 'action' name = ID (end ?= ';')? ('{'
+RedefinedDeleteAction:
+    'redefined' 'delete' 'action' name = ID '{'
     	(rootElement ?= 'rootElement'';')?
     	'methodTypeAndParameters' ':' typeParameters = STRING';'
     	'methodCall' ':' methodCall = STRING';'
@@ -142,9 +142,12 @@ DeleteAction:
     			(deleteEffects += DeleteEffect)*
     		'}')?
     	'}')?
-    '}')?
+    '}'
 ;
 
+HiddenAction:
+	'hidden' 'action' name = ID';'
+;
 CreateFacadeAction:
     'facadeAction' 'create' name = ID '{'
     	'facade' 'calls' '{'

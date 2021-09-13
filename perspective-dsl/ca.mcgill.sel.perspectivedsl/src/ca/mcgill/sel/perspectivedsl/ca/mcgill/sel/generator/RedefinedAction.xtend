@@ -1,11 +1,10 @@
 package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.generator
 
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.LanguageActionType
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.CreateAction
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.DeleteAction
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.BooleanType
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.RedefinedCreateAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.RedefinedDeleteAction
 
 class RedefinedAction {
 	
@@ -47,7 +46,8 @@ class RedefinedAction {
 		
 		public class «perspective.name.replaceAll("\\s", "")»Redefined«language.name»Action {
 			«FOR action : language.actions»
-				«IF action instanceof CreateAction»
+				«IF action instanceof RedefinedCreateAction»
+				
 «««					The redefined action for the respective language action
 					«IF action.rootElement === BooleanType.FALSE»
 						public static EObject «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
@@ -577,8 +577,9 @@ class RedefinedAction {
 							}
 						}
 					}
-«««				Redefined delete action
-				«ELSEIF action instanceof DeleteAction»
+				«ELSEIF action instanceof RedefinedDeleteAction»
+				
+«««					Redefined delete action
 					public static void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
 											
 						«action.methodCall»;
@@ -648,72 +649,139 @@ class RedefinedAction {
 				
 «««				action effects
 				«resetCounter»
-				«IF action.createEffects.size > 0» 	
-					private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole, Map<EObject, Collection<EObject>> after, 
-							«action.typeParameters») {
-						for (Map.Entry<EObject, Collection<EObject>> e : after.entrySet()) {
-							Collection<EObject> newElements = e.getValue();
-							for (EObject newElement : newElements) {
-								«FOR createEffect : action.createEffects»
-									«IF count === 0»
-										if (newElement.eClass().equals(«createEffect.languageElement»)) {
-											«FOR m : createEffect.mappings»
-												«m.mapping»;
-											«ENDFOR»
-														
-											// Call the respective redefined recursive method
-											«createEffect.methodCall»;
-										}
-									«ENDIF»
-									«IF count > 0»
-										else if (newElement.eClass().equals(«createEffect.languageElement»)) {
-											«FOR m : createEffect.mappings»
-												«m.mapping»;
-											«ENDFOR»
-												
-											// Call the respective redefined recursive method
-											«createEffect.methodCall»;
+				«IF action instanceof RedefinedCreateAction»
+					«IF action.createEffects.size > 0» 	
+						private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole, Map<EObject, Collection<EObject>> after, 
+								«action.typeParameters») {
+							for (Map.Entry<EObject, Collection<EObject>> e : after.entrySet()) {
+								Collection<EObject> newElements = e.getValue();
+								for (EObject newElement : newElements) {
+									«FOR createEffect : action.createEffects»
+										«IF count === 0»
+											if (newElement.eClass().equals(«createEffect.languageElement»)) {
+												«FOR m : createEffect.mappings»
+													«m.mapping»;
+												«ENDFOR»
+															
+												// Call the respective redefined recursive method
+												«createEffect.methodCall»;
 											}
-									«ENDIF»
-									«counter»
-								«ENDFOR»
+										«ENDIF»
+										«IF count > 0»
+											else if (newElement.eClass().equals(«createEffect.languageElement»)) {
+												«FOR m : createEffect.mappings»
+													«m.mapping»;
+												«ENDFOR»
+													
+												// Call the respective redefined recursive method
+												«createEffect.methodCall»;
+												}
+										«ENDIF»
+										«counter»
+									«ENDFOR»
+								}
 							}
 						}
-					}
-				«ENDIF»
-				«resetCounter»
-				«IF action.deleteEffects.size > 0»
-					private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole,
-								List<EObject> deleteSecondaryEffects) {
-						for (EObject deletedElement : deleteSecondaryEffects) {
-								«FOR deleteEffect : action.deleteEffects»
-									«IF count === 0»
-										if (deletedElement.eClass().equals(«deleteEffect.languageElement»)) {
-											«FOR m : deleteEffect.mappings»
-												«m.mapping»;
-											«ENDFOR»
-														
-											// Call the respective redefined recursive method
-											«deleteEffect.methodCall»;
-										}
-									«ENDIF»
-									«IF count > 0»
-										else if (deletedElement.eClass().equals(«deleteEffect.languageElement»)) {
-											«FOR m : deleteEffect.mappings»
-												«m.mapping»;
-											«ENDFOR»
-												
-											// Call the respective redefined recursive method
-											«deleteEffect.methodCall»;
+					«ENDIF»
+					«resetCounter»
+					«IF action.deleteEffects.size > 0»
+						private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole,
+									List<EObject> deleteSecondaryEffects) {
+							for (EObject deletedElement : deleteSecondaryEffects) {
+									«FOR deleteEffect : action.deleteEffects»
+										«IF count === 0»
+											if (deletedElement.eClass().equals(«deleteEffect.languageElement»)) {
+												«FOR m : deleteEffect.mappings»
+													«m.mapping»;
+												«ENDFOR»
+															
+												// Call the respective redefined recursive method
+												«deleteEffect.methodCall»;
 											}
-									«ENDIF»
-									«counter»
-								«ENDFOR»
+										«ENDIF»
+										«IF count > 0»
+											else if (deletedElement.eClass().equals(«deleteEffect.languageElement»)) {
+												«FOR m : deleteEffect.mappings»
+													«m.mapping»;
+												«ENDFOR»
+													
+												// Call the respective redefined recursive method
+												«deleteEffect.methodCall»;
+												}
+										«ENDIF»
+										«counter»
+									«ENDFOR»
+								}
+									
+						}
+					«ENDIF»
+				«ELSEIF action instanceof RedefinedDeleteAction»
+					«IF action.createEffects.size > 0» 	
+						private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole, Map<EObject, Collection<EObject>> after, 
+								«action.typeParameters») {
+							for (Map.Entry<EObject, Collection<EObject>> e : after.entrySet()) {
+								Collection<EObject> newElements = e.getValue();
+								for (EObject newElement : newElements) {
+									«FOR createEffect : action.createEffects»
+										«IF count === 0»
+											if (newElement.eClass().equals(«createEffect.languageElement»)) {
+												«FOR m : createEffect.mappings»
+													«m.mapping»;
+												«ENDFOR»
+															
+												// Call the respective redefined recursive method
+												«createEffect.methodCall»;
+											}
+										«ENDIF»
+										«IF count > 0»
+											else if (newElement.eClass().equals(«createEffect.languageElement»)) {
+												«FOR m : createEffect.mappings»
+													«m.mapping»;
+												«ENDFOR»
+													
+												// Call the respective redefined recursive method
+												«createEffect.methodCall»;
+												}
+										«ENDIF»
+										«counter»
+									«ENDFOR»
+								}
 							}
-								
-					}
+						}
+					«ENDIF»
+					«resetCounter»
+					«IF action.deleteEffects.size > 0»
+						private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole,
+									List<EObject> deleteSecondaryEffects) {
+							for (EObject deletedElement : deleteSecondaryEffects) {
+									«FOR deleteEffect : action.deleteEffects»
+										«IF count === 0»
+											if (deletedElement.eClass().equals(«deleteEffect.languageElement»)) {
+												«FOR m : deleteEffect.mappings»
+													«m.mapping»;
+												«ENDFOR»
+															
+												// Call the respective redefined recursive method
+												«deleteEffect.methodCall»;
+											}
+										«ENDIF»
+										«IF count > 0»
+											else if (deletedElement.eClass().equals(«deleteEffect.languageElement»)) {
+												«FOR m : deleteEffect.mappings»
+													«m.mapping»;
+												«ENDFOR»
+													
+												// Call the respective redefined recursive method
+												«deleteEffect.methodCall»;
+												}
+										«ENDIF»
+										«counter»
+									«ENDFOR»
+								}
+									
+						}
+					«ENDIF»
 				«ENDIF»
-
 			«ENDFOR»
 			/**
 			 * This is a helper method which retrieves the corresponding container of an

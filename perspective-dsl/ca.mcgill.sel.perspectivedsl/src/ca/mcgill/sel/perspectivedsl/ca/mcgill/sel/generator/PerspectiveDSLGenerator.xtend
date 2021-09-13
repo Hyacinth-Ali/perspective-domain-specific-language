@@ -6,11 +6,12 @@ package ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.generator
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Perspective
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveAction
-import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveActionType
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.RedefinedCreateAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.RedefinedDeleteAction
 
 /**
  * Generates code from your model files on save.
@@ -167,16 +168,15 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 		   }
 		}
 		
-		'''
-		
+		'''	
 	}
 	
 	  /**
-	  * This method checks if a language contains redefined action.
+	  * This method checks if a language contains a redefined action.
 	  */
 	 def static boolean containsRedefinedAction(Perspective perspective, Language language) {
 	 	for (PerspectiveAction pA : language.actions) {
-	 		if (pA.perspectiveActionType == PerspectiveActionType.REDEFINED) {
+	 		if (pA instanceof RedefinedCreateAction || pA instanceof RedefinedDeleteAction) {
 	 			return true;
 	 		}
 	 	}
@@ -189,8 +189,4 @@ class PerspectiveDSLGenerator extends AbstractGenerator {
 	 def static String getPerspectiveName(Perspective perspective) {
 	 	return perspective.name.replaceAll("\\s", "");
 	 }
-	 
-	 
-	 
-
 }
