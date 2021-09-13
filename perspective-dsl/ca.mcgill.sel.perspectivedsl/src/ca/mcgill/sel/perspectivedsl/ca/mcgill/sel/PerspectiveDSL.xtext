@@ -95,7 +95,7 @@ NestedMapping:
 ;
 
 PerspectiveAction:
-	 RedefinedCreateAction | RedefinedDeleteAction | HiddenAction
+	 RedefinedCreateAction | RedefinedDeleteAction | HiddenAction | CreateMapping
 ;
 
 
@@ -148,6 +148,11 @@ RedefinedDeleteAction:
 HiddenAction:
 	'hidden' 'action' name = ID';'
 ;
+
+CreateMapping:
+	'create' 'mapping' 'action' name = ID';'
+;
+
 CreateFacadeAction:
     'facadeAction' 'create' name = ID '{'
     	'facade' 'calls' '{'

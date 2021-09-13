@@ -6,6 +6,10 @@ import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Cardinality
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.Language
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveAction
 import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.PerspectiveActionType
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.RedefinedCreateAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.RedefinedDeleteAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.HiddenAction
+import ca.mcgill.sel.perspectivedsl.ca.mcgill.sel.perspectiveDSL.CreateMapping
 
 class PerspectiveSpecification {
 	
@@ -75,10 +79,22 @@ class PerspectiveSpecification {
 	 	        
 	 	        «FOR language : perspective.languages»
 	 	        	«FOR action : language.actions»
-	 	        		pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
-	 	        		pAction.setName("«action.name»");
-	 	        		pAction.setForRole("«language.roleName»");
-	 	        		perspective.getActions().add(pAction);
+	 	        		«IF action instanceof RedefinedCreateAction || action instanceof RedefinedDeleteAction»
+	 	        			pAction = CoreFactory.eINSTANCE.createCORERedefineAction();
+	 	        			pAction.setName("«action.name»");
+	 	        			pAction.setForRole("«language.roleName»");
+	 	        			perspective.getActions().add(pAction);
+	 	        		«ELSEIF action instanceof HiddenAction»
+	 	        			pAction = CoreFactory.eINSTANCE.createCOREHiddenAction();
+	 	        			pAction.setName("«action.name»");
+	 	        			pAction.setForRole("«language.roleName»");
+	 	        			perspective.getActions().add(pAction);
+	 	        		«ELSEIF action instanceof CreateMapping»
+	 	        			pAction = CoreFactory.eINSTANCE.createCORECreateMapping();
+	 	        			pAction.setName("«action.name»");
+	 	        			pAction.setForRole("«language.roleName»");
+	 	        			perspective.getActions().add(pAction);	 	        		
+	 	        		«ENDIF»
 	 	        	«ENDFOR»
 	 	        «ENDFOR»
 	 	       }
