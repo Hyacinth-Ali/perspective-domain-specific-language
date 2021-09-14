@@ -42,7 +42,10 @@ class PerspectiveSpecification {
 	 	
 	 	        // create perspective mappings
 	 	        createPerspectiveMappings(perspective);
-	 	
+	 	        
+	 	        // create intra-language navigation mappings
+	 	        createIntraLanguageMappings(perspective);
+	 	        
 	 	        return perspective;
 	 	    }
 	 	    
@@ -63,9 +66,6 @@ class PerspectiveSpecification {
 	 	
 	 	        // create perspective mappings
 	 	        createPerspectiveMappings(perspective);
-	 	        
-	 	        // create intra-language navigation mappings
-	 	        createIntraLanguageMappings(perspective);
 	 	
 	 	        return perspective;
 	 	    }
