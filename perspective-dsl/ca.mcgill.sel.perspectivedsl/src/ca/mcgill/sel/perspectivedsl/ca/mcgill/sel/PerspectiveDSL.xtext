@@ -12,7 +12,7 @@ Perspective:
     
     	'name'':' name = STRING';'
         // to dictate the model shown by default with the perspective
-        ('default'':' default = ID';')?
+        ('default'':' isDefault = ID';')?
         
         // customizes the perspective to support persistence for both
         // language models and the perspective. Note that in TouchCORE,
@@ -64,7 +64,8 @@ Language:
 LanguageElementMapping:
     (biDirectional ?= 'bi-directional')? (uniDirectional ?= 'uni-directional')? 'mapping' name = ID '{'
     	
-    	('tag' ':' tag = STRING';')?
+    	('active' ':' active = BooleanType';')?
+    	('default' ':' isDefault = BooleanType';')?
     	
     	(fromOrigin ?= 'origin')? (fromDestination ?= 'destination')? 'fromMappingEnd' fromMappingEndName = ID '{'
 			'isRootElement' ':' fromIsRootElement = BooleanType';'
