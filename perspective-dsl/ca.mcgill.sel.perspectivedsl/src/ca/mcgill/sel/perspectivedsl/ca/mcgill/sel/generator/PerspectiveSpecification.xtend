@@ -19,7 +19,10 @@ class PerspectiveSpecification {
 	 	
 	 	package ca.mcgill.sel.perspective.«perspective.name.toLowerCase.replaceAll("\\s", "")»;
 	 	
+	 	import java.util.List;
+	 	import org.eclipse.emf.ecore.EClass;
 	 	import org.eclipse.emf.ecore.EObject;
+	 	import org.eclipse.emf.ecore.EReference;
 	 	
 	 	
 	 	import ca.mcgill.sel.core.*;
@@ -60,8 +63,59 @@ class PerspectiveSpecification {
 	 	
 	 	        // create perspective mappings
 	 	        createPerspectiveMappings(perspective);
+	 	        
+	 	        // create intra-language navigation mappings
+	 	        createIntraLanguageMappings(perspective);
 	 	
 	 	        return perspective;
+	 	    }
+	 	    
+	 	    /**
+	 	     * Creates intra-language navigation mappings
+	 	     * @param perspective
+	 	     */
+	 	    private static void createIntraLanguageMappings(COREPerspective perspective) {
+	 			IntraLanguageMapping intraMapping = null;
+	 			
+	 			«FOR language : perspective.languages»
+	 				«FOR intraMapping : language.mappings»
+	 					intraMapping = createIntraLanguageMapping(perspective, «intraMapping.active», «intraMapping.closure», «intraMapping.reuse», 
+	 						«intraMapping.increaseDepth», «intraMapping.changeModel», «intraMapping.from»);
+	 					«FOR h : intraMapping.hops»
+	 						intraMapping.getHops().add(«h.hop»);
+	 					«ENDFOR»
+	 					
+	 				«ENDFOR»
+	 			«ENDFOR»
+	 			
+	 			
+	 		}
+	 	    
+	 	    /**
+	 	     * Creates an instance of {@link IntraLanguageMapping}.
+	 	     * @param perspective
+	 	     * @param active
+	 	     * @param closure
+	 	     * @param reuse
+	 	     * @param increaseDepth
+	 	     * @param changeModel
+	 	     * @param from
+	 	     * @return return the new intraMapping
+	 	     */
+	 	    private static IntraLanguageMapping createIntraLanguageMapping(COREPerspective perspective, boolean active, boolean closure, 
+	 	    		boolean reuse, boolean increaseDepth, boolean changeModel, EClass from) {
+	 	    	IntraLanguageMapping intraMapping = CoreFactory.eINSTANCE.createIntraLanguageMapping();
+	 	    	intraMapping.setActive(active);
+	 	    	intraMapping.setClosure(closure);
+	 	    	intraMapping.setReuse(reuse);
+	 	    	intraMapping.setIncreaseDepth(increaseDepth);
+	 	    	intraMapping.setChangeModel(changeModel);
+	 	    	intraMapping.setFrom(from);
+	 	
+	 	    	perspective.getNavigationMappings().add(intraMapping);
+	 	    	
+	 	    	return intraMapping;
+	 	    	
 	 	    }
 	 	
 	 	    private static void createPerspectiveAction(COREPerspective perspective) {

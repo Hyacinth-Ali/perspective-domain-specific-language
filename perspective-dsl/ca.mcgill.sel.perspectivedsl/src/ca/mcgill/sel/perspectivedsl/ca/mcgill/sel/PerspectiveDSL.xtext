@@ -216,7 +216,7 @@ IntraLanguageMapping:
 		'changeModel' ':' changeModel = BooleanType';'
 		'from' ':' from = STRING';'
 		'hops' '{'
-			(hop += Hop)*
+			(hops += Hop)*
 		'}'
 	'}'	
 ;
