@@ -601,9 +601,9 @@ class ModelFactory {
 				EList<COREArtefact> artefacts = scene.getArtefacts().get(role);
 				if (artefacts == null) {
 					artefacts = new BasicEList<COREArtefact>();
+					artefacts.add(externalArtefact);
 					scene.getArtefacts().put(role, artefacts);
 				}
-				artefacts.add(externalArtefact);
 				externalArtefact.setScene(scene);
 				
 				try {
