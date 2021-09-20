@@ -19,18 +19,13 @@ class PerspectiveSpecification {
 	 	
 	 	package ca.mcgill.sel.perspective.«perspective.name.toLowerCase.replaceAll("\\s", "")»;
 	 	
+	 	import java.util.List;
+	 	import org.eclipse.emf.ecore.EClass;
 	 	import org.eclipse.emf.ecore.EObject;
+	 	import org.eclipse.emf.ecore.EReference;
 	 	
 	 	
-	 	import ca.mcgill.sel.core.COREExternalLanguage;
-	 	import ca.mcgill.sel.core.CORELanguageElement;
-	 	import ca.mcgill.sel.core.CORELanguageElementMapping;
-	 	import ca.mcgill.sel.core.COREPerspective;
-	 	import ca.mcgill.sel.core.COREPerspectiveAction;
-	 	import ca.mcgill.sel.core.Cardinality;
-	 	import ca.mcgill.sel.core.CoreFactory;
-	 	import ca.mcgill.sel.core.MappingEnd;
-	 	//import ca.mcgill.sel.core.perspective.design.ElementMapping;
+	 	import ca.mcgill.sel.core.*;
 	 	import ca.mcgill.sel.core.language.*;
 	 	
 	 	«FOR language : perspective.languages»
@@ -47,7 +42,10 @@ class PerspectiveSpecification {
 	 	
 	 	        // create perspective mappings
 	 	        createPerspectiveMappings(perspective);
-	 	
+	 	        
+	 	        // create intra-language navigation mappings
+	 	        createIntraLanguageMappings(perspective);
+	 	        
 	 	        return perspective;
 	 	    }
 	 	    
@@ -70,6 +68,54 @@ class PerspectiveSpecification {
 	 	        createPerspectiveMappings(perspective);
 	 	
 	 	        return perspective;
+	 	    }
+	 	    
+	 	    /**
+	 	     * Creates intra-language navigation mappings
+	 	     * @param perspective
+	 	     */
+	 	    private static void createIntraLanguageMappings(COREPerspective perspective) {
+	 			IntraLanguageMapping intraMapping = null;
+	 			
+	 			«FOR language : perspective.languages»
+	 				«FOR intraMapping : language.mappings»
+	 					intraMapping = createIntraLanguageMapping(perspective, «intraMapping.active», «intraMapping.closure», «intraMapping.reuse», 
+	 						«intraMapping.increaseDepth», «intraMapping.changeModel», «intraMapping.from»);
+	 					«FOR h : intraMapping.hops»
+	 						intraMapping.getHops().add(«h.hop»);
+	 					«ENDFOR»
+	 					
+	 				«ENDFOR»
+	 			«ENDFOR»
+	 			
+	 			
+	 		}
+	 	    
+	 	    /**
+	 	     * Creates an instance of {@link IntraLanguageMapping}.
+	 	     * @param perspective
+	 	     * @param active
+	 	     * @param closure
+	 	     * @param reuse
+	 	     * @param increaseDepth
+	 	     * @param changeModel
+	 	     * @param from
+	 	     * @return return the new intraMapping
+	 	     */
+	 	    private static IntraLanguageMapping createIntraLanguageMapping(COREPerspective perspective, boolean active, boolean closure, 
+	 	    		boolean reuse, boolean increaseDepth, boolean changeModel, EClass from) {
+	 	    	IntraLanguageMapping intraMapping = CoreFactory.eINSTANCE.createIntraLanguageMapping();
+	 	    	intraMapping.setActive(active);
+	 	    	intraMapping.setClosure(closure);
+	 	    	intraMapping.setReuse(reuse);
+	 	    	intraMapping.setIncreaseDepth(increaseDepth);
+	 	    	intraMapping.setChangeModel(changeModel);
+	 	    	intraMapping.setFrom(from);
+	 	
+	 	    	perspective.getNavigationMappings().add(intraMapping);
+	 	    	
+	 	    	return intraMapping;
+	 	    	
 	 	    }
 	 	
 	 	    private static void createPerspectiveAction(COREPerspective perspective) {
@@ -101,40 +147,99 @@ class PerspectiveSpecification {
 	 	
 	 	    private static void createPerspectiveMappings(COREPerspective perspective) {
 	 	
-	 	        // language element mapping 
+	 	        // language element mappings 
 	 	        «FOR mapping : perspective.mappings»
-	 	         «IF mapping.nestedMappings.empty» 
-	 	         	«IF mapping.tag === null»
-	 	         		createLanguageElementMapping(perspective, «getCardinality(mapping, true)», "«mapping.fromRoleName»", 
-	 	         		«mapping.fromLanguageElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»", «mapping.toLanguageElement», «mapping.toIsRootElement»);
-	 	         	«ELSE»
-	 	         		createLanguageElementMapping(perspective, "«mapping.tag»", «getCardinality(mapping, true)», "«mapping.fromRoleName»", 
-	 	         			 	         		«mapping.fromLanguageElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»", «mapping.toLanguageElement», «mapping.toIsRootElement»);
-	 	         	«ENDIF»
-	 	         «ELSE»
-	 	            «IF mapping.tag === null»
-	 	            	ElementMapping «mapping.name.toFirstLower»Mapping = createLanguageElementMapping(perspective, «getCardinality(mapping, true)», "«mapping.fromRoleName»", 
-	 	            		 	         		«mapping.fromLanguageElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»", «mapping.toLanguageElement», «mapping.toIsRootElement»);	            
-	 	            «ELSE»
-	 	            	ElementMapping «mapping.name.toFirstLower»Mapping = createLanguageElementMapping(perspective, "«mapping.tag»", «getCardinality(mapping, true)», "«mapping.fromRoleName»", 
-	 	            		 	         		«mapping.fromLanguageElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»", «mapping.toLanguageElement», «mapping.toIsRootElement»);	 	            
-	 	            «ENDIF»
+	 	        	«IF mapping.biDirectional»
+«««	 	        		Handle mappings with bi-directional navigation specifications
+		 	        	«IF mapping.nestedMappings.empty» 
+	«««	 	        		creates language element mappings with nested mapping(s)
+		 	        		createLanguageElementMapping(perspective, «getCardinality(mapping, true)», "«mapping.fromRoleName»", 
+		 	        			«mapping.fromLanguageElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»", «mapping.toLanguageElement», «mapping.toIsRootElement»,
+		 	        			«mapping.active», «mapping.isDefault», "«mapping.fromMappingEndName»", "«mapping.toMappingEndName»", true, true, true, true);
+		 	        		
+		 	         	«ELSE»
+	«««	 	        		crates language element mappings with nested mapping(s)
+		 	            	ElementMapping «mapping.name.toFirstLower»Mapping = createLanguageElementMapping(perspective, «getCardinality(mapping, true)», "«mapping.fromRoleName»", 
+		 	            		«mapping.fromLanguageElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»", «mapping.toLanguageElement», «mapping.toIsRootElement»,
+		 	            				 	        			«mapping.active», «mapping.isDefault», "«mapping.fromMappingEndName»", "«mapping.toMappingEndName»", true, true, true, true); 	            	    	
+		 	            	 	            
+		 	            	CORELanguageElementMapping «mapping.name.toFirstLower»MappingType = «mapping.name.toFirstLower»Mapping.getMappingType();
+		 	            		 	            
+		 	            	// get from mapped language element, i.e., the from container of the feature to be mapped.
+		 	            	CORELanguageElement «mapping.name.toFirstLower»MappingFromLanguageELement = «mapping.name.toFirstLower»Mapping.getFromLanguageElement();
+		 	            		 	            
+		 	            	// get to mapped language element, i.e., the to container of the feature to be mapped.
+		 	            	CORELanguageElement «mapping.name.toFirstLower»MappingToLanguageELement = «mapping.name.toFirstLower»Mapping.getToLanguageElement();
+		 	            		 	            
+		 	            	«FOR nestedMapping : mapping.nestedMappings»
+		 	            		createNestedMapping(«mapping.name.toFirstLower»MappingType, «mapping.name.toFirstLower»MappingFromLanguageELement, 
+		 	            	    	«mapping.name.toFirstLower»MappingToLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
+		 	            	        	"«mapping.fromRoleName»", "«mapping.toRoleName»", «nestedMapping.matchMaker»);
+		 	            	«ENDFOR»
+		 	            
+		 	          	«ENDIF»
+	 	        	«ELSEIF mapping.uniDirectional»
+«««	 	        		Handle mappings with uni-directional navigation specifications
+		 	        	«IF mapping.nestedMappings.empty» 
+	«««	 	        		creates language element mappings with nested mapping(s)
+		 	        		createLanguageElementMapping(perspective, «getCardinality(mapping, true)», "«mapping.fromRoleName»", 
+		 	        			«mapping.fromLanguageElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»", «mapping.toLanguageElement», «mapping.toIsRootElement»,
+		 	        			«mapping.active», «mapping.isDefault», "«mapping.fromMappingEndName»", "«mapping.toMappingEndName»", 
+		 	        			«mapping.fromOrigin», «mapping.fromDestination», «mapping.toOrigin», «mapping.toDestination»);
+		 	        		
+		 	         	«ELSE»
+	«««	 	        		crates language element mappings with nested mapping(s)
+		 	            	ElementMapping «mapping.name.toFirstLower»Mapping = createLanguageElementMapping(perspective, «getCardinality(mapping, true)», "«mapping.fromRoleName»", 
+		 	            		«mapping.fromLanguageElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», "«mapping.toRoleName»", «mapping.toLanguageElement», «mapping.toIsRootElement»,
+		 	            				 	        			«mapping.active», «mapping.isDefault», "«mapping.fromMappingEndName»", "«mapping.toMappingEndName»", 
+		 	            				 	        			«mapping.fromOrigin», «mapping.fromDestination», «mapping.toOrigin», «mapping.toDestination»);	            	    	
+		 	            	 	            
+		 	            	CORELanguageElementMapping «mapping.name.toFirstLower»MappingType = «mapping.name.toFirstLower»Mapping.getMappingType();
+		 	            		 	            
+		 	            	// get from mapped language element, i.e., the from container of the feature to be mapped.
+		 	            	CORELanguageElement «mapping.name.toFirstLower»MappingFromLanguageELement = «mapping.name.toFirstLower»Mapping.getFromLanguageElement();
+		 	            		 	            
+		 	            	// get to mapped language element, i.e., the to container of the feature to be mapped.
+		 	            	CORELanguageElement «mapping.name.toFirstLower»MappingToLanguageELement = «mapping.name.toFirstLower»Mapping.getToLanguageElement();
+		 	            		 	            
+		 	            	«FOR nestedMapping : mapping.nestedMappings»
+		 	            		createNestedMapping(«mapping.name.toFirstLower»MappingType, «mapping.name.toFirstLower»MappingFromLanguageELement, 
+		 	            	    	«mapping.name.toFirstLower»MappingToLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
+		 	            	        	"«mapping.fromRoleName»", "«mapping.toRoleName»", «nestedMapping.matchMaker»);
+		 	            	«ENDFOR»
+		 	            
+		 	          	«ENDIF»
+	 	        	«ELSE»
+«««	 	        		Handle mappings without navigation specifications
+		 	        	«IF mapping.nestedMappings.empty» 
+	«««	 	        		creates language element mappings with nested mapping(s)
+							createLanguageElementMapping(perspective, «getCardinality(mapping, true)», "«mapping.fromRoleName»", 
+		 	        			 	         		«mapping.fromLanguageElement», «mapping.fromIsRootElement», 
+		 	        			 	         		«getCardinality(mapping, false)», "«mapping.toRoleName»", «mapping.toLanguageElement», «mapping.toIsRootElement»);
+		 	        		
+		 	         	«ELSE»
+	«««	 	        		crates language element mappings with nested mapping(s)
+		 	            	ElementMapping «mapping.name.toFirstLower»Mapping = createLanguageElementMapping(perspective, «getCardinality(mapping, true)», "«mapping.fromRoleName»", 
+		 	            		«mapping.fromLanguageElement», «mapping.fromIsRootElement», «getCardinality(mapping, false)», 
+		 	            		"«mapping.toRoleName»", «mapping.toLanguageElement», «mapping.toIsRootElement»); 	            	    	
+		 	            	 	            
+		 	            	CORELanguageElementMapping «mapping.name.toFirstLower»MappingType = «mapping.name.toFirstLower»Mapping.getMappingType();
+		 	            		 	            
+		 	            	// get from mapped language element, i.e., the from container of the feature to be mapped.
+		 	            	CORELanguageElement «mapping.name.toFirstLower»MappingFromLanguageELement = «mapping.name.toFirstLower»Mapping.getFromLanguageElement();
+		 	            		 	            
+		 	            	// get to mapped language element, i.e., the to container of the feature to be mapped.
+		 	            	CORELanguageElement «mapping.name.toFirstLower»MappingToLanguageELement = «mapping.name.toFirstLower»Mapping.getToLanguageElement();
+		 	            		 	            
+		 	            	«FOR nestedMapping : mapping.nestedMappings»
+		 	            		createNestedMapping(«mapping.name.toFirstLower»MappingType, «mapping.name.toFirstLower»MappingFromLanguageELement, 
+		 	            	    	«mapping.name.toFirstLower»MappingToLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
+		 	            	        	"«mapping.fromRoleName»", "«mapping.toRoleName»", «nestedMapping.matchMaker»);
+		 	            	«ENDFOR»
+		 	            
+		 	          	«ENDIF»
+	 	        	«ENDIF»
 
-	 	            CORELanguageElementMapping «mapping.name.toFirstLower»MappingType = «mapping.name.toFirstLower»Mapping.getMappingType();
-	 	            
-	 	            // get from mapped language element, i.e., the from container of the feature to be mapped.
-	 	            CORELanguageElement «mapping.name.toFirstLower»MappingFromLanguageELement = «mapping.name.toFirstLower»Mapping.getFromLanguageElement();
-	 	            
-	 	            // get to mapped language element, i.e., the to container of the feature to be mapped.
-	 	            CORELanguageElement «mapping.name.toFirstLower»MappingToLanguageELement = «mapping.name.toFirstLower»Mapping.getToLanguageElement();
-	 	            
-                    «FOR nestedMapping : mapping.nestedMappings»
-	 	            	createNestedMapping(«mapping.name.toFirstLower»MappingType, «mapping.name.toFirstLower»MappingFromLanguageELement, 
-                        	«mapping.name.toFirstLower»MappingToLanguageELement, "«nestedMapping.fromElementName»", "«nestedMapping.toElementName»", 
-                    		"«mapping.fromRoleName»", "«mapping.toRoleName»", «nestedMapping.matchMaker»);
-					«ENDFOR»
-	 	            
-	 	          «ENDIF»
 	 	         
 	 	        «ENDFOR»
 	 	        
@@ -192,10 +297,9 @@ class PerspectiveSpecification {
 	 	        return elementMapping;
 	 	    }
 	 	    
-	 	     /**
-	 		 * This method creates an instance of {@link CORELanguageElementMapping}.
-	 	     * @param perspective
-	 	     * @param tag 
+	 	    /**
+	 	     * This method creates an instance of {@link CORELanguageElementMapping} with navigation specification.
+	 	     * @param perspective 
 	 	     * @param fromCardinality
 	 	     * @param fromRoleName
 	 	     * @param fromMetaclass
@@ -206,14 +310,16 @@ class PerspectiveSpecification {
 	 	     * 
 	 	     * @author Hyacinth Ali
 	 	     */
-	 	    private static ElementMapping createLanguageElementMapping(COREPerspective perspective, String tag,
+	 	    private static ElementMapping createLanguageElementMapping(COREPerspective perspective,
 	 	                Cardinality fromCardinality, String fromRoleName, EObject fromMetaclass, boolean fromIsRootMapping, Cardinality toCardinality, 
-	 	                String toRoleName, EObject toMetaclass, boolean toIsRootMapping) {
+	 	                String toRoleName, EObject toMetaclass, boolean toIsRootMapping,
+	 	                boolean active, boolean isDefault, String fromMappingEndName, String toMappingEndName,
+	 	                boolean fromOrigin, boolean fromDestination, boolean toOrigin, boolean toDestination) {
 	 	
+	 			// Navigation Specification
 	 	        CORELanguageElementMapping mappingType = CoreFactory.eINSTANCE.createCORELanguageElementMapping();
 	 	        mappingType.setIdentifier(getNextMappingId(perspective));
-	 			// mappingType.setTag(tag);
-	 				 			
+	 			
 	 	        // from mapping end settings
 	 	        MappingEnd fromMappingEnd = CoreFactory.eINSTANCE.createMappingEnd();
 	 	        fromMappingEnd.setRootMappingEnd(fromIsRootMapping);
@@ -236,7 +342,31 @@ class PerspectiveSpecification {
 	 	        mappingType.getMappingEnds().add(fromMappingEnd);
 	 	        mappingType.getMappingEnds().add(toMappingEnd);
 	 	
+	 	        // Navigation Specification
+	 	        InterLanguageMapping navMapping = CoreFactory.eINSTANCE.createInterLanguageMapping();
+	 			navMapping.setActive(active);
+	 			navMapping.setDefault(isDefault);
+	 			navMapping.setCoreLanguageElementMapping(mappingType);
+	 			
+	 			InterLanguageMappingEnd fromInterMappingEnd = CoreFactory.eINSTANCE.createInterLanguageMappingEnd();
+	 			fromInterMappingEnd.setMappingEnd(fromMappingEnd);
+	 			fromInterMappingEnd.setName(fromMappingEndName);
+	 			fromInterMappingEnd.setOrigin(fromOrigin);
+	 			fromInterMappingEnd.setDestination(fromDestination);
+	 			navMapping.getInterLanguageMappingEnds().add(fromInterMappingEnd);
+	 			
+	 			InterLanguageMappingEnd toInterMappingEnd = CoreFactory.eINSTANCE.createInterLanguageMappingEnd();
+	 			toInterMappingEnd.setMappingEnd(toMappingEnd);
+	 			toInterMappingEnd.setName(toMappingEndName);
+	 			toInterMappingEnd.setOrigin(toOrigin);
+	 			toInterMappingEnd.setDestination(toDestination);
+	 			navMapping.getInterLanguageMappingEnds().add(toInterMappingEnd);
+	 	        
+	 			// Add the mapping to perspective
 	 	        perspective.getMappings().add(mappingType);
+	 	        
+	 	        // Add the navigation mapping to the perspective
+	 	        perspective.getNavigationMappings().add(navMapping);
 	 	
 	 	        ElementMapping elementMapping = new ElementMapping();
 	 	        elementMapping.setMappingType(mappingType);
@@ -245,6 +375,7 @@ class PerspectiveSpecification {
 	 	
 	 	        return elementMapping;
 	 	    }
+	 	    
 	 	
 	 	    /**
 	 	     * This method creates nested mapping, i.e., a language element mapping which is contained in another language 

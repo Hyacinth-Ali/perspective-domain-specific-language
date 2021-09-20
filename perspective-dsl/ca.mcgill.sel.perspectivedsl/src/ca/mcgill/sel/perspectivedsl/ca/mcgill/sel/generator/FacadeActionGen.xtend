@@ -49,7 +49,7 @@ class FacadeActionGen {
 					
 «««					The main facade action
 						public static EObject createOtherElementsFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, EObject otherLE, String otherRoleName, COREScene scene, 
-								«action.typeParameters») {
+								EObject owner, «action.typeParameters») {
 							EObject newElement = null;
 							Object primitiveAttribute = null;
 							«FOR facadeCall : facadeAction.facadeCalls»
@@ -110,7 +110,7 @@ class FacadeActionGen {
 «««					The main create facade action
 					«IF action.rootElement === BooleanType.FALSE»
 						public static EObject «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
-							«action.typeParameters») {
+							EObject owner, «action.typeParameters») {
 							
 							EObject newElement = null;
 						
@@ -186,7 +186,7 @@ class FacadeActionGen {
 				«IF action instanceof RedefinedCreateAction»
 					«IF action.createEffects.size > 0» 	
 						private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole, Map<EObject, Collection<EObject>> after, 
-								«action.typeParameters») {
+								EObject owner, «action.typeParameters») {
 							for (Map.Entry<EObject, Collection<EObject>> e : after.entrySet()) {
 								Collection<EObject> newElements = e.getValue();
 								for (EObject newElement : newElements) {
