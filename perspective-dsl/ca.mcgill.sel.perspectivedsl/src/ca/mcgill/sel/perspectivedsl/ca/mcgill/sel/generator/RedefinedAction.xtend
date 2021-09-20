@@ -50,9 +50,12 @@ class RedefinedAction {
 				
 «««					The redefined action for the respective language action
 					«IF action.rootElement === BooleanType.FALSE»
-						public static EObject «action.name»(COREPerspective perspective, COREScene scene, String currentRole, 
-							«action.typeParameters») {
-						
+						public static EObject «action.name»(«action.ownerType» owner, «action.typeParameters») {
+							
+							COREPerspective perspective = «perspective.currentPerspective»;
+							COREScene scene = «perspective.perspectiveScene»;
+							String currentRole = «perspective.currentRoleName»;
+							
 							EObject newElement = null;
 							List<EObject> createSecondaryEffects = new ArrayList<EObject>();
 							«FOR createEffect : action.createEffects»
@@ -91,7 +94,7 @@ class RedefinedAction {
 					«ENDIF»
 					
 					public static void createOtherElementsFor«action.languageElementName»(COREPerspective perspective, COREScene scene, String currentRoleName,
-							EObject currentElement, «action.typeParameters») throws PerspectiveException {
+							EObject currentElement, EObject owner, «action.typeParameters») throws PerspectiveException {
 					
 						List<CORELanguageElementMapping> mappingTypes = COREPerspectiveUtil.INSTANCE.getMappingTypes(perspective,
 								currentElement.eClass(), currentRoleName);
@@ -133,7 +136,7 @@ class RedefinedAction {
 					}
 					
 					public static void createOtherElementsFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene, String currentRoleName,
-								EObject currentElement, «action.typeParameters») {
+								EObject currentElement, EObject owner, «action.typeParameters») {
 							
 						String otherRoleName = COREPerspectiveUtil.INSTANCE.getOtherRoleName(mappingType, currentRoleName);
 					
@@ -221,7 +224,7 @@ class RedefinedAction {
 					 * @param name
 					 */
 					private static void canCreateOrUseElementFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
-							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
+							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, EObject owner, «action.typeParameters») {
 					
 						EObject otherElement = null;
 						boolean otherExist = true;
@@ -265,7 +268,7 @@ class RedefinedAction {
 					 * @param name
 					 */
 					private static void createOrUseElementFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene, EObject currentElement,
-							String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
+							String currentRoleName, String otherRoleName, EObject otherLE, EObject owner, «action.typeParameters») {
 					
 						EObject otherElement = null;
 						boolean otherExist = true;
@@ -306,7 +309,7 @@ class RedefinedAction {
 					 * @param name
 					 */
 					private static void canCreateOrUseManyElementsFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
-							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
+							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, EObject owner, «action.typeParameters») {
 					
 						EObject otherElement = null;
 						// Ask user how many mappings to create
@@ -355,7 +358,7 @@ class RedefinedAction {
 					 * @param name
 					 */
 					private static void createOrUseAtLeastOneElementFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
-							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
+							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, EObject owner, «action.typeParameters») {
 					
 						EObject otherElement = null;
 						// Ask user how many mappings to create
@@ -404,7 +407,7 @@ class RedefinedAction {
 					 * @param name
 					 */
 					private static void canCreateOrUseNonMappedElementFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
-							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
+							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, EObject owner, «action.typeParameters») {
 					
 						EObject otherElement = null;
 						boolean otherExist = true;
@@ -448,7 +451,7 @@ class RedefinedAction {
 					 * @param name
 					 */
 					private static void createOrUseNonMappedElementFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType, COREScene scene,
-							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, «action.typeParameters») {
+							EObject currentElement, String currentRoleName, String otherRoleName, EObject otherLE, EObject owner, «action.typeParameters») {
 					
 						EObject otherElement = null;
 						boolean otherExist = true;
@@ -492,7 +495,7 @@ class RedefinedAction {
 					 */
 					private static void canCreateOrUseNonMappedManyElementsFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType,
 							COREScene scene, EObject currentElement, String currentRoleName, String otherRoleName,
-							EObject otherLE, «action.typeParameters») {
+							EObject otherLE, EObject owner, «action.typeParameters») {
 					
 						EObject otherElement = null;
 						int numberOfMappings = QueryAction.INSTANCE.askNumberOfMappings();
@@ -544,7 +547,7 @@ class RedefinedAction {
 					 */
 					private static void createOrUseNonMappedAtLeastOneElementFor«action.languageElementName»(COREPerspective perspective, CORELanguageElementMapping mappingType,
 							COREScene scene, EObject currentElement, String currentRoleName, String otherRoleName,
-							EObject otherLE, «action.typeParameters») {
+							EObject otherLE, EObject owner, «action.typeParameters») {
 					
 						EObject otherElement = null;
 						// Ask user how many mappings to create (at least one)
@@ -580,8 +583,12 @@ class RedefinedAction {
 				«ELSEIF action instanceof RedefinedDeleteAction»
 				
 «««					Redefined delete action
-					public static void «action.name»(COREPerspective perspective, COREScene scene, String currentRole, «action.typeParameters») {
-											
+					public static void «action.name»(«action.typeParameters») {
+						
+						COREPerspective perspective = «perspective.currentPerspective»;
+						COREScene scene = «perspective.perspectiveScene»;
+						String currentRole = «perspective.currentRoleName»;
+							
 						«action.methodCall»;
 						deleteOtherElementsFor«action.languageElementName»(perspective, scene, currentRole, «action.methodParameter»);
 						
@@ -652,7 +659,7 @@ class RedefinedAction {
 				«IF action instanceof RedefinedCreateAction»
 					«IF action.createEffects.size > 0» 	
 						private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole, Map<EObject, Collection<EObject>> after, 
-								«action.typeParameters») {
+								EObject owner, «action.typeParameters») {
 							for (Map.Entry<EObject, Collection<EObject>> e : after.entrySet()) {
 								Collection<EObject> newElements = e.getValue();
 								for (EObject newElement : newElements) {
@@ -718,7 +725,7 @@ class RedefinedAction {
 				«ELSEIF action instanceof RedefinedDeleteAction»
 					«IF action.createEffects.size > 0» 	
 						private static void «action.name»SecondaryEffects(COREPerspective perspective, COREScene scene, String currentRole, Map<EObject, Collection<EObject>> after, 
-								«action.typeParameters») {
+								EObject owner, «action.typeParameters») {
 							for (Map.Entry<EObject, Collection<EObject>> e : after.entrySet()) {
 								Collection<EObject> newElements = e.getValue();
 								for (EObject newElement : newElements) {

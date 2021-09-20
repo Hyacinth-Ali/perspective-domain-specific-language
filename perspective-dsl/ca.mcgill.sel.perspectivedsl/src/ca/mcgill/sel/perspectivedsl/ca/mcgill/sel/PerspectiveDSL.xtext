@@ -23,6 +23,12 @@ Perspective:
         ('savePerspective'':' savePerspective = STRING';')?
         ('saveModel'':' saveModel = STRING';')?
         
+        // Allowing the generated code to get the current perspective, current scene, and current role name
+        // when a redefined perspective action is called
+        'currentPerspective' ':' currentPerspective = STRING';'
+        'perspectiveScene' ':' perspectiveScene = STRING';'
+        'currentRoleName' ':' currentRoleName = STRING';'
+        
         // When a root model is mapped with another regular language element,
         // a facade call is required to call the recursive action of the regular 
         // language element to propagate the changes after creating the model in
@@ -103,6 +109,7 @@ PerspectiveAction:
 RedefinedCreateAction:
     'redefined' 'create' 'action' name = ID '{'
     	('rootElement' ':' rootElement = BooleanType';')?
+    	'ownerType' ':' ownerType = ID';'
     	'methodTypeAndParameters' ':' typeParameters = STRING';'
     	'methodCall' ':' methodCall = STRING';'
     	'methodParameters' ':' methodParameter = STRING';'
